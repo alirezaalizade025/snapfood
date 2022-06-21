@@ -71,10 +71,10 @@
                                     </div>
                                 </td>
                                 {{-- TODO:change group-hover to group-fucos --}}
-                                <td class="p-3 group rounded">
+                                <td class="p-3 group rounded mx-auto">
                                     @isset($food->image)
                                         <img src="{{ $food->image }}"
-                                            class="rounded-3xl object-cover w-10 h-10 group-hover:w-36 group-hover:h-20 transition-all duration-500"
+                                            class="m-auto rounded-3xl object-cover w-10 h-10 group-hover:w-36 group-hover:h-36 transition-all duration-500"
                                             alt="">
                                     @endisset
                                 </td>

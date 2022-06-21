@@ -15,8 +15,8 @@
         </div>
         <select wire:model="foodTypeId" class="p-3 rounded-xl w-full cursor-pointer">
             @foreach ($foodTypes as $foodType)
-                <option value="{{ $foodType->id }}" {{ $foodTypeId == $foodType->id ? 'selected' : '' }}>
-                    {{ $foodTypeName }}
+                <option value="{{ $foodType->id }}">
+                    {{ $foodType->name }}
             @endforeach
         </select>
         @error('foodTypeId')

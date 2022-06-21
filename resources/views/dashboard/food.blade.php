@@ -12,9 +12,6 @@
             </div>
             <div class="mt-5">
             </div>
-            <h3 class="font-black text-2xl my-4 mt-20">Resturants</h3>
-            <div class="mt-5">
-            </div>
         </div>
         <livewire:modal-add-food />
     </div>
