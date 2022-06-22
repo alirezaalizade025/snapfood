@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class FoodParty extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'discount'
+    ];
 
     public function status(): Attribute
     {

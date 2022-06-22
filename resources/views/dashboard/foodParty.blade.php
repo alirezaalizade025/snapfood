@@ -1,6 +1,6 @@
 <x-app-layout>
     <div>
-        <div class="bg-lime-100 w-full h-full p-8 border bg-gradient-to-r from-lime-200 text-lime-800 pb-20">
+        <div class=" w-full h-full p-8 border bg-gradient-to-br from-lime-200 to-lime-50 text-lime-800 pb-20">
             <div class="flex justify-between">
                 <h3 class="font-black text-2xl mb-4">Food Party</h3>
                 <div onclick="Livewire.emit('showAddFoodModal')"
@@ -15,6 +15,6 @@
             </div>
         </div>
 
-        <livewire:modal-add-food />
+        <livewire:modal-add-food-party />
     </div>
 </x-app-layout>

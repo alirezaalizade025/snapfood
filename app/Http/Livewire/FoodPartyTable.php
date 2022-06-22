@@ -4,26 +4,38 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\FoodParty;
+use Illuminate\Http\Request;
+use App\Http\Controllers\FoodPartyController;
+
+
 
 class FoodPartyTable extends Component
 {
     public $search;
+    public $photo;
+    public $listeners = [
+        'refreshFoodPartyTable' => 'fetchData'
+    ];
 
+    public function changeStatus($id)
+    {
+        $request = new Request();
+        $request->replace(['status' => true]);
+        $response = app(FoodPartyController::class)->update($request, $id);
+        $response = json_decode($response, true);
+        $this->dispatchBrowserEvent('banner-message', [
+            'style' => $response['status'] == 'success' ? 'success' : 'danger',
+            'message' => $response['message']
+        ]);
+        $this->fetchData();
+    }
     public function fetchData()
     {
-
-
         $where = [];
-        // if ($this->foodType != null && $this->foodType != 'All') {
-        //     $where[] = ['food_type_id', '=', $this->foodType];
-        // }
-        // if ($this->foodParty != null && $this->foodParty != 'All') {
-        //     $where[] = ['food_party_id', '=', $this->foodParty];
-        // }
-
         if ($this->search != null) {
             $where[] = ['name', 'like', '%' . $this->search . '%'];
         }
+
         return FoodParty::where($where)
             ->orderBy('id')
             ->orderBy('created_at', 'desc')

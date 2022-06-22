@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('food_parties', function (Blueprint $table) {
-            $table->boolean('status');
+            $table->boolean('status')->default(false);
         });
     }
 
