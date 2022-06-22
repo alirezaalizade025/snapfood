@@ -65,13 +65,25 @@
                             @enderror
                         </div>
                         {{-- TODO:row material --}}
-                        <div>
-                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">FinalPrice</label>
+                        <div class="my-auto">
+                            <label class="text-white dark:text-gray-200 h-full"
+                                for="passwordConfirmation">FinalPrice</label>
                             <div
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 {{ $finalPrice }}
                             </div>
                         </div>
+                        <div class="h-full">
+                            <div class="text-white dark:text-gray-200 h-[12%]" for="discount">Raw Meterial</div>
+                            <textarea type="text" wire:model="rawMaterial"
+                                class="h-[73%] block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                            </textarea>
+                            <span class="text-red-300 dark:text-gray-200 h-[10%]">Please seperate materials with ","</span>
+                            @error('discount')
+                                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-white">
                                 Image

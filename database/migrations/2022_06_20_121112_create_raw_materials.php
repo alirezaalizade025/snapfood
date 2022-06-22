@@ -14,10 +14,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('row_material', function (Blueprint $table) {
+        Schema::create('raw_materials', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignIdFor(Food::class)->constrained();
+            $table->foreignIdFor(Food::class)->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('row_material');
+        Schema::dropIfExists('raw_materials');
     }
 };

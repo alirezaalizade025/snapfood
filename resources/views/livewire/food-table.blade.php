@@ -1,4 +1,3 @@
-<div class="w-full">
     @empty(!session('response'))
         @php
             $class = session('response')['status'] == 'success' ? 'bg-green-500' : 'bg-red-500';
@@ -120,4 +119,4 @@
                 <livewire:edit-food />
             </div>
         </div>
-    </div>
+        </div>

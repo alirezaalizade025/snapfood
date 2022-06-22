@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use App\Http\Requests\FoodRequest;
 
@@ -18,15 +19,24 @@ class FoodController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $food = $request->validate([
             'name' => 'required|min:2',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
             'food_type_id' => 'required|exists:food_types,id',
         ]);
+        $material = $request->validate([
+            'raw_material' => 'required|min:2|max:255',
+        ]);
+        $material = trim($material['raw_material']);
+        $material = explode(',', $material);
 
-        if ($food = Food::create($request->all())) {
+
+        if ($food = Food::create($food)) {
+            foreach ($material as $row) {
+                RawMaterial::create(['food_id' => $food->id, 'name' => $row]);
+            }
             return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
         }
         return json_encode(['status' => 'success', 'message' => 'Error adding food.']);
