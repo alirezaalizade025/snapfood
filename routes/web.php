@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FoodTypeController;
 use App\Http\Controllers\RestaurantController;
 
@@ -28,4 +29,5 @@ Route::middleware([
         Route::resource('/foodType', FoodTypeController::class);
         Route::resource('/food', FoodController::class);
         Route::resource('/restaurant', RestaurantController::class);
+        Route::resource('/discount', DiscountController::class);
     });
