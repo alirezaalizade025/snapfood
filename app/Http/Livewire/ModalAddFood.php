@@ -99,5 +99,6 @@ class ModalAddFood extends Component
     {
         $this->model = 'Food';
         $this->showingModal = true;
+        $this->resetErrorBag();
     }
 }

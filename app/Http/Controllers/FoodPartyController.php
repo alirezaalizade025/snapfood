@@ -32,24 +32,7 @@ class FoodPartyController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
-    {
-    //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
     //
     }
@@ -67,6 +50,16 @@ class FoodPartyController extends Controller
             $foodParty->update();
             return json_encode(['status' => 'success', 'message' => $foodParty->name . ' status updated']);
         }
+
+        $data = $request->validate([
+            'name' => 'required|min:2|max:255|unique:food_parties,name,' . $id,
+            'discount' => 'required|numeric|between:0,99.99'
+        ]);
+
+        if ($foodParty->update($data)) {
+            return json_encode(['status' => 'success', 'message' => $data['name'] . ' updated successfully']);
+        }
+        return json_encode(['status' => 'error', 'message' => $data['name'] . ' can\'t be changed']);
     }
 
     public function destroy($id)

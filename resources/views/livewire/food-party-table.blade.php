@@ -54,7 +54,7 @@
                                 </td>
                                 <td class="p-3 font-bold rounded flex flex-col gap-2 justify-center items-center">
                                     <div class="flex gap-3">
-                                        <div wire:click="$emit('showEditModal', 'Food', {{ $foodParty->id }})"
+                                        <div wire:click="$emit('showEditModal', {{ $foodParty->id }})"
                                             class="bg-purple-400 cursor-pointer p-2 rounded text-white">edit</div>
                                         <div wire:click="$emit('showDeleteModal', 'FoodParty', {{ $foodParty->id }})"
                                             class="bg-red-500 cursor-pointer p-2 rounded text-white">delete</div>
@@ -73,7 +73,7 @@
                 <div class="mt-2">
                     {{ $foodParties->links() }}
                 </div>
-                {{-- <livewire:edit-foodParty /> --}}
+                <livewire:modal-edit-food-party />
             </div>
         </div>
     </div>
