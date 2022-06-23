@@ -32,4 +32,12 @@ class Restaurant extends Model
             set: fn($value) => $value == 'active' ? true : false,
         );
     }
+
+    public function confirm(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? 'active' : 'inactive',
+            set: fn($value) => $value == 'active' ? true : false,
+        );
+    }
 }

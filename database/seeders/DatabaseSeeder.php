@@ -17,10 +17,6 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         \App\Models\FoodType::factory(4)->create();
-        \App\Models\Restaurant::factory(50)->create();
-        \App\Models\FoodParty::factory(4)->create();
-        \App\Models\Food::factory(100)->create();
-
         \App\Models\User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
@@ -30,5 +26,9 @@ class DatabaseSeeder extends Seeder
             'bank_account_number' => '1234567891234',
 
         ]);
+        \App\Models\User::factory(20)->create();
+        \App\Models\Restaurant::factory(50)->create();
+        \App\Models\FoodParty::factory(5)->create();
+        Food::factory(100)->create();
     }
 }

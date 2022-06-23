@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\FoodType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class RestaurantFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
+            'user_id' => User::where('role', 'restaurant')->get()->random()->id,
             'food_type_id' => FoodType::all()->random()->id,
             'phone' => $this->faker->phoneNumber,
             'address' => $this->faker->address,

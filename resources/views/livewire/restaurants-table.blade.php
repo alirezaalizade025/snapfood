@@ -5,8 +5,7 @@
         </div>
         <label for="">
             Food Type
-            <select wire:model="foodType" wire:change="fetchData"
-                class="p-3 bg-white rounded-full border border-teal-300">
+            <select wire:model="foodType" wire:change="fetchData" class="p-3 bg-white rounded-full border border-teal-300">
                 <option>All</option>
                 @foreach ($foodTypes as $foodType)
                     <option value="{{ $foodType->id }}">{{ $foodType->name }}</option>
@@ -25,6 +24,7 @@
                         <th class="p-3">Name</th>
                         <th class="p-3">Type</th>
                         <th class="p-3">Updated at</th>
+                        <th class="p-3">Confirm</th>
                         <th class="p-3">Status</th>
                     </tr>
                 </thead>
@@ -51,6 +51,15 @@
                                 <div wire:click="$emit('editType', {{ $restaurant->id }}, '{{ $restaurant->name }}')"
                                     class=" hover:text-purple-600 mr-2 cursor-pointer flex justify-center gap-5">
                                     <div wire:click="changeStatus({{ $restaurant->id }})"
+                                        class="{{ $restaurant->confirm == 'active' ? 'text-green-500' : 'text-red-500' }} capitalize">
+                                        {{ $restaurant->confirm }}
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="p-3 font-bold">
+                                <div class=" hover:text-purple-600 mr-2 flex justify-center gap-5">
+                                    <div
                                         class="{{ $restaurant->status == 'active' ? 'text-green-500' : 'text-red-500' }} capitalize">
                                         {{ $restaurant->status }}
                                     </div>

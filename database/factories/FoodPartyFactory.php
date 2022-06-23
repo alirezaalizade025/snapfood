@@ -17,7 +17,7 @@ class FoodPartyFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['spring', 'summer', 'autumn', 'winter']),
+            'name' => $this->faker->unique()->randomElement(['daily', 'spring', 'summer', 'autumn', 'winter']),
             'discount' => $this->faker->randomNumber(2),
         ];
     }
