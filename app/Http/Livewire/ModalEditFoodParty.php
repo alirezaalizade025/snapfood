@@ -55,7 +55,7 @@ class ModalEditFoodParty extends Component
                 'message' => $response['message']
             ]);
             $this->showingModal = false;
-            $this->emit('refreshFoodTable');
+            $this->emit('refreshFoodPartyTable');
         }
     }
 

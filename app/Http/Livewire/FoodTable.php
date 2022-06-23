@@ -49,16 +49,34 @@ class FoodTable extends Component
         if ($this->search != null) {
             $where[] = ['name', 'like', '%' . $this->search . '%'];
         }
-        return Food::where($where)
-            ->orderBy('id')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+
+        if (auth()->user()->role != 'admin') {
+            return Food::select(['food.*', 'restaurants.user_id'])
+                ->where($where)
+                ->where('restaurants.user_id', auth()->id())
+                ->leftJoin('restaurants', 'restaurants.id', '=', 'food.restaurant_id')
+                ->orderBy('food.updated_at', 'desc')
+                ->orderBy('food.id')
+                ->paginate(10);
+        }
+        else {
+            return Food::where($where)
+                ->orderBy('updated_at', 'desc')
+                ->orderBy('id')
+                ->paginate(10);
+        }
     }
 
     public function mount()
     {
+        if (auth()->user()->role != 'admin') {
+            $this->foodParties = FoodParty::where('status', true)->get();
+        }
+        else {
+            $this->foodParties = FoodParty::all();
+        }
+
         $this->foodTypes = FoodType::all();
-        $this->foodParties = FoodParty::all();
     }
 
     public function render()

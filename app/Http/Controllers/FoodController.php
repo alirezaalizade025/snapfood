@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\Restaurant;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
 use App\Http\Requests\FoodRequest;
@@ -12,6 +13,9 @@ class FoodController extends Controller
 
     public function index()
     {
+        if (is_null(Restaurant::where('user_id', auth()->id())->get()->first()) && auth()->user()->role != 'admin') {
+            return redirect()->back()->withErrors('You must create a restaurant first');
+        }
         return view('dashboard.food');
     }
 
@@ -36,13 +40,17 @@ class FoodController extends Controller
             'raw_materials.*' => 'required|string|min:2|max:255',
         ]);
 
-        if ($food = Food::create($food)) {
-            foreach ($material['raw_materials'] as $material) {
-                RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
+        $restaurant = Restaurant::where('user_id', auth()->id())->get()->first();
+        if (!is_null($restaurant)) {
+            $food['restaurant_id'] = $restaurant->id;
+            if ($food = Food::create($food)) {
+                foreach ($material['raw_materials'] as $material) {
+                    RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
+                }
+                return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
             }
-            return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
         }
-        return json_encode(['status' => 'success', 'message' => 'Error adding food.']);
+        return json_encode(['status' => 'success', 'message' => 'Error in adding food.']);
 
     }
 
@@ -56,13 +64,30 @@ class FoodController extends Controller
     {
         $food = Food::find($id);
         if (in_array('status', $request->all())) {
-            if ($food->status == 'active') {
-                $food->status = 'inactive';
+            if (auth()->user()->role == 'admin') {
+                if ($food->status == 'active') {
+                    if ($food->confirm == 'accept') {
+                        $food->confirm = 'denied';
+                    }
+                    else {
+                        $food->confirm = 'accept';
+                    }
+                }
+                else {
+                    $food->confirm = 'denied';
+                }
+
             }
-            else {
-                $food->status = 'active';
+            elseif (auth()->user()->role == 'restaurant') {
+                if ($food->status == 'active') {
+                    $food->status = 'inactive';
+                }
+                else {
+                    $food->status = 'active';
+                }
+                $column = 'status';
             }
-            $food->update(['status' => $food->status]);
+            $food->save();
             return json_encode(['status' => 'success', 'message' => $food->name . ' status updated']);
         }
         $data = $request->validate(
@@ -83,6 +108,8 @@ class FoodController extends Controller
         $material = $request->validate([
             'raw_materials.*' => 'required|min:2|max:255',
         ]);
+        $data['status'] = 'inactive';
+        $data['confirm'] = 'denied';
 
         if ($food->update($data)) {
             RawMaterial::whereNotIn('name', $material['raw_materials'])->where('food_id', $food->id)->delete();

@@ -14,15 +14,8 @@ class Food extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'price',
-        'discount',
-        'food_party_id',
-        'food_type_id',
-        'status',
-        'image',
-        'status'
+    protected $guarded = [
+
     ];
     public function foodType()
     {

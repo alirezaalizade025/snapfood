@@ -38,7 +38,7 @@
             <div class="h-full ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
                 <x-jet-banner />
                 @livewire('navigation-menu')
-                {{-- @if ($errors->any())
+                @if ($errors->any())
                     <div class="bg-red-400 text-white text-center py-1">
                         <ul>
                             @foreach ($errors->all() as $error)
@@ -46,7 +46,7 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif --}}
+                @endif
                 {{ $slot }}
             </div>
         </main>
