@@ -27,21 +27,25 @@
             <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                 {{ __('Profile') }}
             </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('foodType.index') }}" :active="request()->routeIs('foodType.index')">
-                {{ __('Food Type') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('food.index') }}" :active="request()->routeIs('food.index')">
-                {{ __('Food') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('restaurant.index') }}" :active="request()->routeIs('restaurant.index')">
-                {{ __('Restarant') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('restaurant.show', auth()->id()) }}" :active="request()->routeIs('restaurant.show')">
-                {{ __('My Restaurant') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('discount.index') }}" :active="request()->routeIs('discount.index')">
-                {{ __('Discount') }}
-            </x-jet-responsive-nav-link>
+            @if (auth()->user()->role == 'admin')
+                <x-jet-responsive-nav-link href="{{ route('foodType.index') }}" :active="request()->routeIs('foodType.index')">
+                    {{ __('Food Type') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('food.index') }}" :active="request()->routeIs('food.index')">
+                    {{ __('Food') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('restaurant.index') }}" :active="request()->routeIs('restaurant.index')">
+                    {{ __('Restarant') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('discount.index') }}" :active="request()->routeIs('discount.index')">
+                    {{ __('Discount') }}
+                </x-jet-responsive-nav-link>
+            @endif
+            @if (auth()->user()->role == 'restaurant')
+                <x-jet-responsive-nav-link href="{{ route('restaurant.show', auth()->id()) }}" :active="request()->routeIs('restaurant.show')">
+                    {{ __('My Restaurant') }}
+                </x-jet-responsive-nav-link>
+            @endif
         </ul>
     </div>
 

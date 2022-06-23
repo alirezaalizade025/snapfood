@@ -1,6 +1,5 @@
 <x-guest-layout>
-    {{-- TODO:add livewire for check dublicate phone email bank in login,register --}}
-    <div class="flex flex-col sm:justify-center items-center  sm:pt-0 bg-gray-100">
+    <div class="flex flex-col sm:justify-center items-center  sm:pt-0 bg-gray-100 h-screen">
         <div class="w-full mt-6 px-6 py-4  overflow-hidden sm:rounded-lg">
             <form method="POST" action="{{ route('register') }}" class=" p-5">
                 <x-jet-validation-errors class="mb-4" />

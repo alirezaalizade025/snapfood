@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div>
+    <div class="min-h-[calc(100vh-4rem)]">
         <div class=" w-full h-full p-8 border bg-gradient-to-br from-lime-200 to-lime-50 text-lime-800 pb-20">
             <div class="flex justify-between">
                 <h3 class="font-black text-2xl mb-4">Food Party</h3>

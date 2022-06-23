@@ -34,8 +34,8 @@
 
     <div class="h-full bg-gray-100">
         @livewire('aside-menu')
-        <main>
-            <div class="h-full ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
+        <main class="min-h-screen">
+            <div class="h-full ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
                 @livewire('navigation-menu')
                 <x-jet-banner />
                 {{ $slot }}
