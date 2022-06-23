@@ -18,21 +18,35 @@ class EditFood extends Component
     public $discount;
     public $foodParty;
     public $finalPrice;
-
+    public $rawMaterials = [];
+    public $i = 0;
 
     protected $rules = [
         'name' => 'required|min:2|max:255',
         'price' => 'required|numeric',
-        'discount' => 'required|numeric',
+        'discount' => 'nullable|numeric',
         'foodParty' => 'numeric',
         'foodType' => 'numeric',
-        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'rawMaterials.*' => 'required|string|min:2|max:255',
     ];
 
     public $listeners = [
         'hideMe' => 'hideModal',
-        'showEditModal' => 'showModal'
+        'showEditFoodModal' => 'showModal'
     ];
+
+    public function addInput($i)
+    {
+        $i++;
+        $this->i = $i;
+        $this->rawMaterials[$i] = '';
+    }
+
+    public function removeInput($i)
+    {
+        unset($this->rawMaterials[$i]);
+    }
 
     public function finalPrice()
     {
@@ -65,6 +79,7 @@ class EditFood extends Component
 
     public function showModal($model, $id)
     {
+        $this->resetErrorBag();
         $this->selectID = $id;
         $this->model = $model;
         $model = "App\Models\\" . $model;
@@ -79,6 +94,10 @@ class EditFood extends Component
         $this->foodType = $item->foodType->toArray();
         $this->showingModal = true;
         $this->finalPrice();
+        $this->rawMaterials = $item->rawMaterials->map(function ($item) {
+            return $item->name;
+        });
+        $this->i = count($this->rawMaterials);
     }
 
     public function updateFood()
@@ -90,6 +109,7 @@ class EditFood extends Component
             'discount' => $this->discount,
             'food_party_id' => $this->foodParty == null ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
             'food_type_id' => $this->foodType['id'],
+            'raw_materials' => $this->rawMaterials,
             'image' => $this->image
         ]);
 

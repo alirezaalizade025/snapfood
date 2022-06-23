@@ -13,6 +13,11 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 
     @livewireStyles
     <wireui:scripts />
@@ -23,6 +28,7 @@
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
+
 
 <body class="font-sans antialiased">
 
@@ -37,7 +43,7 @@
         </main>
     </div>
 
-    @stack('modals')
+    {{-- @stack('modals') --}}
     <livewire:delete-modal />
     @livewireScripts
     {{-- @powerGridScripts --}}

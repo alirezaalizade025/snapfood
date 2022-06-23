@@ -64,13 +64,41 @@
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
                         </div>
-                        {{-- TODO:row material --}}
                         <div>
                             <label class="text-white dark:text-gray-200" for="passwordConfirmation">FinalPrice</label>
                             <div
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-indigo-200 border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 {{ $finalPrice }}
                             </div>
+                        </div>
+                        <div class="h-full">
+                            <div class="overflow-auto">
+                                <div class="flex justify-between">
+                                    <div class="text-white dark:text-gray-200" for="discount">Raw Meterial</div>
+                                    <div class="p-1 bg-green-400 rounded text-white btn-info text-sm selected-none cursor-pointer"
+                                        wire:click.prevent="addInput({{ $i }})">
+                                        Add
+                                    </div>
+                                </div>
+                            </div>
+                            @error('rawMaterials.*')
+                                <p class="text-red-500
+                            text-sm mt-2">
+                                    {{ $message }}</p>
+                            @enderror
+                            @foreach ($rawMaterials as $key => $value)
+                                <div class="flex justify-between gap-2 mt-1">
+                                    <input type="text" class="rounded"
+                                        wire:model="rawMaterials.{{ $key }}">
+                                    <div class="col-md-2">
+                                        <div class="btn btn-danger btn-sm cursor-pointer"
+                                            wire:click="removeInput({{ $key }})">
+                                            &times
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-white">

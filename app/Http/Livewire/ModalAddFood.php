@@ -22,8 +22,9 @@ class ModalAddFood extends Component
         'id' => '',
         'name' => ''
     ];
-    public $rawMaterial;
     public $image;
+    public $rawMaterials = [];
+    public $i = 0;
     public $listeners = [
         'hideMe' => 'hideModal',
         'showAddFoodModal' => 'showModal'
@@ -34,8 +35,21 @@ class ModalAddFood extends Component
         'discount' => 'digits_between:0,100',
         'foodParty' => 'nullable|exists:food_parties,id',
         'foodType' => 'required|exists:food_types,id',
-        'rawMaterial' => 'required|string|max:255',
+        'rawMaterials.*' => 'required|string|min:2|max:255',
     ];
+
+    public function addInput($i)
+    {
+        $i++;
+        $this->i = $i;
+        $this->rawMaterials[$i] = '';
+    }
+
+    public function removeInput($i)
+    {
+        unset($this->rawMaterials[$i]);
+    }
+
 
     public function updated($field)
     {
@@ -69,7 +83,7 @@ class ModalAddFood extends Component
             'discount' => $this->discount,
             'food_party_id' => $this->foodParty == null ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
             'food_type_id' => $this->foodType['id'],
-            'raw_material' => $this->rawMaterial,
+            'raw_materials' => $this->rawMaterials,
             'image' => $this->image
         ]);
 

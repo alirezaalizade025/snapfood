@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\FoodParty;
 use App\Models\FoodType;
+use App\Models\FoodParty;
+use App\Models\RawMaterial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +31,11 @@ class Food extends Model
     function foodParty()
     {
         return $this->belongsTo(FoodParty::class);
+    }
+
+    public function rawMaterials()
+    {
+        return $this->hasMany(RawMaterial::class);
     }
 
     public function status(): Attribute

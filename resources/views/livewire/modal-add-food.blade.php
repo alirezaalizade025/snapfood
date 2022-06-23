@@ -64,24 +64,42 @@
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
                         </div>
-                        {{-- TODO:row material --}}
                         <div class="my-auto">
                             <label class="text-white dark:text-gray-200 h-full"
                                 for="passwordConfirmation">FinalPrice</label>
                             <div
-                                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                                class="block w-full px-4 py-1 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 {{ $finalPrice }}
                             </div>
                         </div>
                         <div class="h-full">
-                            <div class="text-white dark:text-gray-200 h-[12%]" for="discount">Raw Meterial</div>
-                            <textarea type="text" wire:model="rawMaterial"
-                                class="h-[73%] block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                            </textarea>
-                            <span class="text-red-300 dark:text-gray-200 h-[10%]">Please seperate materials with ","</span>
-                            @error('discount')
-                                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                            <div class="overflow-auto">
+                                <div class="flex justify-between">
+                                    <div class="text-white dark:text-gray-200" for="discount">Raw Meterial</div>
+                                    <div class="p-1 bg-green-400 rounded text-white btn-info text-sm cursor-pointer selected-none"
+                                        wire:click.prevent="addInput({{ $i }})">
+                                        Add
+                                    </div>
+                                </div>
+                            </div>
+                            @error('rawMaterials.*')
+                                <p class="text-red-500
+                            text-sm mt-2">
+                                    {{ $message }}</p>
                             @enderror
+                            @foreach ($rawMaterials as $key => $value)
+                                <div class="flex justify-between gap-2 mt-1">
+                                    <input type="text" class="rounded"
+                                        wire:model="rawMaterials.{{ $key }}">
+                                    <div class="col-md-2">
+                                        <div class="btn btn-danger btn-sm cursor-pointer"
+                                            wire:click="removeInput({{ $key }})">
+                                            &times
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
                         </div>
 
                         <div>

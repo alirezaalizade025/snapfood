@@ -26,16 +26,19 @@ class FoodController extends Controller
             'food_party_id' => 'nullable|exists:food_parties,id',
             'food_type_id' => 'required|exists:food_types,id',
         ]);
-        $material = $request->validate([
-            'raw_material' => 'required|min:2|max:255',
-        ]);
-        $material = trim($material['raw_material']);
-        $material = explode(',', $material);
 
+        $material = collect($request->all()['raw_materials'])->filter(function ($value) {
+            return !empty($value);
+        })->toArray();
+
+        $request->merge(['raw_materials' => $material]);
+        $material = $request->validate([
+            'raw_materials.*' => 'required|string|min:2|max:255',
+        ]);
 
         if ($food = Food::create($food)) {
-            foreach ($material as $row) {
-                RawMaterial::create(['food_id' => $food->id, 'name' => $row]);
+            foreach ($material['raw_materials'] as $material) {
+                RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
             }
             return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
         }
@@ -62,16 +65,32 @@ class FoodController extends Controller
             $food->update(['status' => $food->status]);
             return json_encode(['status' => 'success', 'message' => $food->name . ' status updated']);
         }
-        $request->validate(
+        $data = $request->validate(
         [
             'name' => 'required|min:2|max:255',
             'price' => 'required|numeric',
-            'discount' => 'required|numeric|digits:2',
+            'discount' => 'nullable|numeric|digits:2',
             'food_party_id' => 'nullable|exists:food_parties,id',
-            'food_type_id' => 'nullable|exists:food_types,id',
+            'food_type_id' => 'required|exists:food_types,id',
         ]
         );
-        if ($food->update($request->all())) {
+
+        $material = collect($request->all()['raw_materials'])->filter(function ($value) {
+            return !empty($value);
+        })->toArray();
+
+        $request->merge(['raw_materials' => $material]);
+        $material = $request->validate([
+            'raw_materials.*' => 'required|min:2|max:255',
+        ]);
+
+        if ($food->update($data)) {
+            RawMaterial::whereNotIn('name', $material['raw_materials'])->where('food_id', $food->id)->delete();
+            foreach ($material['raw_materials'] as $row) {
+                if (!RawMaterial::where('name', $row)->where('food_id', $food->id)->exists()) {
+                    RawMaterial::create(['name' => $row, 'food_id' => $food->id]);
+                }
+            }
             return json_encode(['status' => 'success', 'message' => $food->name . ' updated']);
         }
 

@@ -1231,6 +1231,9 @@ video {
 .col-span-12 {
   grid-column: span 12 / span 12;
 }
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
 .float-right {
   float: right;
 }
@@ -2657,6 +2660,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
+.bg-stone-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(214 211 209 / var(--tw-bg-opacity));
+}
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
 }
@@ -3503,6 +3510,10 @@ video {
 .text-red-300 {
   --tw-text-opacity: 1;
   color: rgb(252 165 165 / var(--tw-text-opacity));
+}
+.text-neutral-700 {
+  --tw-text-opacity: 1;
+  color: rgb(64 64 64 / var(--tw-text-opacity));
 }
 .underline {
   -webkit-text-decoration-line: underline;

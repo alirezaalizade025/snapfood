@@ -14,5 +14,6 @@
             </div>
         </div>
         <livewire:modal-add-food />
+        <livewire:edit-food />
     </div>
 </x-app-layout>
