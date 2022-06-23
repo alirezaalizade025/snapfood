@@ -40,9 +40,6 @@ class FoodPartyTable extends Component
             ->orderBy('id')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
-
-
-    // TODO:dynamics per page with select in table
     }
 
     public function render()

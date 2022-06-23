@@ -21,16 +21,6 @@ class EditFood extends Component
     public $rawMaterials = [];
     public $i = 0;
 
-    protected $rules = [
-        'name' => 'required|min:2|max:255',
-        'price' => 'required|numeric',
-        'discount' => 'nullable|numeric',
-        'foodParty' => 'numeric',
-        'foodType' => 'numeric',
-        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'rawMaterials.*' => 'required|string|min:2|max:255',
-    ];
-
     public $listeners = [
         'hideMe' => 'hideModal',
         'showEditFoodModal' => 'showModal'
@@ -127,4 +117,17 @@ class EditFood extends Component
     {
         $this->showingModal = false;
     }
+
+    public function updated($field)
+    {
+        $this->validateOnly($field, [
+            'name' => 'required|min:2|max:255|unique:food,name,' . $this->selectID,
+            'price' => 'required|numeric',
+            'discount' => 'nullable|numeric',
+            'foodParty' => 'numeric',
+            'foodType' => 'numeric',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'rawMaterials.*' => 'required|string|min:2|max:255', ]);
+    }
+
 }

@@ -20,10 +20,7 @@ class FoodTypesTable extends Component
 
     public function fetchData()
     {
-
         return FoodType::where('name', 'LIKE', "%$this->search%")->orderBy('updated_at', 'desc')->paginate(10, ['*'], 'typePage');
-
-    // TODO:dynamics per page with select in table
     }
     public function render()
     {

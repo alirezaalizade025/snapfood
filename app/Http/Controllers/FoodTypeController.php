@@ -18,7 +18,7 @@ class FoodTypeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => 'required|min:2'
+            'type' => 'required|min:2|unique:food_types,name',
         ]);
 
         if (FoodType::create(['name' => $data['type']])) {
@@ -43,7 +43,7 @@ class FoodTypeController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'type' => 'required|min:2'
+            'type' => 'required|min:2|unique:food_types,name,' . $id
         ]);
 
         $foodType = FoodType::find($id);

@@ -20,7 +20,7 @@ class FoodController extends Controller
     public function store(Request $request)
     {
         $food = $request->validate([
-            'name' => 'required|min:2',
+            'name' => 'required|min:2|unique:food,name',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
@@ -67,7 +67,7 @@ class FoodController extends Controller
         }
         $data = $request->validate(
         [
-            'name' => 'required|min:2|max:255',
+            'name' => 'required|min:2|max:255|unique:food,name,' . $id,
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric|digits:2',
             'food_party_id' => 'nullable|exists:food_parties,id',

@@ -104,6 +104,7 @@ class ModalAddFood extends Component
             'name' => ''
         ];
         $this->image = '';
+        $this->rawMaterials = [];
     }
 
     public function hideModal()
