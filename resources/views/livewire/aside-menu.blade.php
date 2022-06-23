@@ -38,7 +38,7 @@
                     {{ __('Restarant') }}
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('discount.index') }}" :active="request()->routeIs('discount.index')">
-                    {{ __('Discount') }}
+                    {{ __('Food Party') }}
                 </x-jet-responsive-nav-link>
             @endif
             @if (auth()->user()->role == 'restaurant')

@@ -36,14 +36,23 @@
         @livewire('aside-menu')
         <main class="min-h-screen">
             <div class="h-full ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-                @livewire('navigation-menu')
                 <x-jet-banner />
+                @livewire('navigation-menu')
+                {{-- @if ($errors->any())
+                    <div class="bg-red-400 text-white text-center py-1">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif --}}
                 {{ $slot }}
             </div>
         </main>
     </div>
 
-    {{-- @stack('modals') --}}
+    @stack('modals')
     <livewire:delete-modal />
     @livewireScripts
     {{-- @powerGridScripts --}}

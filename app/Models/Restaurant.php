@@ -11,14 +11,7 @@ class Restaurant extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'address',
-        'phone',
-        'status',
-        'food_type_id',
-        'bank_account',
-    ];
+    protected $guarded = [];
 
     public function foodType()
     {
@@ -26,14 +19,6 @@ class Restaurant extends Model
     }
 
     public function status(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ? 'active' : 'inactive',
-            set: fn($value) => $value == 'active' ? true : false,
-        );
-    }
-
-    public function confirm(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value ? 'active' : 'inactive',

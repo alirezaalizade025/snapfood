@@ -51,7 +51,7 @@
                                 <div wire:click="$emit('editType', {{ $restaurant->id }}, '{{ $restaurant->name }}')"
                                     class=" hover:text-purple-600 mr-2 cursor-pointer flex justify-center gap-5">
                                     <div wire:click="changeStatus({{ $restaurant->id }})"
-                                        class="{{ $restaurant->confirm == 'active' ? 'text-green-500' : 'text-red-500' }} capitalize">
+                                        class="{{ $restaurant->confirm == 'accept' ? 'text-green-500' : ($restaurant->confirm == 'waiting' ?'text-orange-500' : 'text-red-500') }} capitalize">
                                         {{ $restaurant->confirm }}
                                     </div>
 

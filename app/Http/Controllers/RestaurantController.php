@@ -14,10 +14,31 @@ class RestaurantController extends Controller
         return view('dashboard.restaurant');
     }
 
-    public function show(Restaurant $restaurant)
+    public function store(Request $request)
     {
-        $foodTypes = FoodType::all();
-        return view('dashboard.myRestaurant', compact('restaurant', 'foodTypes'));
+        $request->validate([
+            'restaurant.name' => 'required|min:2',
+            'restaurant.address' => 'required|min:2|max:255',
+            'restaurant.phone' => 'required|numeric|digits:11',
+            'restaurant.food_type_id' => 'required|exists:food_types,id',
+            'restaurant.bank_account' => 'required|digits:16',
+
+        ]);
+
+        $restaurant = new Restaurant();
+        $restaurant->name = $request->restaurant['name'];
+        $restaurant->user_id = auth()->id();
+        $restaurant->phone = $request->restaurant['phone'];
+        $restaurant->bank_account = $request->restaurant['bank_account'];
+        $restaurant->address = $request->restaurant['address'];
+        $restaurant->food_type_id = $request->restaurant['food_type_id'];
+        $restaurant->save();
+        return json_encode(['status' => 'success', 'message' => 'Restaurant add successfully']);
+    }
+
+    public function show($id)
+    {
+        return view('dashboard.myRestaurant');
     }
 
     public function update(Request $request, $id)
@@ -26,27 +47,46 @@ class RestaurantController extends Controller
         if (in_array('status', $request->all())) {
             $user = User::find(auth()->id());
             if ($user->role == 'admin') {
+                if ($restaurant->confirm == 'accept') {
+                    $restaurant->confirm = 'denied';
+                    $restaurant->status = 'inactive';
+                }
+                else {
+                    $restaurant->confirm = 'accept';
+                }
                 $column = 'confirm';
             }
             elseif ($user->role == 'restaurant') {
-                if ($restaurant->confirm != 'active') {
+                if ($restaurant->confirm != 'accept') {
                     return json_encode(['status' => 'error', 'message' => 'You can\'t active until your restaurant be confirmed']);
+                }
+                if ($restaurant->status == 'active') {
+                    $restaurant->status = 'inactive';
+                }
+                else {
+                    $restaurant->status = 'active';
                 }
                 $column = 'status';
             }
 
-            if ($restaurant->$column == 'active') {
-                $restaurant->$column = 'inactive';
-            }
-            else {
-                $restaurant->$column = 'active';
-            }
 
             $restaurant->update(["$column" => $restaurant->$column]);
 
             return json_encode(['status' => 'success', 'message' => 'Restaurant status updated']);
         }
-        $restaurant->update($request->all());
+        $request->validate([
+            'restaurant.name' => 'required|min:2',
+            'restaurant.address' => 'required|min:2|max:255',
+            'restaurant.phone' => 'required|numeric|digits:11',
+            'restaurant.status' => 'required|min:2',
+            'restaurant.food_type_id' => 'required|exists:food_types,id',
+            'restaurant.bank_account' => 'required|digits:16',
+        ]);
+        $data = $request->all()['restaurant']->toArray();
+        $data['confirm'] = 'waiting';
+        $data['status'] = 'inactive';
+
+        $restaurant->update($data);
         return json_encode(['status' => 'success', 'message' => 'Restaurant updated']);
     }
 

@@ -53,7 +53,7 @@
                              <th class="p-3 rounded">Final price</th>
                              <th class="p-3 rounded">Food type</th>
                              <th class="p-3 rounded">Updated at</th>
-                             <th class="p-3 rounded"></th>
+                             <th class="p-3 rounded">confirm & status</th>
                          </tr>
                      </thead>
                      <tbody>
@@ -81,7 +81,7 @@
                                      <td class="p-3 group rounded mx-auto">
                                          @isset($food->image)
                                              <img src="{{ $food->image }}"
-                                                 class="m-auto rounded-3xl object-cover w-10 h-10 group-hover:w-36 group-hover:h-36 transition-all duration-500"
+                                                 class="m-auto rounded-3xl object-cover w-10 h-10 group-hover:w-28 group-hover:h-28 transition-all duration-500"
                                                  alt="">
                                          @endisset
                                      </td>
@@ -104,12 +104,15 @@
                                          {{ $food->updated_at }}
                                      </td>
                                      <td class="p-3 font-bold rounded flex flex-col gap-2 justify-center items-center">
-                                         <div class="flex gap-3">
-                                             <div wire:click="$emit('showEditFoodModal', 'Food', {{ $food->id }})"
-                                                 class="bg-purple-400 cursor-pointer p-2 rounded text-white">edit</div>
-                                             <div wire:click="$emit('showDeleteModal', 'Food', {{ $food->id }})"
-                                                 class="bg-red-500 cursor-pointer p-2 rounded text-white">delete</div>
-                                         </div>
+                                         {{ $food->confirm }}
+                                         @if (auth()->user()->role != 'admin')
+                                             <div class="flex gap-3">
+                                                 <div wire:click="$emit('showEditFoodModal', 'Food', {{ $food->id }})"
+                                                     class="bg-purple-400 cursor-pointer p-2 rounded text-white">edit</div>
+                                                 <div wire:click="$emit('showDeleteModal', 'Food', {{ $food->id }})"
+                                                     class="bg-red-500 cursor-pointer p-2 rounded text-white">delete</div>
+                                             </div>
+                                         @endif
                                          <div class="flex gap-3">
                                              <div wire:click="changeStatus({{ $food->id }})"
                                                  class="cursor-pointer rounded hover:scale-110 transition-all ease-in-out text-white p-2 hover:shadow-xl shadow-green-800/80

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('restaurants', function (Blueprint $table) {
+        Schema::table('food', function (Blueprint $table) {
             $table->enum('confirm', ['accept', 'waiting', 'denied'])->default('waiting');
         });
     }
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('restaurants', function (Blueprint $table) {
+        Schema::table('food', function (Blueprint $table) {
             //
         });
     }

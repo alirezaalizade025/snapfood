@@ -11,7 +11,7 @@
                     show = true;
                 });
             "
-            class="z-20 bg-gradient-to-l"
+            class="z-20 bg-gradient-to-l sticky top-0 w-full to-white"
             >
     <div class="max-w-screen-xl mx-auto py-2 px-3 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between flex-wrap">

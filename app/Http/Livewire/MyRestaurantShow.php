@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\FoodType;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RestaurantController;
@@ -10,26 +11,20 @@ use App\Http\Controllers\RestaurantController;
 class MyRestaurantShow extends Component
 {
     public $restaurant;
-    public $foodTypes;
-    public $name;
-    public $address;
-    public $phone;
-    public $status;
-    public $foodTypeId;
-    public $foodTypeName;
-    public $bankAccount;
+
+
     public $listeners = [
-        'refreshComponent' => '$refresh',
+        'refreshComponent' => 'fetchData',
     ];
 
 
     protected $rules = [
-        'name' => 'required|min:2',
-        'address' => 'required|min:2|max:255',
-        'phone' => 'required|integer|min:11',
-        'status' => 'required|min:2',
-        'foodTypeId' => 'required|exists:food_types,id',
-        'bankAccount' => 'required|digits:16',
+        'restaurant.name' => 'required|min:2',
+        'restaurant.address' => 'required|min:2|max:255',
+        'restaurant.phone' => 'required|numeric|digits:11',
+        'restaurant.status' => 'required|min:2',
+        'restaurant.food_type_id' => 'required|exists:food_types,id',
+        'restaurant.bank_account' => 'required|digits:16',
     ];
 
     public function updated($propertyName)
@@ -41,22 +36,25 @@ class MyRestaurantShow extends Component
     {
         $request = new Request();
         $request->replace([
-            'name' => $this->name,
-            'address' => $this->address,
-            'phone' => $this->phone,
-            'status' => $this->status,
-            'foodTypeId' => $this->foodTypeId,
-            'bankAccount' => $this->bankAccount,
+            'restaurant' => $this->restaurant
         ]);
 
-        $response = app(RestaurantController::class)->update($request, $this->restaurant->id);
+        if ($this->formType == 'add') {
+            $response = app(RestaurantController::class)->store($request);
+        }
+        elseif ($this->formType == 'update') {
+            $response = app(RestaurantController::class)->update($request, $this->restaurant->id);
+        }
         $response = json_decode($response, true);
+        if ($response['status'] == 'success') {
+            $this->formType = 'update';
+        }
         $this->dispatchBrowserEvent('banner-message', [
             'style' => $response['status'] == 'success' ? 'success' : 'danger',
             'message' => $response['message']
         ]);
         $this->showingModal = false;
-        $this->emit('refreshComponent');
+        $this->fetchData();
     }
 
     public function changeStatus()
@@ -65,20 +63,30 @@ class MyRestaurantShow extends Component
         $request->replace(['status' => true]);
         $response = app(RestaurantController::class)->update($request, $this->restaurant->id);
         $response = json_decode($response, true);
-        session()->flash('response', $response);
-        $this->render();
+        $this->dispatchBrowserEvent('banner-message', [
+            'style' => $response['status'] == 'success' ? 'success' : 'danger',
+            'message' => $response['message']
+        ]);
         $this->status = Restaurant::find($this->restaurant->id)->status;
+        $this->fetchData();
+    }
+
+    public function fetchData()
+    {
+        $id = auth()->user()->id;
+        $this->foodTypes = FoodType::all();
+        $this->restaurant = Restaurant::where('user_id', $id)->get()->first();
+        if (!empty($this->restaurant)) {
+            $this->formType = 'update';
+            return $this->restaurant;
+        }
+
+        $this->formType = 'add';
     }
 
     public function mount()
     {
-        $this->name = $this->restaurant->name;
-        $this->address = $this->restaurant->address;
-        $this->phone = $this->restaurant->phone;
-        $this->status = $this->restaurant->status;
-        $this->foodTypeId = $this->restaurant->food_type_id;
-        $this->foodTypeName = $this->restaurant->foodType->name;
-        $this->bankAccount = $this->restaurant->bank_account;
+        $this->restaurant = $this->fetchData();
     }
 
     public function render()
