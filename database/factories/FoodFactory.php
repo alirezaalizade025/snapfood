@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\FoodParty;
 use App\Models\FoodType;
+use App\Models\FoodParty;
+use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,6 +26,7 @@ class FoodFactory extends Factory
             'food_type_id' => FoodType::all()->random()->id,
             'discount' => $this->faker->randomNumber(2),
             'food_party_id' => FoodParty::all()->random()->id,
+            'restaurant_id' => Restaurant::all()->random()->id,
         ];
     }
 }

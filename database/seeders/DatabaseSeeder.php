@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             'bank_account_number' => '1234567891234',
 
         ]);
-        \App\Models\User::factory(20)->create();
-        \App\Models\Restaurant::factory(50)->create();
+        \App\Models\User::factory(15)->create();
+        \App\Models\Restaurant::factory(3)->create();
         \App\Models\FoodParty::factory(5)->create();
         Food::factory(100)->create();
     }

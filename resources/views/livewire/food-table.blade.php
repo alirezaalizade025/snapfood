@@ -18,8 +18,6 @@
              <div class="font-bold">
                  Total type: {{ $foods->total() }}
              </div>
-             <input wire:change="fetchData" wire:model.debouns.500ms="search"
-                 class="rounded-full p-3 border border-orange-300" type="text" placeholder="search...">
              <label for="">
                  Food Type
                  <select wire:model="foodType" wire:change="fetchData"
@@ -48,6 +46,7 @@
                          <tr>
                              <th class="p-3 rounded">ID</th>
                              <th class="p-3 rounded">Name</th>
+                             <th class="p-3 rounded">Restaurant</th>
                              <th class="p-3 rounded">Image</th>
                              <th class="p-3 rounded">Price</th>
                              <th class="p-3 rounded">Discount</th>
@@ -68,6 +67,13 @@
                                          <div class="flex justify-center">
                                              <div class="ml-3 self-center font-bold">
                                                  {{ $food->name }}
+                                             </div>
+                                         </div>
+                                     </td>
+                                     <td class="p-3 rounded">
+                                         <div class="flex justify-center">
+                                             <div class="ml-3 self-center font-bold">
+                                                 {{ $food->restaurant->name }}
                                              </div>
                                          </div>
                                      </td>

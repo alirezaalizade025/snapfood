@@ -75,7 +75,7 @@
                             <div class="overflow-auto">
                                 <div class="flex justify-between">
                                     <div class="text-white dark:text-gray-200" for="discount">Raw Meterial</div>
-                                    <div class="p-1 bg-green-400 rounded text-white btn-info text-sm selected-none cursor-pointer"
+                                    <div class="p-1 bg-green-400 rounded text-white btn-info text-sm cursor-pointer selected-none"
                                         wire:click.prevent="addInput({{ $i }})">
                                         Add
                                     </div>

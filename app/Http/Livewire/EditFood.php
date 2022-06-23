@@ -86,7 +86,7 @@ class EditFood extends Component
         $this->finalPrice();
         $this->rawMaterials = $item->rawMaterials->map(function ($item) {
             return $item->name;
-        });
+        })->toArray();
         $this->i = count($this->rawMaterials);
     }
 

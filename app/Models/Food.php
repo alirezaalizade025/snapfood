@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\FoodType;
 use App\Models\FoodParty;
+use App\Models\Restaurant;
 use App\Models\RawMaterial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -38,6 +39,11 @@ class Food extends Model
         return $this->hasMany(RawMaterial::class);
     }
 
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
     public function status(): Attribute
     {
         return Attribute::make(
@@ -45,6 +51,4 @@ class Food extends Model
             set: fn($value) => $value == 'active' ? true : false,
         );
     }
-
-
 }
