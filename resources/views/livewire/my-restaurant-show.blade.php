@@ -1,5 +1,5 @@
 <div
-    class="w-full h-full {{ (isset($restaurant['status']) && $restaurant['status'] == 'active') ? 'from-green-300 outline-green-600' : 'from-rose-200 outline-rose-600' }} bg-gradient-to-br to-white rounded-xl outline-2 outline-offset-4 outline-dotted p-10 grid md:grid-cols-2 gap-10">
+    class="w-full h-full {{ isset($restaurant['status']) && $restaurant['status'] == 'active' ? 'from-green-300 outline-green-600' : 'from-rose-200 outline-rose-600' }} bg-gradient-to-br to-white rounded-xl outline-2 outline-offset-4 outline-dotted p-10 grid md:grid-cols-2 gap-10">
     <div>
         <div class="font-bold text-2xl">
             name
@@ -60,8 +60,14 @@
                 {{ $restaurant['confirm'] }}</div>
         </div>
     @endif
+    <div wire:click="$emit('showChooseLocation')"
+        class="p-2 rounded-xl bg-blue-400 flex justify-center items-center cursor-pointer">Choose location on map</div>
+    @error('latitude')
+        <div class="text-red-500 text-sm">location on map required</div>
+    @enderror
     <div class="flex justify-end items-end">
         <div wire:click="updateRestaurant"
             class="p-3 bg-indigo-400 text-white rounded-xl text-center cursor-pointer hover:bg-indigo-500">save</div>
     </div>
+    <livewire:choose-location />
 </div>

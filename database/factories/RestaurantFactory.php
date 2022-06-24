@@ -23,9 +23,9 @@ class RestaurantFactory extends Factory
             'name' => $this->faker->name,
             'user_id' => User::where('role', 'restaurant')->get()->random()->id,
             'food_type_id' => FoodType::all()->random()->id,
-            'phone' => $this->faker->phoneNumber,
+            'phone' => $this->faker->regexify('09\\d{9}$'),
             'address' => $this->faker->address,
-            'bank_account' => $this->faker->bankAccountNumber,
+            'bank_account' => $this->faker->regexify('\\d{16}$'),
         ];
     }
 }

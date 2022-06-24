@@ -15,6 +15,7 @@ class MyRestaurantShow extends Component
 
     public $listeners = [
         'refreshComponent' => 'fetchData',
+        'mapClicked' => 'setLocation',
     ];
 
 
@@ -27,6 +28,13 @@ class MyRestaurantShow extends Component
         'restaurant.bank_account' => 'required|digits:16',
     ];
 
+    public function setLocation($lat, $lng)
+    {
+        $this->latitude = $lat;
+        $this->longitude = $lng;
+    }
+
+
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
@@ -36,9 +44,10 @@ class MyRestaurantShow extends Component
     {
         $request = new Request();
         $request->replace([
-            'restaurant' => $this->restaurant
+            'restaurant' => $this->restaurant,
+            'latitude' => $this->latitude ?? false,
+            'longitude' => $this->longitude ?? false,
         ]);
-
         if ($this->formType == 'add') {
             $response = app(RestaurantController::class)->store($request);
         }
@@ -53,7 +62,7 @@ class MyRestaurantShow extends Component
             'style' => $response['status'] == 'success' ? 'success' : 'danger',
             'message' => $response['message']
         ]);
-        $this->showingModal = false;
+        // $this->showingModal = false;
         $this->fetchData();
     }
 

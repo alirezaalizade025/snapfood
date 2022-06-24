@@ -22,8 +22,12 @@ class RestaurantController extends Controller
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.food_type_id' => 'required|exists:food_types,id',
             'restaurant.bank_account' => 'required|digits:16',
-
         ]);
+        $location = $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric'
+        ]);
+
 
         $restaurant = new Restaurant();
         $restaurant->name = $request->restaurant['name'];
@@ -32,6 +36,8 @@ class RestaurantController extends Controller
         $restaurant->bank_account = $request->restaurant['bank_account'];
         $restaurant->address = $request->restaurant['address'];
         $restaurant->food_type_id = $request->restaurant['food_type_id'];
+        $restaurant->latitude = $location['latitude'];
+        $restaurant->longitude = $location['longitude'];
         $restaurant->save();
         return json_encode(['status' => 'success', 'message' => 'Restaurant add successfully']);
     }
@@ -74,7 +80,7 @@ class RestaurantController extends Controller
 
             return json_encode(['status' => 'success', 'message' => 'Restaurant status updated']);
         }
-        $request->validate([
+        $data = $request->validate([
             'restaurant.name' => 'required|min:2',
             'restaurant.address' => 'required|min:2|max:255',
             'restaurant.phone' => 'required|numeric|digits:11',
@@ -82,9 +88,14 @@ class RestaurantController extends Controller
             'restaurant.food_type_id' => 'required|exists:food_types,id',
             'restaurant.bank_account' => 'required|digits:16',
         ]);
+        $location = $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric'
+        ]);
         $data = $request->all()['restaurant']->toArray();
         $data['confirm'] = 'waiting';
         $data['status'] = 'inactive';
+        $data = array_merge($data, $location);
 
         $restaurant->update($data);
         return json_encode(['status' => 'success', 'message' => 'Restaurant updated']);
