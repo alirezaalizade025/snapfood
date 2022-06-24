@@ -65,4 +65,7 @@
         <div wire:click="updateRestaurant"
             class="p-3 bg-indigo-400 text-white rounded-xl text-center cursor-pointer hover:bg-indigo-500">save</div>
     </div>
+    @error('latitude')
+        <span class="text-red-500 text-sm">Restaurant location on map required!</span>
+    @enderror
 </div>
