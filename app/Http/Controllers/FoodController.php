@@ -76,6 +76,7 @@ class FoodController extends Controller
                 else {
                     $food->confirm = 'denied';
                 }
+                $column = 'confirm';
 
             }
             elseif (auth()->user()->role == 'restaurant') {
@@ -88,7 +89,7 @@ class FoodController extends Controller
                 $column = 'status';
             }
             $food->save();
-            return json_encode(['status' => 'success', 'message' => $food->name . ' status updated']);
+            return json_encode(['status' => 'success', 'message' => $food->name . ' ' . $column . ' updated']);
         }
         $data = $request->validate(
         [

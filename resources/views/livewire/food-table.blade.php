@@ -55,12 +55,11 @@
                  <tbody>
                      @foreach ($foods as $food)
                          <div>
-                             <tr onclick="$('#materials-{{ $food->id }}').slideToggle()"
-                                 class="bg-orange-50 text-orange-900 text-center">
+                             <tr class="bg-orange-50 text-orange-900 text-center">
                                  <td class="p-3 rounded">
                                      {{ $food->id }}
                                  </td>
-                                 <td class="p-3 rounded">
+                                 <td class="p-3 rounded" onclick="$('#materials-{{ $food->id }}').slideToggle()">
                                      <div class="flex justify-center">
                                          <div class="ml-3 self-center font-bold">
                                              {{ $food->name }}
