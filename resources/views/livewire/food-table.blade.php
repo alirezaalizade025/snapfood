@@ -10,9 +10,14 @@
                  <thead class="bg-orange-500 text-gray-100">
                      <tr>
                          <th class="p-3 rounded">ID</th>
-                         <th class="p-3 rounded"><div>Name <br> & <br> restaurant</div>
-                            <input wire:model="search" type="text" class="p-1 rounded-full text-center text-black" placeholder="search">
-                        </th>
+                         <th class="p-3 rounded space-y-3">
+                             <div>Name @if (auth()->user()->role == 'admin')
+                                     <br> & <br> restaurant
+                                 @endif
+                             </div>
+                             <input wire:model="search" type="text" class="p-1 rounded-full text-center text-black"
+                                 placeholder="search">
+                         </th>
                          <th class="p-3 rounded">Image</th>
                          <th class="p-3 rounded">Price <br> & <br> final price</th>
                          <th class="p-3 rounded">
@@ -30,7 +35,7 @@
                              </div>
                          </th>
                          <th class="p-3 rounded">
-                             <div class="flex flex-col justify-between gap-5">
+                             <div class="flex flex-col justify-between gap-3">
                                  <div>Food type</div>
                                  <div class="text-black">
                                      <select wire:model="foodType" wire:change="fetchData"
@@ -58,7 +63,10 @@
                                  <td class="p-3 rounded">
                                      <div class="flex justify-center">
                                          <div class="ml-3 self-center font-bold">
-                                             {{ $food->name }} <br>({{ $food->restaurant->name }})
+                                             {{ $food->name }}
+                                             @if (auth()->user()->role == 'admin')
+                                                 <br>({{ $food->restaurant->name }})
+                                             @endif
                                          </div>
                                      </div>
                                  </td>

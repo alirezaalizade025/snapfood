@@ -58,7 +58,7 @@ class EditFood extends Component
 
     public function mount()
     {
-        $this->foodParties = FoodParty::all();
+        $this->foodParties = FoodParty::where('status', true)->get();
         $this->foodTypes = FoodType::all();
     }
 
