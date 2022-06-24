@@ -34,7 +34,7 @@
                                 {{ $foodType->updated_at }}
                             </td>
                             <td class="p-3 font-bold flex justify-evenly">
-                                <div wire:click="$emit('editType', {{ $foodType->id }}, '{{ $foodType->name }}')"
+                                <div wire:click="$emit('showModalEditFoodType', {{ $foodType->id }}, '{{ $foodType->name }}')"
                                     class="text-purple-400 hover:text-purple-600 mr-2 cursor-pointer">
                                     Edit
                                 </div>

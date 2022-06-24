@@ -18,10 +18,10 @@ class FoodTypeController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'type' => 'required|min:2|unique:food_types,name',
+            'name' => 'required|min:2|unique:food_types,name',
         ]);
 
-        if (FoodType::create(['name' => $data['type']])) {
+        if (FoodType::create(['name' => $data['name']])) {
             return json_encode(['status' => 'success', 'message' => 'Food type add successfully']);
         }
         return json_encode(['status' => 'error', 'message' => 'Food type can\'t add now!']);
@@ -48,9 +48,9 @@ class FoodTypeController extends Controller
 
         $foodType = FoodType::find($id);
         if ($foodType->update(['name' => $data['type']])) {
-            return json_encode(['status' => 'success', 'message' => $foodType->name . 'Food type update successfully']);
+            return json_encode(['status' => 'success', 'message' => $foodType->name . ' Food type update successfully']);
         }
-        return json_encode(['status' => 'error', 'message' => $foodType->name . 'Food type can\'t update now!']);
+        return json_encode(['status' => 'error', 'message' => $foodType->name . ' Food type can\'t update now!']);
     }
 
 
