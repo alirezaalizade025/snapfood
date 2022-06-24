@@ -1,4 +1,4 @@
-<div>
+<form wire:submit.prevent="storeFoodType">
     <x-jet-dialog-modal wire:model="showingModal">
         <x-slot name="title">
             {{ $title }}
@@ -26,7 +26,7 @@
             <div class="flex gap-5 justify-center font-bold text-black">
                 <div class="p-2 rounded bg-red-400 cursor-pointer" wire:click="$set('showingModal', false)">Cancel
                 </div>
-                <div class="p-2 rounded bg-sky-500 cursor-pointer" wire:click="storeFoodParty">save</div>
+                <button class="p-2 rounded bg-sky-500 cursor-pointer">save</button>
             </div>
         </x-slot>
 

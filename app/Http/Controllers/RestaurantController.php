@@ -44,7 +44,8 @@ class RestaurantController extends Controller
 
     public function show($id)
     {
-        return view('dashboard.myRestaurant');
+        $restaurantInfo = ResTaurant::where('user_id', auth()->user()->id)->get()->first();
+        return view('dashboard.myRestaurant', compact('restaurantInfo'));
     }
 
     public function update(Request $request, $id)
@@ -92,11 +93,11 @@ class RestaurantController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
         ]);
+
         $data = $request->all()['restaurant']->toArray();
         $data['confirm'] = 'waiting';
         $data['status'] = 'inactive';
         $data = array_merge($data, $location);
-
         $restaurant->update($data);
         return json_encode(['status' => 'success', 'message' => 'Restaurant updated']);
     }

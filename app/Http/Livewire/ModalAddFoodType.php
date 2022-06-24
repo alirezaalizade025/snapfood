@@ -26,7 +26,7 @@ class ModalAddFoodType extends Component
         return $this->validateOnly($propertyName);
     }
 
-    public function storeFoodParty()
+    public function storeFoodType()
     {
         $request = new Request();
         $request->replace([
