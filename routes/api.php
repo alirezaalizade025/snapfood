@@ -14,5 +14,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::apiResource(name:'addresses',controller:UserController::class)
 //    ->middleware(middleware:'auth:sanctum');
 
-Route::get('/addresses', [AddressController::class, 'show'])->middleware(middleware:'auth:sanctum');
-Route::post('/addresses', [AddressController::class, 'store'])->middleware(middleware:'auth:sanctum');
+// Route::get('/addresses', [AddressController::class, 'show'])->middleware(middleware:'auth:sanctum');
+// Route::post('/addresses', [AddressController::class, 'store'])->middleware(middleware:'auth:sanctum');
+Route::middleware('auth:sanctum')->controller(AddressController::class)->group(function(){
+    Route::get('/addresses', 'show');
+    Route::post('/addresses', 'store');
+    Route::post('/addresses/{address_id}', 'setCurrentAddress');
+});

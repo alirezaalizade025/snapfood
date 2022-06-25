@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAddressRequest;
 use App\Http\Requests\UpdateAddressRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressController extends Controller
 {
@@ -39,11 +40,13 @@ class AddressController extends Controller
     public function store(StoreAddressRequest $request)
     {
         $user = $request->user();
-        $address = new Address;
+
+        if (empty($user->addresses->toArray())) {
+            $request->merge(['is_current_location' => true]);
+        }
 
         if ($user->addresses()->create($request->toArray())) {
-            // return response()->json(['success', 'address add successfully']);
-            return response(['status' => 'success', 'message' => 'address add successfully'], 200);
+            return response(['msg' => 'address added successfully'], 200);
         }
         return response()->json('hi');
     }
@@ -97,5 +100,29 @@ class AddressController extends Controller
     public function destroy(Address $address)
     {
     //
+    }
+
+    /**
+     * Set customer current address in storage.
+     *
+     * @param  \App\Models\Address  $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function setCurrentAddress(Request $request, $id)
+    {
+        // TODO:add policy if requested id belong to user
+        $addresses = $request->user()->addresses();
+
+        try {
+            $address = $request->user()->addresses()->findOrFail($id);
+        }
+        catch (ModelNotFoundException $e) {
+            return response(['msg' => ['Address NOT FOUND']], 404);
+        }
+        $addresses->where([['is_current_location', true]])->update(['is_current_location' => false]);
+        $address->update(['is_current_location' => true]);
+
+        return response(['msg' => ['current address updated successfully']], 404);
     }
 }
