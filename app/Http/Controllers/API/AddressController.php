@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Models\Contact;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
-use App\Models\Contact;
 
 class ContactController extends Controller
 {
@@ -15,7 +16,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+    //
     }
 
     /**
@@ -25,7 +26,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+    //
     }
 
     /**
@@ -36,51 +37,57 @@ class ContactController extends Controller
      */
     public function store(StoreContactRequest $request)
     {
-        //
+    //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function show(Contact $contact)
+    public function show(Request $request)
     {
-        //
+        $user = $request->user();
+        $addresses = $user->addresses->map(function ($address) {
+            return $address->only(['id', 'title', 'address', 'latitude', 'longitude']);
+        }
+        );
+        return response($addresses);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param  \App\Models\Address  $assress
      * @return \Illuminate\Http\Response
      */
-    public function edit(Contact $contact)
+    public function edit(Address $address)
     {
-        //
+    //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateContactRequest  $request
-     * @param  \App\Models\Contact  $contact
+     * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateContactRequest $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $address)
     {
-        //
+    //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contact $contact)
+    public function destroy(Address $address)
     {
-        //
+    //
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('phone', 12);
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(FoodType::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('bank_account');

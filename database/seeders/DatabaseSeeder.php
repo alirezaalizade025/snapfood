@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Food;
-use App\Models\Contact;
+use App\Models\Address;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\FoodType::factory(4)->create();
         \App\Models\User::factory()->create([
             'name' => 'Admin',
+            'phone' => '091234567890',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin'),
             'role' => 'admin',
@@ -28,6 +29,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\Restaurant::factory(3)->create();
         \App\Models\FoodParty::factory(5)->create();
         Food::factory(100)->create();
-        Contact::factory(10)->create();
+        Address::factory(10)->create();
     }
 }

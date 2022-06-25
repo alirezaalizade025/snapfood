@@ -7,9 +7,9 @@ use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
  */
-class ContactFactory extends Factory
+class AddressFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,24 +18,23 @@ class ContactFactory extends Factory
      */
     public function definition()
     {
-        $contact = [
+        $address = [
             'title' => $this->faker->randomElement(['job', 'home', 'office', 'other']),
-            'contactable_type' => $this->faker->randomElement([
+            'addressable_type' => $this->faker->randomElement([
                 User::class ,
                 Restaurant::class ,
             ]),
-            'phone' => $this->faker->regexify('09\\d{9}$'),
             'address' => $this->faker->address,
             'latitude' => $this->faker->latitude,
             'longitude' => $this->faker->longitude,
         ];
 
-        if ($contact['contactable_type'] == 'App\Models\User') {
-            $contact['contactable_id'] = User::where('role', 'customer')->get()->random()->id;
+        if ($address['addressable_type'] == 'App\Models\User') {
+            $address['addressable_id'] = User::where('role', 'customer')->get()->random()->id;
         }
         else {
-            $contact['contactable_id'] = Restaurant::all()->random()->id;
+            $address['addressable_id'] = Restaurant::all()->random()->id;
         }
-        return $contact;
+        return $address;
     }
 }

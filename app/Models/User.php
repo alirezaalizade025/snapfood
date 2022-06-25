@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Contact;
+use App\Models\Address;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
@@ -65,8 +65,8 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function contacts()
+    public function addresses()
     {
-        return $this->morphMany(Contact::class , 'contactable');
+        return $this->morphMany(Address::class , 'addressable');
     }
 }
