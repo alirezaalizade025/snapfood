@@ -32,7 +32,6 @@ class UserFactory extends Factory
             // 'remember_token' => Str::random(10),
             'name' => $this->faker->name,
             'email' => $this->faker->email,
-            'phone' => $this->faker->unique()->regexify('09\\d{9}$'),
             'password' => bcrypt('admin'),
             'role' => $this->faker->randomElement(['restaurant', 'customer']),
             'bank_account_number' => $this->faker->unique()->regexify('\\d{16}$'),
