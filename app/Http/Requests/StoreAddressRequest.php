@@ -13,7 +13,8 @@ class StoreAddressRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // TODO:fix authorize
+        return true;
     }
 
     /**
@@ -24,7 +25,10 @@ class StoreAddressRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required|max:30',
+            'address' => 'required|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric'
         ];
     }
 }
