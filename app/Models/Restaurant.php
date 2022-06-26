@@ -49,4 +49,28 @@ class Restaurant extends Model
             set: fn($value) => $value == 'active' ? true : false,
         );
     }
+
+
+    public function scopeFilter($query, $value)
+    {
+        if (isset($value['is_open'])) {
+            $query->where('status', true);
+        }
+        if (isset($value['food_type_id'])) {
+            $query->where('food_type_id', $value['food_type_id']);
+        }
+        return $query;
+    }
+
+    public function scopeScore_gt($query)
+    {
+        return $query->where('score', '>', 3);
+    }
+
+    // public function scoreFilter(Type $var = null)
+    // {
+    //     return $this->hasManyThrough(Comment::class, Food::class)->scopeScore();
+    // }
+
+
 }

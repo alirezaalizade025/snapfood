@@ -14,9 +14,36 @@ class RestaurantAPIController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-    //
+        $restaurants = Restaurant::filter($request)
+            ->get()
+            ->map(function ($restaurant) {
+            return [
+            'id' => $restaurant->id,
+            'title' => $restaurant->title,
+            'address' => $restaurant->addresses()->get(['address', 'latitude', 'longitude'])->first(),
+            // TODO:uncomment phone
+            // 'phone' => $restaurant->phone,
+            'is_open' => $restaurant->status == 'active' ? true : false,
+            'image' => $restaurant->image->path,
+            'score' => number_format($restaurant->comments()->avg('score'), 2),
+            ];
+        });
+
+        if (isset($request['score_gt'])) {
+            $restaurants = $restaurants->filter(function ($restaurant) use ($request) {
+                return $restaurant['score'] >= $request['score_gt'] ?? 0 
+                && $restaurant['score'] <= $request['score_lt'] ?? 5;
+            });
+        }
+
+        if ($restaurants->isEmpty()) {
+            return response(
+            ['msg' => 'No restaurants found'], 404);
+        }
+
+        return response($restaurants);
     }
 
     /**
