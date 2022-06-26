@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Food;
 use App\Models\User;
+use App\Models\Image;
 use App\Models\Address;
 use App\Models\Comment;
 use App\Models\FoodType;
@@ -38,5 +39,6 @@ class DatabaseSeeder extends Seeder
         Address::factory(10)->create();
         Comment::factory(1000)->create();
         WeekSchedule::factory(6)->create();
+        Image::factory(100)->create();
     }
 }
