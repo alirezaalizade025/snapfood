@@ -3,8 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Food;
+use App\Models\User;
 use App\Models\Address;
 use App\Models\Comment;
+use App\Models\FoodType;
+use App\Models\FoodParty;
+use App\Models\Restaurant;
+use App\Models\WeekSchedule;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -17,8 +22,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\FoodType::factory(4)->create();
-        \App\Models\User::factory()->create([
+        FoodType::factory(4)->create();
+        User::factory()->create([
             'name' => 'Admin',
             'phone' => '091234567890',
             'email' => 'admin@admin.com',
@@ -26,11 +31,12 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'bank_account_number' => '1234567891234',
         ]);
-        \App\Models\User::factory(15)->create();
-        \App\Models\Restaurant::factory(3)->create();
-        \App\Models\FoodParty::factory(5)->create();
+        User::factory(15)->create();
+        Restaurant::factory(3)->create();
+        FoodParty::factory(5)->create();
         Food::factory(100)->create();
         Address::factory(10)->create();
         Comment::factory(1000)->create();
+        WeekSchedule::factory(6)->create();
     }
 }
