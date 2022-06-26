@@ -41,7 +41,7 @@ class RestaurantsTable extends Component
             $where[] = ['food_type_id', '=', $this->foodType];
         }
         if ($this->search != null) {
-            $where[] = ['name', 'like', '%' . $this->search . '%'];
+            $where[] = ['title', 'like', '%' . $this->search . '%'];
         }
         return Restaurant::where($where)
             ->orderBy('id')

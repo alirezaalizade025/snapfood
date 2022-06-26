@@ -41,7 +41,11 @@ class DeleteModal extends Component
         $this->selectID = $id;
         $this->model = $model;
         $model = "App\Models\\" . $model;
-        $this->item = $model::find($id)->name;
+        if ($model == 'restaurant') {
+            $this->item = $model::find($id)->title;
+        } else {
+            $this->item = $model::find($id)->name;
+        }
 
         $this->showingModal = true;
     }

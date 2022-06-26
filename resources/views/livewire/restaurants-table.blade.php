@@ -37,7 +37,7 @@
                             <td class="p-3">
                                 <div class="flex justify-center">
                                     <div class="ml-3 self-center font-bold">
-                                        {{ $restaurant->name }}
+                                        {{ $restaurant->title }}
                                     </div>
                                 </div>
                             </td>
@@ -48,7 +48,7 @@
                                 {{ $restaurant->updated_at }}
                             </td>
                             <td class="p-3 font-bold">
-                                <div wire:click="$emit('editType', {{ $restaurant->id }}, '{{ $restaurant->name }}')"
+                                <div wire:click="$emit('editType', {{ $restaurant->id }}, '{{ $restaurant->title }}')"
                                     class=" hover:text-purple-600 mr-2 cursor-pointer flex justify-center gap-5">
                                     <div wire:click="changeStatus({{ $restaurant->id }})"
                                         class="{{ $restaurant->confirm == 'accept' ? 'text-green-500' : ($restaurant->confirm == 'waiting' ?'text-orange-500' : 'text-red-500') }} capitalize">

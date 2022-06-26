@@ -20,7 +20,7 @@ class RestaurantFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'title' => $this->faker->name,
             'user_id' => User::where('role', 'restaurant')->get()->random()->id,
             'phone' => $this->faker->regexify('09\\d{9}$'),
             'food_type_id' => FoodType::all()->random()->id,

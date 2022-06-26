@@ -2,10 +2,10 @@
     class="w-full h-full pb-[17rem] {{ isset($restaurant['status']) && $restaurant['status'] == 'active' ? 'from-green-300 outline-green-600' : 'from-rose-200 outline-rose-600' }} bg-gradient-to-br to-white rounded-xl outline-2 outline-offset-4 outline-dotted p-10 grid md:grid-cols-2 gap-10">
     <div>
         <div class="font-bold text-2xl">
-            name
+            title
         </div>
-        <input wire:model="restaurant.name" type="text" class="p-3 rounded-xl w-full">
-        @error('restaurant.name')
+        <input wire:model="restaurant.title" type="text" class="p-3 rounded-xl w-full">
+        @error('restaurant.title')
             <div class="text-red-500 text-sm">{{ $message }}</div>
         @enderror
     </div>

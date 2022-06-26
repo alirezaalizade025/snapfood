@@ -20,7 +20,7 @@ class MyRestaurantShow extends Component
 
 
     protected $rules = [
-        'restaurant.name' => 'required|min:2',
+        'restaurant.title' => 'required|min:2',
         'restaurant.address' => 'required|min:2|max:255',
         'restaurant.phone' => 'required|numeric|digits:11',
         'restaurant.status' => 'required|min:2',

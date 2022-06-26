@@ -64,7 +64,7 @@
                                          <div class="ml-3 self-center font-bold">
                                              {{ $food->name }}
                                              @if (auth()->user()->role == 'admin')
-                                                 <br>({{ $food->restaurant->name }})
+                                                 <br>({{ $food->restaurant->title }})
                                              @endif
                                          </div>
                                      </div>

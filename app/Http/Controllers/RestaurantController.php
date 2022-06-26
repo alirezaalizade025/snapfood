@@ -17,7 +17,7 @@ class RestaurantController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'restaurant.name' => 'required|min:2',
+            'restaurant.title' => 'required|min:2',
             'restaurant.address' => 'required|min:2|max:255',
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.food_type_id' => 'required|exists:food_types,id',
@@ -30,7 +30,7 @@ class RestaurantController extends Controller
 
 
         $restaurant = new Restaurant();
-        $restaurant->name = $request->restaurant['name'];
+        $restaurant->title = $request->restaurant['title'];
         $restaurant->user_id = auth()->id();
         $restaurant->phone = $request->restaurant['phone'];
         $restaurant->bank_account = $request->restaurant['bank_account'];
@@ -82,7 +82,7 @@ class RestaurantController extends Controller
             return json_encode(['status' => 'success', 'message' => 'Restaurant status updated']);
         }
         $data = $request->validate([
-            'restaurant.name' => 'required|min:2',
+            'restaurant.title' => 'required|min:2',
             'restaurant.address' => 'required|min:2|max:255',
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.status' => 'required|min:2',
