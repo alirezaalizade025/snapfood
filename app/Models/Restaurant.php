@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Food;
+use App\Models\Image;
+use App\Models\Comment;
 use App\Models\FoodType;
+use App\Models\WeekSchedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +20,26 @@ class Restaurant extends Model
     public function foodType()
     {
         return $this->belongsTo(FoodType::class);
+    }
+
+    public function addresses()
+    {
+        return $this->morphMany(Address::class , 'addressable');
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
+
+    public function comments()
+    {
+        return $this->hasManyThrough(Comment::class, Food::class);
+    }
+
+    public function weekSchedules()
+    {
+        return $this->hasMany(WeekSchedule::class);
     }
 
     public function status(): Attribute
