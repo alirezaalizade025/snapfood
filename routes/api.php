@@ -28,10 +28,8 @@ Route::middleware('auth:sanctum')->controller(AddressController::class)->group(f
 
 Route::middleware('auth:sanctum')->patch('/user/{id}', [UserController::class , 'update']);
 
-Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->group(function () {
-    Route::get('/restaurants', 'index');
-    Route::get('/restaurants/{restaurant_id}', 'show');
-    Route::post('/restaurants', 'store');
-    Route::patch('/restaurants/{restaurant_id}', 'update');
-    Route::delete('/restaurants/{restaurant_id}', 'destroy');
+Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->prefix('restaurants')->group(function () {
+    Route::get('/', 'index');
+    Route::get('/{restaurant_id}', 'show');
+    Route::get('/{restaurant_id}/foods', 'foods');
 });

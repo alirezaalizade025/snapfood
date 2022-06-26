@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Food;
 use App\Models\User;
 use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -34,7 +35,7 @@ class ImageFactory extends Factory
             $image['imageable_id'] = Restaurant::all()->unique()->random()->id;
         }
         else {
-            $image['imageable_id'] = Restaurant::all()->random()->id;
+            $image['imageable_id'] = Food::all()->random()->id;
         }
 
         return $image;

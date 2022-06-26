@@ -44,6 +44,7 @@ class RestaurantController extends Controller
 
     public function show($id)
     {
+        // TODO:show if user is owner of restaurant
         $restaurantInfo = ResTaurant::where('user_id', auth()->user()->id)->get()->first();
         return view('dashboard.myRestaurant', compact('restaurantInfo'));
     }

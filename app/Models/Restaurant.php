@@ -42,6 +42,11 @@ class Restaurant extends Model
         return $this->hasMany(WeekSchedule::class);
     }
 
+    public function foods()
+    {
+        return $this->hasMany(Food::class);
+    }
+
     public function status(): Attribute
     {
         return Attribute::make(
@@ -61,16 +66,4 @@ class Restaurant extends Model
         }
         return $query;
     }
-
-    public function scopeScore_gt($query)
-    {
-        return $query->where('score', '>', 3);
-    }
-
-    // public function scoreFilter(Type $var = null)
-    // {
-    //     return $this->hasManyThrough(Comment::class, Food::class)->scopeScore();
-    // }
-
-
 }

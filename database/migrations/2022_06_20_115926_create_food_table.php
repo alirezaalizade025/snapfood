@@ -19,7 +19,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('price');
-            $table->string('image')->nullable();
             $table->foreignIdFor(FoodType::class)->nullable()->constrained()->nullOnDelete();
             $table->integer('discount')->nullable();
             $table->foreignIdFor(FoodParty::class)->nullable()->constrained()->nullOnDelete();

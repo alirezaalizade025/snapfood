@@ -37,6 +37,11 @@ class Food extends Model
         return $this->belongsTo(Restaurant::class);
     }
 
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
+
     public function status(): Attribute
     {
         return Attribute::make(

@@ -6,6 +6,7 @@ use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\FoodType;
 
 class RestaurantAPIController extends Controller
 {
@@ -33,7 +34,7 @@ class RestaurantAPIController extends Controller
 
         if (isset($request['score_gt'])) {
             $restaurants = $restaurants->filter(function ($restaurant) use ($request) {
-                return $restaurant['score'] >= $request['score_gt'] ?? 0 
+                return $restaurant['score'] >= $request['score_gt'] ?? 0
                 && $restaurant['score'] <= $request['score_lt'] ?? 5;
             });
         }
@@ -44,17 +45,6 @@ class RestaurantAPIController extends Controller
         }
 
         return response($restaurants);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    //
     }
 
     /**
@@ -81,7 +71,7 @@ class RestaurantAPIController extends Controller
             // TODO:uncomment phone
             // 'phone' => $restaurant->phone,
             'is_open' => $restaurant->status == 'active' ? true : false,
-            'image' => $restaurant->image->path,
+            'image' => $restaurant->image->path ? $restaurant->image->path : null,
             'score' => number_format($restaurant->comments()->avg('score'), 2),
             'comment_count' => $restaurant->comments()->count(),
             'schedule' => $restaurant->weekSchedules->keyBy('day')->map(function ($item) {
@@ -102,26 +92,52 @@ class RestaurantAPIController extends Controller
         return response($restaurant, 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Restaurant  $restaurant
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Restaurant $restaurant)
+    public function foods($id)
     {
-    //
+        try {
+            $restaurant = Restaurant::where([['id', $id], ['confirm', 'accept']])->firstOrFail();
+        }
+        catch (ModelNotFoundException $e) {
+            return response(['msg' => 'restaurant not found'], 404);
+        }
+
+        $foods = $restaurant
+            ->foods()
+            ->get();
+        $foods = $this->createFormat($foods);
+        return response($foods);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Restaurant  $restaurant
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Restaurant $restaurant)
+    public function createFormat($foods)
     {
-    //
+        $foods = $foods->map(function ($food) {
+            $item['id'] = $food->id;
+            $item['title'] = $food->name;
+            $item['price'] = $food->price;
+
+            if ($food->discount != null && $food->discount != 0) {
+                $item['off'] = ['label' => $food->discount . '%', 'factor' => 1 - $food->discount / 100];
+            }
+            //if have food party discount ignored
+            if ($food->foodParty != null) {
+                $item['off'] = ['label' => $food->foodParty->name, 'factor' => 1 - $food->foodParty->discount / 100];
+            }
+
+            $item['raw_material'] = $food->rawMaterials->implode('name', ', ');
+            $item['image'] = $food->image ? $food->image->path : null;
+            $item['food_type_id'] = $food->food_type_id;
+
+            return $item;
+
+        })
+            ->groupBy('food_type_id')->map(function ($food, $index) {
+            $item['id'] = $index;
+            $item['title'] = FoodType::find($index)->name;
+            $item['foods'] = $food;
+            return $item;
+        })
+            ->sortBy(['title', 'asc'])->values();
+        ;
+        return $foods;
     }
 }
