@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Food;
 use App\Models\Address;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -30,5 +31,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\FoodParty::factory(5)->create();
         Food::factory(100)->create();
         Address::factory(10)->create();
+        Comment::factory(1000)->create();
     }
 }
