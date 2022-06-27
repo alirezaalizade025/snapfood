@@ -27,8 +27,8 @@ class FoodController extends Controller
             'name' => 'required|min:2|unique:food,name',
             'price' => 'required|numeric',
             'discount' => 'sometimes|numeric',
-            'food_party_id' => 'sometimes|exists:food_parties,id',
-            'food_type_id' => 'required|exists:food_types,id',
+            'food_party_id' => 'nullable|exists:food_parties,id',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         $material = collect($request->all()['raw_materials'])->filter(function ($value) {
@@ -54,11 +54,6 @@ class FoodController extends Controller
 
     }
 
-
-    public function edit($id)
-    {
-
-    }
 
     public function update(Request $request, $id)
     {

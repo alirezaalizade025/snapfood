@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
@@ -15,7 +14,8 @@ class UserController extends Controller
         if($request->user()->id != $id) {
             return response()->json(['error' => 'You can only update your own account.'], 403);
         }
-        $request->password = $request->password ? bcrypt($request->password) : $request->password;
+        $request['password'] = $request->password ? bcrypt($request->password) : $request->password;
+        // return response($request->all());
 
         $user = User::findOrFail($id);
         $user->update($request->all());

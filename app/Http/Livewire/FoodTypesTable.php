@@ -4,23 +4,24 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\FoodType;
+use App\Models\Category;
 
 class FoodTypesTable extends Component
 {
     use WithPagination;
     public $search;
+
     protected $listeners = [
         'typeAdded' => 'fetchData',
         'itemDeleted' => 'fetchData',
         'typeEdited' => 'fetchData',
-        'refreshFoodTypeTable' => 'fetchData'
+        'refreshCategoryTable' => 'fetchData'
     ];
 
 
     public function fetchData()
     {
-        return FoodType::where('name', 'LIKE', "%$this->search%")->orderBy('updated_at', 'desc')->paginate(10, ['*'], 'typePage');
+        return Category::where('name', 'LIKE', "%$this->search%")->orderBy('updated_at', 'desc')->paginate(10, ['*'], 'typePage');
     }
     public function render()
     {

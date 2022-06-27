@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Food;
 use Livewire\Component;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\FoodParty;
 use Illuminate\Http\Request;
 use Livewire\WithPagination;
@@ -39,7 +39,7 @@ class FoodTable extends Component
         $where = [];
         if (auth()->user()->role != 'admin') {
             if ($this->foodType != null && $this->foodType != 'All') {
-                $where[] = ['food.food_type_id', '=', $this->foodType];
+                $where[] = ['food.category_id', '=', $this->foodType];
             }
             if ($this->foodParty != null && $this->foodParty != 'All') {
                 $where[] = ['food.food_party_id', '=', $this->foodParty];
@@ -59,7 +59,7 @@ class FoodTable extends Component
         }
         else {
             if ($this->foodType != null && $this->foodType != 'All') {
-                $where[] = ['food_type_id', '=', $this->foodType];
+                $where[] = ['category_id', '=', $this->foodType];
             }
             if ($this->foodParty != null && $this->foodParty != 'All') {
                 $where[] = ['food_party_id', '=', $this->foodParty];
@@ -84,7 +84,7 @@ class FoodTable extends Component
             $this->foodParties = FoodParty::all();
         }
 
-        $this->foodTypes = FoodType::all();
+        $this->foodTypes = Category::all();
     }
 
     public function render()

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Address;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\Restaurant;
 use App\Models\WeekSchedule;
 use Illuminate\Http\Request;
@@ -66,7 +66,7 @@ class RestaurantController extends Controller
             );
         });
 
-        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
+        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $restaurant->id)->delete();
 
 
         $categoryRestaurant = new CategoryRestaurant();

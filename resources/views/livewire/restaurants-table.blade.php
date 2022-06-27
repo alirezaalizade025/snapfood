@@ -42,7 +42,7 @@
                                 </div>
                             </td>
                             <td class="p-3">
-                                {{ $restaurant->foodType['name'] }}
+                                {{ $restaurant->name ?? ($restaurant->category ? $restaurant->category->map(function($item){ return $item->category->name;})->implode(', ') : '-') }}
                             </td>
                             <td class="p-3 font-bold">
                                 {{ $restaurant->updated_at }}

@@ -38,7 +38,7 @@
                                     class="text-purple-400 hover:text-purple-600 mr-2 cursor-pointer">
                                     Edit
                                 </div>
-                                <div wire:click="$emit('showDeleteModal', 'FoodType', {{ $foodType->id }})"
+                                <div wire:click="$emit('showDeleteModal', 'Category', {{ $foodType->id }})"
                                     class="text-red-400 hover:text-red-600  mx-2 cursor-pointer">
                                     Delete
                                 </div>

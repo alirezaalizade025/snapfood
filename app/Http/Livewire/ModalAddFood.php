@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\FoodParty;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class ModalAddFood extends Component
     public $foodParty;
     public $finalPrice;
     public $name;
-    public $foodType = [
+    public $category = [
         'id' => '',
         'name' => ''
     ];
@@ -34,7 +34,7 @@ class ModalAddFood extends Component
         'price' => 'required|numeric',
         'discount' => 'digits_between:0,100',
         'foodParty' => 'nullable|exists:food_parties,id',
-        'foodType' => 'required|exists:food_types,id',
+        'category' => 'required|exists:categories,id',
         'rawMaterials.*' => 'required|string|min:2|max:255',
     ];
 
@@ -62,7 +62,7 @@ class ModalAddFood extends Component
         if ($this->foodParty != null)
             $party = $this->foodParties->where('id', $this->foodParty['id'])->first();
         if (is_null($party)) {
-            $this->finalPrice = $this->price - (1 * empty($this->discount) ? 0 : $this->discount);
+            $this->finalPrice = $this->price * (1 - (empty($this->discount) ? 0 : $this->discount)/100);
         }
         else {
             $this->finalPrice = $this->price * (1 - ($party->discount) / 100);
@@ -77,7 +77,7 @@ class ModalAddFood extends Component
             'price' => $this->price,
             'discount' => $this->discount,
             'food_party_id' => $this->foodParty == null ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
-            'food_type_id' => $this->foodType['id'],
+            'category_id' => $this->category['id'],
             'raw_materials' => $this->rawMaterials,
             'image' => $this->image
         ]);
@@ -115,7 +115,7 @@ class ModalAddFood extends Component
         else {
             $this->foodParties = FoodParty::all();
         }
-        $this->foodTypes = FoodType::all();
+        $this->foodTypes = Category::all();
     }
 
     public function render()

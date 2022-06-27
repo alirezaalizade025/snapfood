@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\FoodParty;
 use Illuminate\Http\Request;
 
@@ -59,7 +59,7 @@ class EditFood extends Component
     public function mount()
     {
         $this->foodParties = FoodParty::where('status', true)->get();
-        $this->foodTypes = FoodType::all();
+        $this->foodTypes = Category::all();
     }
 
     public function render()

@@ -18,7 +18,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|min:2|unique:food_types,name',
+            'name' => 'required|min:2|unique:categories,name',
         ]);
 
         if (Category::create(['name' => $data['name']])) {
@@ -32,7 +32,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'type' => 'required|min:2|unique:food_types,name,' . $id
+            'type' => 'required|min:2|unique:categories,name,' . $id
         ]);
 
         $category = Category::find($id);

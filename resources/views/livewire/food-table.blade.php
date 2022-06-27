@@ -45,7 +45,7 @@
                      @endisset
                  </figure>
                  <div class="card-body w-4/5">
-                    <div class="font-bold text-orange-700 text-2xl"><span class="text-blue-500">#</span> {{ $food->foodType->name }}</div>
+                    <div class="font-bold text-orange-700 text-2xl"><span class="text-blue-500">#</span> {{ $food->category->name }}</div>
                      <h2 class="card-title">{{ $food->name }}@if (auth()->user()->role == 'admin')
                              <span class="text-sm">{{ $food->restaurant->title }}</span>
                          @endif

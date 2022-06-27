@@ -143,12 +143,12 @@ class RestaurantAPIController extends Controller
 
             $item['raw_material'] = $food->rawMaterials->implode('name', ', ');
             $item['image'] = $food->image ? $food->image->path : null;
-            $item['food_type_id'] = $food->food_type_id;
+            $item['category_id'] = $food->category_id;
 
             return $item;
 
         })
-            ->groupBy('food_type_id')->map(function ($food, $index) {
+            ->groupBy('category_id')->map(function ($food, $index) {
             $item['id'] = $index;
             $item['title'] = Category::find($index)->name;
             $item['foods'] = $food;

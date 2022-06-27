@@ -54,7 +54,7 @@ class ModalEditFoodType extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName, [
-            'name' => 'required|min:2|unique:food_types,name,' . $this->typeID,
+            'name' => 'required|min:2|unique:categories,name,' . $this->typeID,
         ]);
     }
     public function render()

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\Restaurant;
 use Livewire\WithPagination;
 use App\Http\Controllers\RestaurantController;
@@ -34,11 +34,18 @@ class RestaurantsTable extends Component
 
     public function fetchData()
     {
-        $this->foodTypes = FoodType::all();
+        $this->foodTypes = Category::all();
 
         $where = [];
         if ($this->foodType != null && $this->foodType != 'All') {
-            $where[] = ['food_type_id', '=', $this->foodType];
+            $where[] = ['categories.id', '=', $this->foodType];
+            return (Restaurant::
+            Join('category_restaurants', 'category_restaurants.restaurant_id', '=', 'restaurants.id')
+            ->join('categories', 'category_restaurants.category_id', '=', 'categories.id')
+            ->where($where)
+            ->orderBy('name', 'desc')
+            ->select('restaurants.*', 'categories.name as name')
+            ->paginate(10));
         }
         if ($this->search != null) {
             $where[] = ['title', 'like', '%' . $this->search . '%'];
@@ -50,7 +57,6 @@ class RestaurantsTable extends Component
     }
     public function render()
     {
-
         return view('livewire.restaurants-table', [
             'restaurants' => $this->fetchData()
         ]);

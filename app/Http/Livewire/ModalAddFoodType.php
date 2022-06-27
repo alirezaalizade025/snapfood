@@ -10,11 +10,11 @@ class ModalAddFoodType extends Component
 {
     public $showingModal = false;
     public $title = 'Add Food Type';
-    public $model = 'FoodType';
+    public $model = 'Category';
     public $discount;
     public $name;
     protected $rules = [
-        'name' => 'required|min:2|max:255|unique:food_types',
+        'name' => 'required|min:2|max:255|unique:categories',
     ];
     public $listeners = [
         'hideMe' => 'hideModal',
@@ -41,7 +41,7 @@ class ModalAddFoodType extends Component
                 'message' => $response['message']
             ]);
             $this->showingModal = false;
-            $this->emit('refreshFoodTypeTable');
+            $this->emit('refreshCategoryTable');
             $this->name = '';
             $this->discount = '';
         }

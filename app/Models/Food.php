@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
 use App\Models\RawMaterial;
@@ -19,9 +19,9 @@ class Food extends Model
     protected $guarded = [
 
     ];
-    public function foodType()
+    public function category()
     {
-        return $this->belongsTo(FoodType::class);
+        return $this->belongsTo(Category::class);
     }
 
     function foodParty()

@@ -11,8 +11,14 @@
 
         <div class="mt-3 text-center flex gap-5">
             <div class="w-1/2">
-                <img src="{{ auth()->user()->image->path }}" alt=""
-                    class="w-10 h-10 m-auto rounded-full object-cover lg:w-20 lg:h-20">
+                @isset(auth()->user()->image->path)
+                    <img src="{{ auth()->user()->image->path ?? null }}" alt=""
+                        class="w-10 h-10 m-auto rounded-full object-cover lg:w-20 lg:h-20">
+                @else
+                <div class="rounded-full bg-stone-400 text-gray-600 h-20 w-20 flex justify-center items-center">
+                    <span class="-rotate-[30deg]">snapfood</span>
+                </div>
+                @endisset
             </div>
             <div class="">
                 <h5 class="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">{{ auth()->user()->name }}</h5>
