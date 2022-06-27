@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Address;
 use App\Models\FoodType;
 use App\Models\Restaurant;
+use App\Models\WeekSchedule;
 use Illuminate\Http\Request;
 use App\Models\CategoryRestaurant;
 
@@ -48,6 +49,24 @@ class RestaurantController extends Controller
         $address->latitude = $location['latitude'];
         $address->longitude = $location['longitude'];
         $restaurant->addressInfo()->save($address);
+
+        $schedule = $request->validate([
+            'schedule' => 'array',
+        ])['schedule'];
+
+        $schedule = collect($schedule)
+            ->filter(function ($item) {
+            return $item['open_time'] != null && $item['close_time'] != null;
+        })
+            ->map(function ($item, $key) use ($restaurant) {
+
+            $restaurant->weekSchedules()->updateOrCreate(
+            ['day' => $key, 'restaurant_id' => $restaurant->id],
+            ['open_time' => $item['open_time'], 'close_time' => $item['close_time']]
+            );
+        });
+
+        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
 
 
         $categoryRestaurant = new CategoryRestaurant();
@@ -117,6 +136,24 @@ class RestaurantController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
         ]);
+
+        $schedule = $request->validate([
+            'schedule' => 'array',
+        ])['schedule'];
+
+        $schedule = collect($schedule)
+            ->filter(function ($item) {
+            return $item['open_time'] != null && $item['close_time'] != null;
+        })
+            ->map(function ($item, $key) use ($restaurant) {
+
+            $restaurant->weekSchedules()->updateOrCreate(
+            ['day' => $key, 'restaurant_id' => $restaurant->id],
+            ['open_time' => $item['open_time'], 'close_time' => $item['close_time']]
+            );
+        });
+
+        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
 
         $data['restaurant']['confirm'] = 'waiting';
         $data['restaurant']['status'] = 'inactive';

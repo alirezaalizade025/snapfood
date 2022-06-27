@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Category;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Models\FoodType;
 
 class RestaurantAPIController extends Controller
 {
@@ -23,21 +23,38 @@ class RestaurantAPIController extends Controller
             return [
             'id' => $restaurant->id,
             'title' => $restaurant->title,
-            'address' => $restaurant->addresses()->get(['address', 'latitude', 'longitude'])->first(),
-            // TODO:uncomment phone
-            // 'phone' => $restaurant->phone,
-            'is_open' => $restaurant->status == 'active' ? true : false,
-            'image' => $restaurant->image->path,
-            'score' => number_format($restaurant->comments()->avg('score'), 2),
-            ];
-        });
+            'type' => $restaurant->category->map(function ($item) {
+                    return $item->category->name;
+                }
+                )->implode(', '),
+                'address' => $restaurant->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
+                // 'phone' => $restaurant->phone, // TODO:uncomment phone
+                'is_open' => $restaurant->status == 'active' ? true : false,
+                'image' => isset($restaurant->image) ? $restaurant->image->path : null,
+                'score' => number_format($restaurant->comments()->avg('score'), 2),
+                ];
+            });
 
         if (isset($request['score_gt'])) {
             $restaurants = $restaurants->filter(function ($restaurant) use ($request) {
-                return $restaurant['score'] >= $request['score_gt'] ?? 0
-                && $restaurant['score'] <= $request['score_lt'] ?? 5;
-            });
+                return $restaurant['score'] >= $request['score_gt'] ?? 0;
+            })->values();
         }
+
+        if (isset($request['category_id'])) {
+            $category = Category::find($request['category_id']);
+            if (isset($category)) {
+                $restaurants = $restaurants->filter(function ($restaurant) use ($request, $category) {
+                    $pattern = "/$category->name/";
+                    return preg_match($pattern, $restaurant['type']);
+                })->values();
+            } else {
+                return response(
+                    ['msg' => 'No category found'], 404);
+            }
+        }
+        // TODO:refactor category filter
+
 
         if ($restaurants->isEmpty()) {
             return response(
@@ -66,12 +83,13 @@ class RestaurantAPIController extends Controller
         $restaurant = [
             'id' => $restaurant->id,
             'title' => $restaurant->title,
-            'type' => $restaurant->foodType->name,
-            'address' => $restaurant->addresses()->get(['address', 'latitude', 'longitude'])->first(),
-            // TODO:uncomment phone
-            // 'phone' => $restaurant->phone,
+            'type' => $restaurant->category->map(function ($item) {
+            return $item->category->name;
+        })->implode(', '),
+            'address' => $restaurant->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
+            // 'phone' => $restaurant->phone, // TODO:uncomment phone
             'is_open' => $restaurant->status == 'active' ? true : false,
-            'image' => $restaurant->image->path ? $restaurant->image->path : null,
+            'image' => isset($restaurant->image) ? $restaurant->image->path : null,
             'score' => number_format($restaurant->comments()->avg('score'), 2),
             'comment_count' => $restaurant->comments()->count(),
             'schedule' => $restaurant->weekSchedules->keyBy('day')->map(function ($item) {
@@ -132,7 +150,7 @@ class RestaurantAPIController extends Controller
         })
             ->groupBy('food_type_id')->map(function ($food, $index) {
             $item['id'] = $index;
-            $item['title'] = FoodType::find($index)->name;
+            $item['title'] = Category::find($index)->name;
             $item['foods'] = $food;
             return $item;
         })

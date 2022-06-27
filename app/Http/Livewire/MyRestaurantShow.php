@@ -19,6 +19,7 @@ class MyRestaurantShow extends Component
     public $listeners = [
         'refreshComponent' => 'fetchData',
         'mapClicked' => 'setLocation',
+        'schedule' => 'setSchedule',
     ];
 
 
@@ -29,6 +30,12 @@ class MyRestaurantShow extends Component
         'restaurant.status' => 'required|min:2',
         'restaurant.bank_account' => 'required|digits:16',
     ];
+
+    public function setSchedule($schedule)
+    {
+        $this->schedule = $schedule;
+    }
+
 
     public function setLocation($lat, $lng)
     {
@@ -44,7 +51,6 @@ class MyRestaurantShow extends Component
 
     public function updateRestaurant()
     {
-
         $this->restaurant['category'] = isset($this->restaurantCategory) ? $this->restaurantCategory->map(function ($item) {
             return $item['id'];
         })->toArray() : [];
@@ -54,6 +60,7 @@ class MyRestaurantShow extends Component
             'restaurant' => $this->restaurant,
             'latitude' => $this->latitude ?? false,
             'longitude' => $this->longitude ?? false,
+            'schedule' => $this->schedule ?? false,
         ]);
         if ($this->formType == 'add') {
             $response = app(RestaurantController::class)->store($request);

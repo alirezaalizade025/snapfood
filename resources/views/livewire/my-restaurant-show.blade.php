@@ -74,4 +74,7 @@
     @error('latitude')
         <span class="text-red-500 text-sm">Restaurant location on map required!</span>
     @enderror
+    @error('schedule')
+        <span class="text-red-500 text-sm">{{ $message }}</span>
+    @enderror
 </div>

@@ -14,6 +14,7 @@ class WeekSchedule extends Model
     use SoftDeletes;
     use HasFactory;
 
+    protected $guarded = [];
     protected $casts = [
         'day' => ScheduleCast::class ,
         'open_time' => ScheduleTimeCast::class ,

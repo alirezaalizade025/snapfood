@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Food;
 use App\Models\Image;
 use App\Models\Comment;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\WeekSchedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,9 +17,9 @@ class Restaurant extends Model
 
     protected $guarded = [];
 
-    public function foodType()
+    public function category()
     {
-        return $this->belongsTo(FoodType::class);
+        return $this->hasMany(CategoryRestaurant::class);
     }
 
     public function addressInfo()
@@ -60,9 +60,6 @@ class Restaurant extends Model
     {
         if (isset($value['is_open'])) {
             $query->where('status', true);
-        }
-        if (isset($value['food_type_id'])) {
-            $query->where('food_type_id', $value['food_type_id']);
         }
         return $query;
     }
