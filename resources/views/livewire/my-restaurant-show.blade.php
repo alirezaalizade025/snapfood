@@ -1,5 +1,5 @@
 <div
-    class="w-full h-full pb-[17rem] {{ isset($restaurant['status']) && $restaurant['status'] == 'active' ? 'from-green-300 outline-green-600' : 'from-rose-200 outline-rose-600' }} bg-gradient-to-br to-white rounded-xl outline-2 outline-offset-4 outline-dotted p-10 grid md:grid-cols-2 gap-10">
+    class="w-full h-full {{ isset($restaurant['status']) && $restaurant['status'] == 'active' ? 'from-green-300 outline-green-600' : 'from-rose-200 outline-rose-600' }} bg-gradient-to-br to-white rounded-xl outline-2 outline-offset-4 outline-dotted p-10 grid md:grid-cols-2 gap-10">
     <div>
         <div class="font-bold text-2xl">
             title
@@ -13,13 +13,19 @@
         <div class="font-bold text-2xl">
             Restaurant Type
         </div>
-        <select wire:model="restaurant.food_type_id" class="p-3 rounded-xl w-full cursor-pointer">
+        <div class="overflow-auto h-24 bg-sky-100 rounded-xl scrollbar">
             @foreach ($foodTypes as $foodType)
-                <option value="{{ $foodType->id }}">
-                    {{ $foodType->name }}
+                <div class="form-control odd:bg-white px-4">
+                    <label class="cursor-pointer label">
+                        <span class="label-text">{{ $foodType->name }}</span>
+                        <input wire:click="handelCategory({{ $foodType->id }})" value="{{ $foodType->id }}"
+                            @isset($restaurantCategory) {{ $restaurantCategory->contains('id', $foodType->id) ? 'checked' : '' }} @endisset
+                            type="checkbox" class="checkbox checkbox-accent" />
+                    </label>
+                </div>
             @endforeach
-        </select>
-        @error('restaurant.food_type_id')
+        </div>
+        @error('restaurant.category')
             <div class="text-red-500 text-sm">{{ $message }}</div>
         @enderror
     </div>

@@ -3,14 +3,17 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\RestaurantController;
+use App\Models\CategoryRestaurant;
 
 class MyRestaurantShow extends Component
 {
     public $restaurant;
+    public $selectedCategory;
+    public $restaurantCategory;
 
 
     public $listeners = [
@@ -24,7 +27,6 @@ class MyRestaurantShow extends Component
         'restaurant.address' => 'required|min:2|max:255',
         'restaurant.phone' => 'required|numeric|digits:11',
         'restaurant.status' => 'required|min:2',
-        'restaurant.food_type_id' => 'required|exists:food_types,id',
         'restaurant.bank_account' => 'required|digits:16',
     ];
 
@@ -42,6 +44,11 @@ class MyRestaurantShow extends Component
 
     public function updateRestaurant()
     {
+
+        $this->restaurant['category'] = isset($this->restaurantCategory) ? $this->restaurantCategory->map(function ($item) {
+            return $item['id'];
+        })->toArray() : [];
+
         $request = new Request();
         $request->replace([
             'restaurant' => $this->restaurant,
@@ -62,7 +69,6 @@ class MyRestaurantShow extends Component
             'style' => $response['status'] == 'success' ? 'success' : 'danger',
             'message' => $response['message']
         ]);
-        // $this->showingModal = false;
         $this->fetchData();
     }
 
@@ -80,12 +86,33 @@ class MyRestaurantShow extends Component
         $this->fetchData();
     }
 
+    public function handelCategory($id)
+    {
+        // dd($this->restaurantCategory);
+        if ($this->restaurantCategory != null && $this->restaurantCategory->contains('id', $id)) {
+            $this->restaurantCategory = collect($this->restaurantCategory)
+                ->filter(function ($item, $index) use ($id) {
+                return $item['id'] != $id;
+            });
+        }
+        else {
+            $this->restaurantCategory[] = $this->foodTypes->where('id', $id)->first();
+            $this->restaurantCategory = collect($this->restaurantCategory)->sortBy('id');
+        }
+    }
+
     public function fetchData()
     {
         $id = auth()->user()->id;
-        $this->foodTypes = FoodType::all();
+        $this->foodTypes = Category::all();
         $this->restaurant = Restaurant::where('user_id', $id)->get()->first();
         if (!empty($this->restaurant)) {
+            $this->restaurantCategory = CategoryRestaurant::where('restaurant_id', $this->restaurant->id)->get()->map(function ($item) {
+                return $item->category;
+            });
+            $this->restaurant->address = $this->restaurant->addressInfo->address ?? null;
+            $this->latitude = $this->restaurant->addressInfo->latitude ?? null;
+            $this->longitude = $this->restaurant->addressInfo->longitude ?? null;
             $this->formType = 'update';
             return $this->restaurant;
         }

@@ -22,9 +22,9 @@ class Restaurant extends Model
         return $this->belongsTo(FoodType::class);
     }
 
-    public function addresses()
+    public function addressInfo()
     {
-        return $this->morphMany(Address::class , 'addressable');
+        return $this->morphOne(Address::class , 'addressable');
     }
 
     public function image()

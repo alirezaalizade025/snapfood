@@ -7,11 +7,12 @@ use App\Models\User;
 use App\Models\Image;
 use App\Models\Address;
 use App\Models\Comment;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
 use App\Models\WeekSchedule;
 use Illuminate\Database\Seeder;
+use App\Models\CategoryRestaurant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +24,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        FoodType::factory(4)->create();
+        Category::factory(4)->create();
         User::factory()->create([
             'name' => 'Admin',
             'phone' => '091234567890',
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory(15)->create();
         Restaurant::factory(3)->create();
+        CategoryRestaurant::factory(5)->create();
         FoodParty::factory(5)->create();
         Food::factory(100)->create();
         Address::factory(10)->create();

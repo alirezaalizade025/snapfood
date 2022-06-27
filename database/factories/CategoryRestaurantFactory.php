@@ -3,14 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Category;
-use App\Models\FoodParty;
 use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Food>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class FoodFactory extends Factory
+class CategoryRestaurantFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,11 +19,7 @@ class FoodFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'price' => $this->faker->randomNumber(6),
             'category_id' => Category::all()->random()->id,
-            'discount' => $this->faker->randomNumber(2),
-            'food_party_id' => FoodParty::all()->random()->id,
             'restaurant_id' => Restaurant::all()->random()->id,
         ];
     }

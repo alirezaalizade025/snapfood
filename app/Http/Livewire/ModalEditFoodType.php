@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Http\Controllers\FoodTypeController;
+use App\Http\Controllers\CategoryController;
 
 class ModalEditFoodType extends Component
 {
@@ -36,7 +36,7 @@ class ModalEditFoodType extends Component
     {
         $request = new \Illuminate\Http\Request();
         $request->replace(['type' => $this->name]);
-        $response = app(FoodTypeController::class)->update($request, $this->typeID);
+        $response = app(CategoryController::class)->update($request, $this->typeID);
         $response = json_decode($response, true);
         $this->dispatchBrowserEvent('banner-message', [
             'style' => $response['status'] == 'success' ? 'success' : 'danger',

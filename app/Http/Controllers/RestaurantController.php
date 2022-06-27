@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Address;
 use App\Models\FoodType;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use App\Models\CategoryRestaurant;
 
 class RestaurantController extends Controller
 {
@@ -18,27 +20,43 @@ class RestaurantController extends Controller
     {
         $request->validate([
             'restaurant.title' => 'required|min:2',
-            'restaurant.address' => 'required|min:2|max:255',
             'restaurant.phone' => 'required|numeric|digits:11',
-            'restaurant.food_type_id' => 'required|exists:food_types,id',
             'restaurant.bank_account' => 'required|digits:16',
         ]);
+
+        $category = $request->validate([
+            'restaurant.category' => 'required|array|exists:categories,id',
+        ])['restaurant']['category'];
+
         $location = $request->validate([
+            'restaurant.address' => 'required|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
         ]);
-
 
         $restaurant = new Restaurant();
         $restaurant->title = $request->restaurant['title'];
         $restaurant->user_id = auth()->id();
         $restaurant->phone = $request->restaurant['phone'];
         $restaurant->bank_account = $request->restaurant['bank_account'];
-        $restaurant->address = $request->restaurant['address'];
-        $restaurant->food_type_id = $request->restaurant['food_type_id'];
-        $restaurant->latitude = $location['latitude'];
-        $restaurant->longitude = $location['longitude'];
         $restaurant->save();
+
+        //add location with morph to addresses table
+        $address = new Address;
+        $address->title = 'main';
+        $address->address = $location['restaurant']['address'];
+        $address->latitude = $location['latitude'];
+        $address->longitude = $location['longitude'];
+        $restaurant->addressInfo()->save($address);
+
+
+        $categoryRestaurant = new CategoryRestaurant();
+        collect($category)->map(function ($item) use ($categoryRestaurant, $restaurant) {
+            $categoryRestaurant->category_id = $item;
+            $categoryRestaurant->restaurant_id = $restaurant->id;
+            $categoryRestaurant->save();
+        });
+
         return json_encode(['status' => 'success', 'message' => 'Restaurant add successfully']);
     }
 
@@ -83,23 +101,43 @@ class RestaurantController extends Controller
             return json_encode(['status' => 'success', 'message' => 'Restaurant status updated']);
         }
         $data = $request->validate([
+            'restaurant.id' => 'required',
             'restaurant.title' => 'required|min:2',
-            'restaurant.address' => 'required|min:2|max:255',
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.status' => 'required|min:2',
-            'restaurant.food_type_id' => 'required|exists:food_types,id',
             'restaurant.bank_account' => 'required|digits:16',
         ]);
+
+        $category = $request->validate([
+            'restaurant.category' => 'required|array|exists:categories,id',
+        ])['restaurant']['category'];
+
         $location = $request->validate([
+            'restaurant.address' => 'required|min:2|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric'
         ]);
 
-        $data = $request->all()['restaurant']->toArray();
-        $data['confirm'] = 'waiting';
-        $data['status'] = 'inactive';
-        $data = array_merge($data, $location);
-        $restaurant->update($data);
+        $data['restaurant']['confirm'] = 'waiting';
+        $data['restaurant']['status'] = 'inactive';
+
+        CategoryRestaurant::whereNotIn('category_id', $category)->where('restaurant_id', $data['restaurant']['id'])->delete();
+        foreach ($category as $row) {
+            if (!CategoryRestaurant::where('category_id', $row)->where('restaurant_id', $data['restaurant']['id'])->exists()) {
+                CategoryRestaurant::create(['category_id' => $row, 'restaurant_id' => $data['restaurant']['id']]);
+            }
+        }
+
+        //add location with morph to addresses table
+        $address = new Address;
+        $address->title = 'main';
+        $address->address = $location['restaurant']['address'];
+        $address->latitude = $location['latitude'];
+        $address->longitude = $location['longitude'];
+        $restaurant->addressInfo()->update($address->toArray());
+
+        $restaurant->update($data['restaurant']);
+
         return json_encode(['status' => 'success', 'message' => 'Restaurant updated']);
     }
 

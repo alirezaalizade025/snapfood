@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\FoodType;
+use App\Models\Category;
 use App\Http\Livewire\RestaurantCreate;
 
-class FoodTypeController extends Controller
+class CategoryController extends Controller
 {
 
     public function index()
@@ -21,23 +21,12 @@ class FoodTypeController extends Controller
             'name' => 'required|min:2|unique:food_types,name',
         ]);
 
-        if (FoodType::create(['name' => $data['name']])) {
+        if (Category::create(['name' => $data['name']])) {
             return json_encode(['status' => 'success', 'message' => 'Food type add successfully']);
         }
         return json_encode(['status' => 'error', 'message' => 'Food type can\'t add now!']);
 
 
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-    //
     }
 
     public function update(Request $request, $id)
@@ -46,17 +35,17 @@ class FoodTypeController extends Controller
             'type' => 'required|min:2|unique:food_types,name,' . $id
         ]);
 
-        $foodType = FoodType::find($id);
-        if ($foodType->update(['name' => $data['type']])) {
-            return json_encode(['status' => 'success', 'message' => $foodType->name . ' Food type update successfully']);
+        $category = Category::find($id);
+        if ($category->update(['name' => $data['type']])) {
+            return json_encode(['status' => 'success', 'message' => $category->name . ' Food type update successfully']);
         }
-        return json_encode(['status' => 'error', 'message' => $foodType->name . ' Food type can\'t update now!']);
+        return json_encode(['status' => 'error', 'message' => $category->name . ' Food type can\'t update now!']);
     }
 
 
     public function destroy($id)
     {
-        if ($food = FoodType::find($id)->delete()) {
+        if (Category::find($id)->delete()) {
             return json_encode(['status' => 'success', 'message' => 'Food type update successfully']);
         }
         return json_encode(['status' => 'error', 'message' => 'Food type can\'t update now!']);

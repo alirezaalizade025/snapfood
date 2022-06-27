@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
-use App\Http\Controllers\FoodTypeController;
+use App\Http\Controllers\CategoryController;
 
 class ModalAddFoodType extends Component
 {
@@ -33,7 +33,7 @@ class ModalAddFoodType extends Component
             'name' => $this->name,
         ]);
 
-        $response = app(FoodTypeController::class)->store($request);
+        $response = app(CategoryController::class)->store($request);
         $response = json_decode($response, true);
         if ($response['status'] == 'success') {
             $this->dispatchBrowserEvent('banner-message', [
