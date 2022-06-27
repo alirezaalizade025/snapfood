@@ -10,8 +10,8 @@
         </div>
 
         <div class="mt-3 text-center flex gap-5">
-            <div>
-                <img src="https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp" alt=""
+            <div class="w-1/2">
+                <img src="{{ auth()->user()->image->path }}" alt=""
                     class="w-10 h-10 m-auto rounded-full object-cover lg:w-20 lg:h-20">
             </div>
             <div class="">

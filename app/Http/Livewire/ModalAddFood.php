@@ -58,20 +58,15 @@ class ModalAddFood extends Component
 
     public function finalPrice()
     {
-        if (empty($this->price) | !is_numeric($this->price)) {
-            $this->finalPrice = 0;
-            return true;
-        }
-        if ($this->foodParty != null) {
+        $party = null;
+        if ($this->foodParty != null)
             $party = $this->foodParties->where('id', $this->foodParty['id'])->first();
-            $partyDiscount = 1 - ($party == null ? 0 : $party->discount) / 100;
+        if (is_null($party)) {
+            $this->finalPrice = $this->price - (1 * empty($this->discount) ? 0 : $this->discount);
         }
         else {
-            $partyDiscount = 1;
+            $this->finalPrice = $this->price * (1 - ($party->discount) / 100);
         }
-        $discount = 1 - (empty($this->discount) ? 0 : $this->discount) / 100;
-
-        $this->finalPrice = $this->price * $discount * $partyDiscount;
     }
 
     public function storeFood()
@@ -114,7 +109,12 @@ class ModalAddFood extends Component
 
     public function mount()
     {
-        $this->foodParties = FoodParty::all();
+        if (auth()->user()->role != 'admin') {
+            $this->foodParties = FoodParty::where('status', true)->get();
+        }
+        else {
+            $this->foodParties = FoodParty::all();
+        }
         $this->foodTypes = FoodType::all();
     }
 

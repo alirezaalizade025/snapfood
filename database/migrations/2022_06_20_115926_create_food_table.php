@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('discount')->nullable();
             $table->foreignIdFor(FoodParty::class)->nullable()->constrained()->nullOnDelete();
             $table->boolean('status')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

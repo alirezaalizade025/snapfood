@@ -35,7 +35,7 @@
                             @enderror
                         </div>
                         <div>
-                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Food party</label>
+                            <label class="text-white dark:text-gray-200" for="passwordConfirmation">Food party <span wire:click="$set('foodParty')" class="font-black text-lg cursor-pointer">&times;</span></label>
                             <select wire:model="foodParty.id" wire:change="finalPrice"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                                 <option>None</option>
@@ -53,7 +53,7 @@
                             <label class="text-white dark:text-gray-200" for="passwordConfirmation">Food type</label>
                             <select wire:model="foodType.id"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                                <option>None</option>
+                                <option value="none">None</option>
                                 @foreach ($foodTypes as $item)
                                     <option value="{{ $item->id }}"">
                                         {{ $item->name }}
@@ -88,7 +88,7 @@
                             @enderror
                             @foreach ($rawMaterials as $key => $value)
                                 <div class="flex justify-between gap-2 mt-1">
-                                    <input type="text" class="rounded"
+                                    <input type="text" class="rounded px-1"
                                         wire:model="rawMaterials.{{ $key }}">
                                     <div class="col-md-2">
                                         <div class="btn btn-danger btn-sm cursor-pointer"

@@ -26,8 +26,8 @@ class FoodController extends Controller
         $food = $request->validate([
             'name' => 'required|min:2|unique:food,name',
             'price' => 'required|numeric',
-            'discount' => 'nullable|numeric',
-            'food_party_id' => 'nullable|exists:food_parties,id',
+            'discount' => 'sometimes|numeric',
+            'food_party_id' => 'sometimes|exists:food_parties,id',
             'food_type_id' => 'required|exists:food_types,id',
         ]);
 
@@ -95,7 +95,7 @@ class FoodController extends Controller
         [
             'name' => 'required|min:2|max:255|unique:food,name,' . $id,
             'price' => 'required|numeric',
-            'discount' => 'nullable|numeric|digits:2',
+            'discount' => 'sometimes|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
             'food_type_id' => 'required|exists:food_types,id',
         ]
@@ -113,10 +113,12 @@ class FoodController extends Controller
         $data['confirm'] = 'denied';
 
         if ($food->update($data)) {
-            RawMaterial::whereNotIn('name', $material['raw_materials'])->where('food_id', $food->id)->delete();
-            foreach ($material['raw_materials'] as $row) {
-                if (!RawMaterial::where('name', $row)->where('food_id', $food->id)->exists()) {
-                    RawMaterial::create(['name' => $row, 'food_id' => $food->id]);
+            if (!empty($material)) {
+                RawMaterial::whereNotIn('name', $material['raw_materials'])->where('food_id', $food->id)->delete();
+                foreach ($material['raw_materials'] as $row) {
+                    if (!RawMaterial::where('name', $row)->where('food_id', $food->id)->exists()) {
+                        RawMaterial::create(['name' => $row, 'food_id' => $food->id]);
+                    }
                 }
             }
             return json_encode(['status' => 'success', 'message' => $food->name . ' updated']);

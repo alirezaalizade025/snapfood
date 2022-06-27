@@ -36,34 +36,42 @@ class FoodTable extends Component
 
     public function fetchData()
     {
-
-
         $where = [];
-        if ($this->foodType != null && $this->foodType != 'All') {
-            $where[] = ['food_type_id', '=', $this->foodType];
-        }
-        if ($this->foodParty != null && $this->foodParty != 'All') {
-            $where[] = ['food_party_id', '=', $this->foodParty];
-        }
-
-        if ($this->search != null) {
-            $where[] = ['name', 'like', '%' . $this->search . '%'];
-        }
-
         if (auth()->user()->role != 'admin') {
+            if ($this->foodType != null && $this->foodType != 'All') {
+                $where[] = ['food.food_type_id', '=', $this->foodType];
+            }
+            if ($this->foodParty != null && $this->foodParty != 'All') {
+                $where[] = ['food.food_party_id', '=', $this->foodParty];
+            }
+
+            if ($this->search != null) {
+                $where[] = ['food.name', 'like', '%' . $this->search . '%'];
+            }
+
             return Food::select(['food.*', 'restaurants.user_id'])
                 ->where($where)
                 ->where('restaurants.user_id', auth()->id())
                 ->leftJoin('restaurants', 'restaurants.id', '=', 'food.restaurant_id')
-                ->orderBy('food.updated_at', 'desc')
+                ->orderBy('food.name', 'asc')
                 ->orderBy('food.id')
-                ->paginate(10);
+                ->paginate(20);
         }
         else {
+            if ($this->foodType != null && $this->foodType != 'All') {
+                $where[] = ['food_type_id', '=', $this->foodType];
+            }
+            if ($this->foodParty != null && $this->foodParty != 'All') {
+                $where[] = ['food_party_id', '=', $this->foodParty];
+            }
+
+            if ($this->search != null) {
+                $where[] = ['name', 'like', '%' . $this->search . '%'];
+            }
             return Food::where($where)
                 ->orderBy('updated_at', 'desc')
                 ->orderBy('id')
-                ->paginate(10);
+                ->paginate(20);
         }
     }
 

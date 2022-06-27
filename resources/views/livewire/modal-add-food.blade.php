@@ -45,6 +45,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <span class="text-sm">(if select food party discount be ignored)</span>
                             @error('food_party_id')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
@@ -89,7 +90,7 @@
                             @enderror
                             @foreach ($rawMaterials as $key => $value)
                                 <div class="flex justify-between gap-2 mt-1">
-                                    <input type="text" class="rounded"
+                                    <input type="text" class="rounded px-1"
                                         wire:model="rawMaterials.{{ $key }}">
                                     <div class="col-md-2">
                                         <div class="btn btn-danger btn-sm cursor-pointer"

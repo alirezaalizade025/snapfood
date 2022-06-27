@@ -97,7 +97,7 @@ class EditFood extends Component
             'name' => $this->name,
             'price' => $this->price,
             'discount' => $this->discount,
-            'food_party_id' => $this->foodParty == null ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
+            'food_party_id' => $this->foodParty == null || !$this->foodParty ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
             'food_type_id' => $this->foodType['id'],
             'raw_materials' => $this->rawMaterials,
             'image' => $this->image

@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->morphMany(Address::class , 'addressable');
     }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class , 'imageable');
+    }
 }
