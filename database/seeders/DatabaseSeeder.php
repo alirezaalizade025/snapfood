@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cart;
 use App\Models\Food;
 use App\Models\User;
 use App\Models\Image;
 use App\Models\Address;
 use App\Models\Comment;
+use App\Models\CartUser;
 use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
@@ -39,8 +41,10 @@ class DatabaseSeeder extends Seeder
         FoodParty::factory(5)->create();
         Food::factory(100)->create();
         Address::factory(10)->create();
-        Comment::factory(1000)->create();
+        Comment::factory(100)->create();
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
+        Cart::factory(15)->create();
+        CartUser::factory(100)->create();
     }
 }

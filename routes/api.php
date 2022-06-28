@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\RestaurantAPIController;
@@ -32,4 +33,8 @@ Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->p
     Route::get('/', 'index');
     Route::get('/{restaurant_id}', 'show');
     Route::get('/{restaurant_id}/foods', 'foods');
+});
+
+Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('carts')->group(function () {
+    Route::get('/', 'index');
 });
