@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Cart::class)->constrained();
             $table->foreignIdFor(Food::class)->constrained();
             $table->integer('quantity');
-            $table->float('price', 8, 2);
+            $table->float('price', 10, 2);
             $table->timestamps();
         });
     }

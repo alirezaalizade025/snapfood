@@ -37,4 +37,8 @@ Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->p
 
 Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('carts')->group(function () {
     Route::get('/', 'index');
+    Route::get('/{cart_id}', 'show');
+    Route::post('/add', 'store');
+    Route::patch('/add', 'update');
+    Route::post('/{cart_id}/pay', 'sendToPay');
 });

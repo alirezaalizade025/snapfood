@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         Comment::factory(100)->create();
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
-        Cart::factory(15)->create();
+        Cart::factory(10)->create();
         CartUser::factory(100)->create();
     }
 }

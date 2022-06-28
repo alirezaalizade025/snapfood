@@ -18,7 +18,7 @@ class CartFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->randomElement(User::where('role', 'customer')->pluck('id')->toArray()),
+            'user_id' => $this->faker->unique()->randomElement(User::where('role', 'customer')->pluck('id')->toArray()),
             'status' => $this->faker->randomElement(['0', '1', '2', '3']),
             'total_price' => $this->faker->randomFloat(2, 0, 1000000),
         ];

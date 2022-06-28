@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration
+return new class extends Migration 
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
             $table->enum('status', [0, 1, 2, 3])->default(0);
-            $table->float('total_price', 8, 2)->default(0);
+            $table->enum('cart_number', [1, 2])->default(1);
             $table->softDeletes();
             $table->timestamps();
         });
