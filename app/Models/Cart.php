@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CartFood;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cart extends Model
 {
@@ -19,5 +20,10 @@ class Cart extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function cartFood()
+    {
+        return $this->hasMany(CartFood::class);
     }
 }

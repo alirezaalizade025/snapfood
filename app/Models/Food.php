@@ -53,7 +53,7 @@ class Food extends Model
 
     public function cartFood()
     {
-        return $this->hasManyThrough(Comment::class, CartFood::class);
+        return $this->hasMany(CartFood::class);
     }
 
     public function status(): Attribute

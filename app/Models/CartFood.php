@@ -2,10 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Cart;
+use App\Models\Food;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CartFood extends Model
 {
     use HasFactory;
+
+    public function food()
+    {
+        return $this->belongsTo(Food::class);
+    }
+
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
+    }
 }

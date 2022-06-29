@@ -48,6 +48,11 @@ class Restaurant extends Model
         return $this->hasMany(WeekSchedule::class);
     }
 
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     public function status(): Attribute
     {
         return Attribute::make(

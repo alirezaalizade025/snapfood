@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Models\Food;
 use App\Models\Comment;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentFoodResource;
+use App\Http\Resources\CommentRestaurantResource;
 
 class CommentController extends Controller
 {
@@ -15,7 +19,6 @@ class CommentController extends Controller
      */
     public function index()
     {
-        return response('hi');
     }
 
     /**
@@ -26,7 +29,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    //
     }
 
     /**
@@ -35,9 +38,42 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Request $request)
     {
-        //
+        if (isset($request->restaurant_id)) {
+            $comments = $this->findCommentsByRestaurant($request->restaurant_id);
+        }
+        elseif (isset($request->food_id)) {
+            $comments = $this->findCommentsByFood($request->food_id);
+        }
+        else {
+            return response(['msg' => 'set (restaurant / food)\'s id'], 404);
+        }
+        
+        return response(compact('comments'));
+    }
+
+    public function findCommentsByRestaurant(int $id)
+    {
+        $comments = optional(Restaurant::find($id), function ($restaurant) {
+            return CommentRestaurantResource::collection($restaurant->comments);
+        }) ?? ['msg' => 'restaurant not found'];
+
+        return $comments;
+    }
+
+    public function findCommentsByFood(int $id)
+    {
+
+        $comments = optional(Food::find($id), function ($food) use ($id) {
+            return $food->cartFood
+            ->map( function ($food) {
+                return CommentFoodResource::collection($food->cart->comments)->first();
+            })
+            ;
+        }) ?? ['msg' => 'food not found'];
+        $tt = $comments;
+        return $tt;
     }
 
     /**
@@ -49,7 +85,7 @@ class CommentController extends Controller
      */
     public function update(Request $request, Comment $comment)
     {
-        //
+    //
     }
 
     /**
@@ -60,6 +96,6 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+    //
     }
 }
