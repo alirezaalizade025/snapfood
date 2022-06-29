@@ -15,4 +15,9 @@ class Cart extends Model
     {
         return $this->hasManyThrough(User::class, CartUser::class, 'cart_id', 'id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

@@ -14,8 +14,10 @@ class UserController extends Controller
         if($request->user()->id != $id) {
             return response()->json(['error' => 'You can only update your own account.'], 403);
         }
-        $request['password'] = $request->password ? bcrypt($request->password) : $request->password;
-        // return response($request->all());
+        
+        if (isset($request['password'])) {
+            $request['password'] = bcrypt($request->password);
+        }
 
         $user = User::findOrFail($id);
         $user->update($request->all());

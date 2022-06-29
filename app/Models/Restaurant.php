@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Cart;
 use App\Models\Food;
 use App\Models\Image;
 use App\Models\Comment;
@@ -34,17 +35,17 @@ class Restaurant extends Model
 
     public function comments()
     {
-        return $this->hasManyThrough(Comment::class, Food::class);
-    }
-
-    public function weekSchedules()
-    {
-        return $this->hasMany(WeekSchedule::class);
+        return $this->hasManyThrough(Comment::class, Cart::class);
     }
 
     public function foods()
     {
         return $this->hasMany(Food::class);
+    }
+
+    public function weekSchedules()
+    {
+        return $this->hasMany(WeekSchedule::class);
     }
 
     public function status(): Attribute

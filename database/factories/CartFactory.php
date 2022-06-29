@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
+use App\Models\Restaurant;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cart>
@@ -19,8 +20,9 @@ class CartFactory extends Factory
     {
         return [
             'user_id' => $this->faker->unique()->randomElement(User::where('role', 'customer')->pluck('id')->toArray()),
-            'status' => $this->faker->randomElement(['0', '1', '2', '3']),
+            'status' => $this->faker->randomElement(['0', '1', '2', '3', '4']),
             'total_price' => $this->faker->randomFloat(2, 0, 1000000),
+            'restaurant_id' => $this->faker->randomElement(Restaurant::pluck('id')),
         ];
     }
 }

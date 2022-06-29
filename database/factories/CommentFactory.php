@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Food;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
@@ -18,9 +19,10 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'food_id' => Food::all()->random()->id,
+            'user_id' => User::all()->random()->id,
+            'cart_id' => Cart::all()->random()->id,
             'score' => $this->faker->numberBetween(1, 5),
-            'comment' => $this->faker->sentence,
+            'content' => $this->faker->sentence,
         ];
     }
 }

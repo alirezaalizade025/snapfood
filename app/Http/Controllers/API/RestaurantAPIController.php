@@ -48,9 +48,10 @@ class RestaurantAPIController extends Controller
                     $pattern = "/$category->name/";
                     return preg_match($pattern, $restaurant['type']);
                 })->values();
-            } else {
+            }
+            else {
                 return response(
-                    ['msg' => 'No category found'], 404);
+                ['msg' => 'No category found'], 404);
             }
         }
         // TODO:refactor category filter
@@ -78,7 +79,6 @@ class RestaurantAPIController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'restaurant not found'], 404);
         }
-
         $days = ['saturday' => 1, 'sunday' => 2, 'monday' => 3, 'tuesday' => 4, 'wednesday' => 5, 'thursday' => 6, 'friday' => 7];
         $restaurant = [
             'id' => $restaurant->id,

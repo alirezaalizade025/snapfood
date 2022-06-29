@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Cart;
 use App\Models\Food;
 use App\Models\Image;
-use App\Models\CartUser;
+use App\Models\CartFood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -14,10 +14,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class CartController extends Controller
 {
 
-    public function cartFormatter($cart_id = null)
+    public function cartFormatter($cart_number = null)
     {
-        $carts = Cart::join('cart_users', 'cart_users.cart_id', '=', 'carts.id')
-            ->join('food', 'food.id', '=', 'cart_users.food_id')
+
+        $carts = Cart::join('cart_food', 'cart_food.cart_id', '=', 'carts.id')
+            ->join('food', 'food.id', '=', 'cart_food.food_id')
             ->join('restaurants', 'restaurants.id', '=', 'food.restaurant_id')
             ->join('users', 'users.id', '=', 'carts.user_id')
             ->where('carts.user_id', auth()->user()->id)
@@ -28,8 +29,8 @@ class CartController extends Controller
             'food.name as food_name',
             'restaurants.id as restaurant_id',
             'restaurants.title as restaurant_title',
-            'cart_users.quantity as count',
-            'cart_users.price as price',
+            'cart_food.quantity as count',
+            'cart_food.price as price',
         )
             ->get()
             ->groupBy('restaurant_id')
@@ -54,9 +55,10 @@ class CartController extends Controller
             })
             ->values()
             ;
-        if ($cart_id != null) {
-            return $carts->where('id', $cart_id)->values();
+        if ($cart_number != null) {
+            return $carts->where('id', $cart_number)->values();
         }
+        // TODO:check this when enter cart_nember
         return $carts;
     }
     /**
@@ -91,19 +93,19 @@ class CartController extends Controller
 
         $foodWhitDiscount = isset($food->food_party_id) ? (1 - $food->foodParty->discount / 100) * $food->price : (isset($food->discount) ? (1 - $food->discount / 100) * $food->price : $food->price);
 
-        $cartUser = CartUser::where(['cart_id' => $cart->id, 'food_id' => $food->id])->get()->first();
-        if ($cartUser) {
-            $cartUser->quantity += $request->count;
-            $cartUser->price = $foodWhitDiscount * $cartUser->quantity;
-            $cartUser->save();
+        $cartFood = CartFood::where(['cart_id' => $cart->id, 'food_id' => $food->id])->get()->first();
+        if ($cartFood) {
+            $cartFood->quantity += $request->count;
+            $cartFood->price = $foodWhitDiscount * $cartFood->quantity;
+            $cartFood->save();
         }
         else {
-            $cartUser = new CartUser();
-            $cartUser->cart_id = $cart->id;
-            $cartUser->food_id = $food->id;
-            $cartUser->quantity = $request->count;
-            $cartUser->price = $foodWhitDiscount * $cartUser->quantity;
-            $cartUser->save();
+            $cartFood = new CartFood();
+            $cartFood->cart_id = $cart->id;
+            $cartFood->food_id = $food->id;
+            $cartFood->quantity = $request->count;
+            $cartFood->price = $foodWhitDiscount * $cartFood->quantity;
+            $cartFood->save();
         }
 
         return response(['msg' => 'Food added to cart successfully', 'cart_id' => $cart->id]);
@@ -143,20 +145,20 @@ class CartController extends Controller
 
 
         try {
-            $cartUser = CartUser::where('cart_id', $cart->id)->where('food_id', $food->id)->get()->first();
+            $cartFood = CartFood::where('cart_id', $cart->id)->where('food_id', $food->id)->get()->first();
         }
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Cart not found'], 404);
         }
 
-        if ($cartUser) {
+        if ($cartFood) {
             if ($request->count > 0) {
-                $cartUser->quantity = $request->count;
-                $cartUser->price = $foodWhitDiscount * $cartUser->quantity;
-                $cartUser->save();
+                $cartFood->quantity = $request->count;
+                $cartFood->price = $foodWhitDiscount * $cartFood->quantity;
+                $cartFood->save();
             }
             else {
-                $cartUser->delete();
+                $cartFood->delete();
                 return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
 
             }

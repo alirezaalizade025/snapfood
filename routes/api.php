@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AddressController;
+use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\RestaurantAPIController;
 
 
@@ -41,4 +42,8 @@ Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('ca
     Route::post('/add', 'store');
     Route::patch('/add', 'update');
     Route::post('/{cart_id}/pay', 'sendToPay');
+});
+
+Route::middleware('auth:sanctum')->controller(CommentController::class)->prefix('comments')->group(function () {
+    Route::get('/', 'index');
 });

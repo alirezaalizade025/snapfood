@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Address;
+use App\Models\Restaurant;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
@@ -74,4 +75,10 @@ class User extends Authenticatable
     {
         return $this->morphOne(Image::class , 'imageable');
     }
+
+    public function restaurant()
+    {
+        return $this->hasOne(Restaurant::class);
+    }
+
 }

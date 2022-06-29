@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Image;
 use App\Models\Address;
 use App\Models\Comment;
-use App\Models\CartUser;
+use App\Models\CartFood;
 use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
@@ -35,16 +35,16 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'bank_account_number' => '1234567891234',
         ]);
-        User::factory(15)->create();
+        User::factory(40)->create();
         Restaurant::factory(3)->create();
         CategoryRestaurant::factory(5)->create();
         FoodParty::factory(5)->create();
         Food::factory(100)->create();
         Address::factory(10)->create();
-        Comment::factory(100)->create();
+        Cart::factory(10)->create();
+        Comment::factory(10)->create();
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
-        Cart::factory(10)->create();
-        CartUser::factory(100)->create();
+        CartFood::factory(100)->create();
     }
 }

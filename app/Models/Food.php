@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Comment;
+use App\Models\CartFood;
 use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
 use App\Models\RawMaterial;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Food extends Model
 {
@@ -42,6 +44,16 @@ class Food extends Model
     public function image()
     {
         return $this->morphOne(Image::class , 'imageable');
+    }
+
+    public function carts()
+    {
+        return $this->hasManyThrough(Cart::class, CartFood::class);
+    }
+
+    public function cartFood()
+    {
+        return $this->hasManyThrough(Comment::class, CartFood::class);
     }
 
     public function status(): Attribute

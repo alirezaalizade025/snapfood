@@ -1,13 +1,12 @@
 <?php
 
 use App\Models\Cart;
-use App\Models\Food;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration 
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,13 +15,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cart_users', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Cart::class)->constrained();
-            $table->foreignIdFor(Food::class)->constrained();
-            $table->integer('quantity');
-            $table->float('price', 10, 2);
+            $table->ForeignIDFor(User::class)->constrained();
+            $table->ForeignIDFor(Cart::class)->constrained();
+            $table->integer('score');
+            $table->string('content');
+            $table->string('answer')->nullable()->default(null);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_users');
+        Schema::dropIfExists('comments');
     }
 };
