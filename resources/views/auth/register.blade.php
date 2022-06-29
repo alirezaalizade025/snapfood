@@ -10,8 +10,14 @@
                     </div>
                     <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
                         <div class="max-w-md mx-auto">
-                            <div>
+                            <div class="flex justify-between">
                                 <h1 class="text-2xl font-semibold">Sign up</h1>
+                                <div>
+                                    <select name="role" class="p-1 rounded bg-negative-50 text-gray-600 border border-negative-500">
+                                        <option value="customer">customer</option>
+                                        <option value="restaurant">restaurant</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="divide-y divide-gray-200">
                                 <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">

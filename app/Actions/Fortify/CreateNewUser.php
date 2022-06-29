@@ -28,6 +28,7 @@ class CreateNewUser implements CreatesNewUsers
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
             'bank_account_number' => ['required', 'integer', 'unique:users', 'digits:16'],
             'phone' => ['required', 'string', 'unique:users', 'regex:/^(\\+98|0)?9\\d{9}$/'],
+            'role' => 'required',
         ])->validate();
 
         return User::create([

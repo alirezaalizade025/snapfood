@@ -27,9 +27,12 @@
                         <div class="text-gray-600 lg:pr-4">
                             <ul class="space-y-6 tracking-wide font-medium text-sm md:flex md:space-y-0">
                                 <li>
-                                    <a href="#" class="block md:px-4 transition hover:text-yellow-700">
-                                        <span>I've a restaurant</span>
-                                    </a>
+                                    @auth
+                                        <a class="block md:px-4 transition hover:text-yellow-700">
+                                            <span class="font-bold">Hi <span
+                                                    class="rounded-full p-2 bg-emerald-500 text-white">{{ auth()->user()->name }}</span></span>
+                                        </a>
+                                    @endauth
                                 </li>
                                 <li>
                                     <a href="#" class="block md:px-4 transition hover:text-yellow-700">
@@ -42,14 +45,27 @@
                         <div
                             class="w-full md:my-2 lg:space-y-0 md:w-max flex justify-center items-center gap-2 border-t-2 md:border-t-0 py-3">
                             @auth
-                                <a href="{{ url('/dashboard') }}" title="Start buying" class="">
-                                    <div
-                                        class="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max">
-                                        <span class="block text-yellow-900 font-semibold text-sm">
-                                            Dashboard
-                                        </span>
-                                    </div>
-                                </a>
+                                @if (auth()->user()->role == 'customer')
+                                    <form method="POST" action="{{ route('logout') }}"
+                                        class="flex justify-between items-center">
+                                        @csrf
+                                        <button
+                                            class="w-full py-3 px-6 text-center rounded-full transition bg-rose-300 hover:bg-rose-100 active:bg-rose-400 focus:bg-rose-300 sm:w-max">
+                                            <span class="block text-rose-900 font-semibold text-sm">
+                                                Logout
+                                            </span>
+                                        </button>
+                                    </form>
+                                @else
+                                    <a href="{{ url('/dashboard') }}" title="Start buying" class="">
+                                        <div
+                                            class="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max">
+                                            <span class="block text-yellow-900 font-semibold text-sm">
+                                                Dashboard
+                                            </span>
+                                        </div>
+                                    </a>
+                                @endif
                             @else
                                 <a href="{{ route('register') }}" title="Start buying" class="">
                                     <div
