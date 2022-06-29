@@ -46,4 +46,5 @@ Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('ca
 
 Route::middleware('auth:sanctum')->controller(CommentController::class)->prefix('comments')->group(function () {
     Route::get('/', 'show');
+    Route::post('/', 'store');
 });

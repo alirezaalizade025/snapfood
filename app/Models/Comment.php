@@ -13,6 +13,7 @@ class Comment extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    protected $guarded = [];
 
     public function user()
     {

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Cart;
 use App\Models\Food;
 use App\Models\Comment;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddCommentRequest;
 use App\Http\Resources\CommentFoodResource;
 use App\Http\Resources\CommentRestaurantResource;
 
@@ -24,12 +26,17 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\AddCommentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddCommentRequest $request)
     {
-    //
+        $cart = Cart::find($request->cart_id);
+        if ($cart->comments()->create(['user_id' => auth()->id(),'score' => $request->score, 'content' => $request->message])) {
+            return response (['msg' => 'comment created successfully'], 200);
+        }
+
+        return response($cart);
     }
 
     /**
@@ -49,7 +56,7 @@ class CommentController extends Controller
         else {
             return response(['msg' => 'set (restaurant / food)\'s id'], 404);
         }
-        
+
         return response(compact('comments'));
     }
 
@@ -67,25 +74,14 @@ class CommentController extends Controller
 
         $comments = optional(Food::find($id), function ($food) use ($id) {
             return $food->cartFood
-            ->map( function ($food) {
-                return CommentFoodResource::collection($food->cart->comments)->first();
-            })
-            ;
-        }) ?? ['msg' => 'food not found'];
+            ->map(function ($food) {
+                    return CommentFoodResource::collection($food->cart->comments)->first();
+                }
+                )
+                ;
+            }) ?? ['msg' => 'food not found'];
         $tt = $comments;
         return $tt;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Comment $comment)
-    {
-    //
     }
 
     /**
