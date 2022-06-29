@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Food;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\FoodParty;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ModalAddFood extends Component
 {
@@ -18,6 +21,7 @@ class ModalAddFood extends Component
     public $foodParty;
     public $finalPrice;
     public $name;
+    public $restaurant_id;
     public $category = [
         'id' => '',
         'name' => ''
@@ -28,14 +32,6 @@ class ModalAddFood extends Component
     public $listeners = [
         'hideMe' => 'hideModal',
         'showAddFoodModal' => 'showModal'
-    ];
-    protected $rules = [
-        'name' => 'required|string|max:255|unique:food,name',
-        'price' => 'required|numeric',
-        'discount' => 'digits_between:0,100',
-        'foodParty' => 'nullable|exists:food_parties,id',
-        'category' => 'required|exists:categories,id',
-        'rawMaterials.*' => 'required|string|min:2|max:255',
     ];
 
     public function addInput($i)
@@ -53,7 +49,16 @@ class ModalAddFood extends Component
 
     public function updated($field)
     {
-        $this->validateOnly($field);
+        $this->validateOnly($field, [
+            'name' => ['required', 'string', 'max:255', 'unique_food_name:food,name,restaurant_id, ' . $this->restaurant_id],
+            'price' => 'required|numeric',
+            'discount' => 'digits_between:0,100',
+            'foodParty' => 'nullable|exists:food_parties,id',
+            'category' => 'required|exists:categories,id',
+            'rawMaterials.*' => 'required|string|min:2|max:255',
+        ],
+        ['unique_food_name' => 'Food name already exists.']);
+
     }
 
     public function finalPrice()
@@ -62,7 +67,7 @@ class ModalAddFood extends Component
         if ($this->foodParty != null)
             $party = $this->foodParties->where('id', $this->foodParty['id'])->first();
         if (is_null($party)) {
-            $this->finalPrice = $this->price * (1 - (empty($this->discount) ? 0 : $this->discount)/100);
+            $this->finalPrice = $this->price * (1 - (empty($this->discount) ? 0 : $this->discount) / 100);
         }
         else {
             $this->finalPrice = $this->price * (1 - ($party->discount) / 100);
@@ -126,6 +131,7 @@ class ModalAddFood extends Component
     public function showModal()
     {
         $this->model = 'Food';
+        $this->restaurant_id = Restaurant::where('user_id', auth()->user()->id)->first()->id;
         $this->showingModal = true;
         $this->resetErrorBag();
     }

@@ -6,6 +6,7 @@ use App\Models\Food;
 use App\Models\Restaurant;
 use App\Models\RawMaterial;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Requests\FoodRequest;
 
 class FoodController extends Controller
@@ -24,12 +25,13 @@ class FoodController extends Controller
     public function store(Request $request)
     {
         $food = $request->validate([
-            'name' => 'required|min:2|unique:food,name',
+            'name' => ['required', 'string', 'max:255', 'unique_food_name:food,name,restaurant_id, ' . Restaurant::where('user_id', auth()->id())->get()->first()->id],
             'price' => 'required|numeric',
             'discount' => 'sometimes|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
             'category_id' => 'required|exists:categories,id',
-        ]);
+        ],
+        ['unique_food_name' => 'Food name already exists.']);
 
         $material = collect($request->all()['raw_materials'])->filter(function ($value) {
             return !empty($value);
@@ -44,8 +46,10 @@ class FoodController extends Controller
         if (!is_null($restaurant)) {
             $food['restaurant_id'] = $restaurant->id;
             if ($food = Food::create($food)) {
-                foreach ($material['raw_materials'] as $material) {
-                    RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
+                if (!empty($material)) {
+                    foreach ($material['raw_materials'] as $material) {
+                        RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
+                    }
                 }
                 return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
             }
@@ -86,6 +90,7 @@ class FoodController extends Controller
             $food->save();
             return json_encode(['status' => 'success', 'message' => $food->name . ' ' . $column . ' updated']);
         }
+        // TODO:unique food name on update
         $data = $request->validate(
         [
             'name' => 'required|min:2|max:255|unique:food,name,' . $id,
@@ -136,7 +141,7 @@ class FoodController extends Controller
             $message = ['status' => 'success', 'message' => $food->name . ' deleted successfully'];
         }
         else {
-            $message = ['status' => 'error', 'message' => $food->name . 'Can\'t delete now!'];
+            $message = ['status' => 'error', 'message' => 'Can\'t delete now!'];
         }
         return json_encode($message);
     }
