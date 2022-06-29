@@ -58,7 +58,7 @@ class CartController extends Controller
         if ($cart_number != null) {
             return $carts->where('id', $cart_number)->values();
         }
-        // TODO:check this when enter cart_nember
+        // TODO:check this when enter cart_number
         return $carts;
     }
     /**
@@ -86,8 +86,9 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::firstOrCreate(
+        $cart = Cart::where([['user_id', auth()->id()], ['restaurant_id', $food->restaurant_id], ['cart_number', 1]])->firstOrCreate(
         ['user_id' => auth()->user()->id],
+        ['restaurant_id' => $food->restaurant_id],
         ['cart_number' => 1]
         );
 

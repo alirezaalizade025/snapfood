@@ -12,6 +12,8 @@ class Cart extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     public function user()
     {
         return $this->hasManyThrough(User::class, CartUser::class, 'cart_id', 'id');
