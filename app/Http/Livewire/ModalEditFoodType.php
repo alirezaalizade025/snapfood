@@ -3,10 +3,12 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use WireUi\Traits\Actions;
 use App\Http\Controllers\CategoryController;
 
 class ModalEditFoodType extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $name;
     public $title = 'Edit Food Type';
@@ -38,9 +40,10 @@ class ModalEditFoodType extends Component
         $request->replace(['type' => $this->name]);
         $response = app(CategoryController::class)->update($request, $this->typeID);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'Category Edited!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->name = '';
         $this->emit('typeEdited');

@@ -4,11 +4,13 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\FoodParty;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FoodPartyController;
 
 class ModalEditFoodParty extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $title = 'Edit food party';
     public $model = 'FoodParty';
@@ -50,9 +52,10 @@ class ModalEditFoodParty extends Component
         $response = app(FoodPartyController::class)->update($request, $this->selectID);
         $response = json_decode($response, true);
         if ($response['status'] == 'success') {
-            $this->dispatchBrowserEvent('banner-message', [
-                'style' => $response['status'] == 'success' ? 'success' : 'danger',
-                'message' => $response['message']
+            $this->notification()->send([
+                'title'       => 'Food Party Edited!',
+                'description' => $response['message'],
+                'icon'        => $response['status']
             ]);
             $this->showingModal = false;
             $this->emit('refreshFoodPartyTable');

@@ -5,12 +5,14 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Restaurant;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
-use App\Http\Controllers\RestaurantController;
 use App\Models\CategoryRestaurant;
+use App\Http\Controllers\RestaurantController;
 
 class MyRestaurantShow extends Component
 {
+    use Actions;
     public $restaurant;
     public $selectedCategory;
     public $restaurantCategory;
@@ -72,9 +74,10 @@ class MyRestaurantShow extends Component
         if ($response['status'] == 'success') {
             $this->formType = 'update';
         }
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'Restaurant Information Edited!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->fetchData();
     }
@@ -85,9 +88,10 @@ class MyRestaurantShow extends Component
         $request->replace(['status' => true]);
         $response = app(RestaurantController::class)->update($request, $this->restaurant->id);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'activity Changed!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->status = Restaurant::find($this->restaurant->id)->status;
         $this->fetchData();

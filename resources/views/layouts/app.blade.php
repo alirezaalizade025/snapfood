@@ -31,12 +31,12 @@
 
 
 <body class="font-sans antialiased">
-
+    <x-notifications z-index="z-50" timeout/>
     <div class="h-full bg-gray-100">
         @livewire('aside-menu')
         <main class="min-h-screen">
             <div class="h-full ml-auto lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
-                <x-jet-banner />
+                {{-- <x-jet-banner /> --}}
                 @livewire('navigation-menu')
                 @if ($errors->any())
                     <div class="bg-red-400 text-white text-center py-1">

@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use WireUi\Traits\Actions;
+
 // use LivewireUI\Modal\ModalComponent;
 
 class DeleteModal extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $title = 'Delete item';
     public $selectID;
@@ -23,9 +26,10 @@ class DeleteModal extends Component
     {
         $response = app("App\Http\Controllers\\$this->model" . 'Controller')->destroy($this->selectID);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification([
+            'title'       => 'Status changed!',
+            'description' => $response['message'],
+            'icon'        => 'warning'
         ]);
         $this->showingModal = false;
         $this->emit('refresh' . $this->model . 'Table');

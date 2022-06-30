@@ -5,10 +5,12 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\FoodParty;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 
 class EditFood extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $title = 'Edit item';
     public $selectID;
@@ -81,7 +83,7 @@ class EditFood extends Component
             $this->foodParty = $item->foodParty->toArray();
         }
         $this->image = $item->image;
-        $this->foodType = $item->foodType->toArray();
+        $this->foodType = $item->category->toArray();
         $this->showingModal = true;
         $this->finalPrice();
         $this->rawMaterials = $item->rawMaterials->map(function ($item) {
@@ -98,16 +100,17 @@ class EditFood extends Component
             'price' => $this->price,
             'discount' => $this->discount,
             'food_party_id' => $this->foodParty == null || !$this->foodParty ? null : ($this->foodParty['id'] == 'None' ? null : $this->foodParty['id']),
-            'food_type_id' => $this->foodType['id'],
+            'category_id' => $this->foodType['id'],
             'raw_materials' => $this->rawMaterials,
             'image' => $this->image
         ]);
 
         $response = app("App\Http\Controllers\\" . $this->model . "Controller")->update($request, $this->selectID);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'Food Edited!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->showingModal = false;
         $this->emit('refreshFoodTable');

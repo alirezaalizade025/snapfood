@@ -7,11 +7,13 @@ use Livewire\Component;
 use App\Models\Category;
 use App\Models\FoodParty;
 use App\Models\Restaurant;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class ModalAddFood extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $title = 'Add Food';
     public $model;
@@ -89,9 +91,10 @@ class ModalAddFood extends Component
 
         $response = app("App\Http\Controllers\\" . $this->model . "Controller")->store($request);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'Food Edited!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->showingModal = false;
         $this->emit('refreshFoodTable');

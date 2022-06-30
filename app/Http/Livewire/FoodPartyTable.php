@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\FoodParty;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\FoodPartyController;
 
@@ -11,6 +12,7 @@ use App\Http\Controllers\FoodPartyController;
 
 class FoodPartyTable extends Component
 {
+    use Actions;
     public $search;
     public $photo;
     public $listeners = [
@@ -23,9 +25,10 @@ class FoodPartyTable extends Component
         $request->replace(['status' => true]);
         $response = app(FoodPartyController::class)->update($request, $id);
         $response = json_decode($response, true);
-        $this->dispatchBrowserEvent('banner-message', [
-            'style' => $response['status'] == 'success' ? 'success' : 'danger',
-            'message' => $response['message']
+        $this->notification()->send([
+            'title'       => 'Status Changed!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
         ]);
         $this->fetchData();
     }

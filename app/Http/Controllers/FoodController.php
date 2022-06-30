@@ -97,7 +97,7 @@ class FoodController extends Controller
             'price' => 'required|numeric',
             'discount' => 'sometimes|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
-            'food_type_id' => 'required|exists:food_types,id',
+            'category_id' => 'required|exists:categories,id',
         ]
         );
 

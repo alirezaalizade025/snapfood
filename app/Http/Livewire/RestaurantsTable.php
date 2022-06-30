@@ -5,12 +5,14 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Restaurant;
+use WireUi\Traits\Actions;
 use Livewire\WithPagination;
 use App\Http\Controllers\RestaurantController;
 
 class RestaurantsTable extends Component
 {
     use WithPagination;
+    use Actions;
     public $search;
     public $foodType;
 
@@ -27,7 +29,11 @@ class RestaurantsTable extends Component
         $request->replace(['status' => true]);
         $response = app(RestaurantController::class)->update($request, $id);
         $response = json_decode($response, true);
-        session()->flash('response', $response);
+        $this->notification()->send([
+            'title'       => 'Status Changed!',
+            'description' => $response['message'],
+            'icon'        => $response['status']
+        ]);
         $this->emit('restaurantEdited');
         $this->fetchData();
     }

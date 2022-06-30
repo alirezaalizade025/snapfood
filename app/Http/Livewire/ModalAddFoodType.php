@@ -3,11 +3,13 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoryController;
 
 class ModalAddFoodType extends Component
 {
+    use Actions;
     public $showingModal = false;
     public $title = 'Add Food Type';
     public $model = 'Category';
@@ -36,9 +38,10 @@ class ModalAddFoodType extends Component
         $response = app(CategoryController::class)->store($request);
         $response = json_decode($response, true);
         if ($response['status'] == 'success') {
-            $this->dispatchBrowserEvent('banner-message', [
-                'style' => $response['status'] == 'success' ? 'success' : 'danger',
-                'message' => $response['message']
+            $this->notification()->send([
+                'title'       => 'Category Added!',
+                'description' => $response['message'],
+                'icon'        => $response['status']
             ]);
             $this->showingModal = false;
             $this->emit('refreshCategoryTable');
