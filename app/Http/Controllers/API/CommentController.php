@@ -31,6 +31,7 @@ class CommentController extends Controller
      */
     public function store(AddCommentRequest $request)
     {
+        // TODO::add comment if user have cart or food
         $cart = Cart::find($request->cart_id);
         if ($cart->comments()->create(['user_id' => auth()->id(),'score' => $request->score, 'content' => $request->message])) {
             return response (['msg' => 'comment created successfully'], 200);
@@ -63,7 +64,7 @@ class CommentController extends Controller
     public function findCommentsByRestaurant(int $id)
     {
         $comments = optional(Restaurant::find($id), function ($restaurant) {
-            return CommentRestaurantResource::collection($restaurant->comments);
+            return CommentRestaurantResource::collection($restaurant->carts->map(fn($cart) => $cart->comments)->flatten());
         }) ?? ['msg' => 'restaurant not found'];
 
         return $comments;

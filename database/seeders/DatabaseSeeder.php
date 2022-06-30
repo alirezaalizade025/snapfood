@@ -15,6 +15,7 @@ use App\Models\Restaurant;
 use App\Models\WeekSchedule;
 use Illuminate\Database\Seeder;
 use App\Models\CategoryRestaurant;
+use App\Models\CartRestaurant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -46,5 +47,6 @@ class DatabaseSeeder extends Seeder
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
         CartFood::factory(100)->create();
+        CartRestaurant::factory(10)->create();
     }
 }

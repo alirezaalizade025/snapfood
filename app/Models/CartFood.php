@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CartFood extends Model
 {
     use HasFactory;
+    protected $table = 'cart_food';
 
     public function food()
     {

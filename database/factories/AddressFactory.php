@@ -33,7 +33,7 @@ class AddressFactory extends Factory
             $address['addressable_id'] = User::where('role', 'customer')->get()->random()->id;
         }
         else {
-            $address['addressable_id'] = Restaurant::all()->random()->id;
+            $address['addressable_id'] = Restaurant::all()->unique()->random()->id;
         }
         return $address;
     }

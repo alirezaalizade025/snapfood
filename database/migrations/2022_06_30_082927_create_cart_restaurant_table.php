@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\User;
+use App\Models\Cart;
 use App\Models\Restaurant;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-return new class extends Migration 
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('cart_restaurant', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained();
-            $table->enum('status', [0, 1, 2, 3, 4])->default(0);
-            $table->enum('cart_number', [1, 2])->default(1);
-            $table->float('total_price', 11, 2)->default(0);
-            $table->softDeletes();
+            $table->foreignIdFor(Restaurant::class)->constrained();
+            $table->foreignIdFor(Cart::class)->constrained();
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('cart_restaurant');
     }
 };

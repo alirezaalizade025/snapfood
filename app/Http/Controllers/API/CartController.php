@@ -16,12 +16,14 @@ class CartController extends Controller
 
     public function cartFormatter($cart_number = null)
     {
+        // TODO:change for find cart
+        $where[] = ['carts.user_id', '=', auth()->user()->id];
 
         $carts = Cart::join('cart_food', 'cart_food.cart_id', '=', 'carts.id')
             ->join('food', 'food.id', '=', 'cart_food.food_id')
             ->join('restaurants', 'restaurants.id', '=', 'food.restaurant_id')
             ->join('users', 'users.id', '=', 'carts.user_id')
-            ->where('carts.user_id', auth()->user()->id)
+            ->where($where)
             ->select(
             'carts.id as cart_id',
             // 'carts.status as cart_status', //TODO:uncomment
@@ -55,10 +57,7 @@ class CartController extends Controller
             })
             ->values()
             ;
-        if ($cart_number != null) {
-            return $carts->where('id', $cart_number)->values();
-        }
-        // TODO:check this when enter cart_number
+
         return $carts;
     }
     /**
@@ -86,9 +85,8 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['restaurant_id', $food->restaurant_id], ['cart_number', 1]])->firstOrCreate(
+        $cart = Cart::where([['user_id', auth()->id()], ['cart_number', 1]])->firstOrCreate(
         ['user_id' => auth()->user()->id],
-        ['restaurant_id' => $food->restaurant_id],
         ['cart_number' => 1]
         );
 
@@ -121,7 +119,7 @@ class CartController extends Controller
     public function show(Request $request)
     {
         $carts = $this->cartFormatter($request->cart_id);
-        return response(['carts_' . $request->cart_id => $carts]);
+        return response(['data' => $carts]);
     }
 
     /**

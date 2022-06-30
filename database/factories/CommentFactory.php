@@ -19,8 +19,8 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::all()->where('role', 'customer')->random()->id,
-            'cart_id' => Cart::all()->unique()->id,
+            'user_id' => User::where('role', 'customer')->get()->random()->id,
+            'cart_id' => Cart::all()->random()->unique()->id,
             'score' => $this->faker->numberBetween(1, 5),
             'content' => $this->faker->sentence,
         ];

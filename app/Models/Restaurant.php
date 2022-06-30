@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Comment;
 use App\Models\Category;
 use App\Models\WeekSchedule;
+use App\Models\CartRestaurant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -35,10 +36,10 @@ class Restaurant extends Model
         return $this->morphOne(Image::class , 'imageable');
     }
 
-    public function comments()
-    {
-        return $this->hasManyThrough(Comment::class, Cart::class);
-    }
+    // public function comments()
+    // {
+    //     return $this->hasManyThrough(Comment::class, Cart::class);
+    // }
 
     public function foods()
     {
@@ -50,9 +51,9 @@ class Restaurant extends Model
         return $this->hasMany(WeekSchedule::class);
     }
 
-    public function cart()
+    public function carts()
     {
-        return $this->hasMany(Cart::class);
+        return $this->belongsToMany(Cart::class, CartRestaurant::class);
     }
 
     public function status(): Attribute

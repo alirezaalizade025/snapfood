@@ -11,6 +11,7 @@ class UserController extends Controller
 {
     public function update(UpdateUserRequest $request, $id)
     {
+        
         if($request->user()->id != $id) {
             return response()->json(['error' => 'You can only update your own account.'], 403);
         }

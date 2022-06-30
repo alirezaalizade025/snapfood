@@ -22,7 +22,6 @@ class CartFactory extends Factory
             'user_id' => $this->faker->unique()->randomElement(User::where('role', 'customer')->pluck('id')->toArray()),
             'status' => $this->faker->randomElement(['0', '1', '2', '3', '4']),
             'total_price' => $this->faker->randomFloat(2, 0, 1000000),
-            'restaurant_id' => $this->faker->randomElement(Restaurant::pluck('id')),
         ];
     }
 }
