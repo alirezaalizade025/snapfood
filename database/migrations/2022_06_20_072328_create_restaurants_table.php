@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('bank_account');
             $table->boolean('status')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
