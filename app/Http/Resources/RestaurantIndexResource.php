@@ -25,7 +25,7 @@ class RestaurantIndexResource extends JsonResource
             // 'phone' => $this->phone, // TODO:uncomment phone
             'is_open' => $this->status == 'active' ? true : false,
             'image' => isset($this->image) ? $this->image->path : null,
-            'score' => number_format($this->comments()->avg('score'), 2),
+            'score' => $this->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
         ];
 
         return $restaurant;

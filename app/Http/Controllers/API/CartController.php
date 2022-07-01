@@ -96,7 +96,6 @@ class CartController extends Controller
      */
     public function update(Request $request, Cart $cart)
     {
-        // TODO: destroy cart implement in destroy
         try {
             $food = Food::findOrFail($request->food_id);
         }
@@ -139,13 +138,18 @@ class CartController extends Controller
      */
     public function destroy(Cart $cart)
     {
-    //
+    // TODO: destroy cart implement in destroy
     }
 
     public function sendToPay(Request $request, $cartID)
     {
-        $cart = $this->cartFormatter($request->cart_id);
+        $cart = Cart::
+            where('user_id', auth()->id())
+            ->where('id', $request->cart_id)
+            ->get();
 
-        return response(['msg' => 'cart sending to pay page', 'cart' => $cart]);
+        $cart = CartResource::collection($cart);
+
+        return response(['msg' => 'cart sending to pay page', 'cart' => $cartID]);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\RestaurantShowResource;
 use App\Http\Resources\RestaurantFoodsResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Resources\RestaurantIndexResource;
 
 class RestaurantAPIController extends Controller
 {
@@ -20,6 +21,12 @@ class RestaurantAPIController extends Controller
     public function index(Request $request)
     {
         $restaurants = Restaurant::filter($request)
+            ->whereHas('category', function ($query) use ($request) {
+            if ($request->has('type')) {
+                $query->where('category_id', $request->type);
+            }
+        })
+
             ->get()
             ->map(function ($restaurant) {
             return [
@@ -36,6 +43,7 @@ class RestaurantAPIController extends Controller
                 'score' => $restaurant->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
                 ];
             });
+        // $restaurants = RestaurantIndexResource::collection($restaurants);
 
         if (isset($request['score_gt'])) {
             $restaurants = $restaurants->filter(function ($restaurant) use ($request) {
@@ -43,20 +51,7 @@ class RestaurantAPIController extends Controller
             })->values();
         }
 
-        if (isset($request['category_id'])) {
-            $category = Category::find($request['category_id']);
-            if (isset($category)) {
-                $restaurants = $restaurants->filter(function ($restaurant) use ($request, $category) {
-                    $pattern = "/$category->name/";
-                    return preg_match($pattern, $restaurant['type']);
-                })->values();
-            }
-            else {
-                return response(
-                ['msg' => 'No category found'], 404);
-            }
-        }
-        // TODO:refactor category filter
+        // TODO:refactor score filter
 
 
         if ($restaurants->isEmpty()) {

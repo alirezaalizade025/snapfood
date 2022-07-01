@@ -31,8 +31,11 @@ class CommentController extends Controller
      */
     public function store(AddCommentRequest $request)
     {
-        // TODO::add comment if user have cart or food
         $cart = Cart::find($request->cart_id);
+        if ($cart->user_id != auth()->id()) {
+            return response(['msg' => 'You can not add comment to this cart'], 403);
+        }
+
         if ($cart->comments()->create(['user_id' => auth()->id(),'score' => $request->score, 'content' => $request->message])) {
             return response (['msg' => 'comment created successfully'], 200);
         }
