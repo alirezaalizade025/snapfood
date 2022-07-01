@@ -9,57 +9,11 @@ use App\Models\CartFood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartController extends Controller
 {
-
-    public function cartFormatter($cart_number = null)
-    {
-        // TODO:change for find cart
-        $where[] = ['carts.user_id', '=', auth()->user()->id];
-
-        $carts = Cart::join('cart_food', 'cart_food.cart_id', '=', 'carts.id')
-            ->join('food', 'food.id', '=', 'cart_food.food_id')
-            ->join('restaurants', 'restaurants.id', '=', 'food.restaurant_id')
-            ->join('users', 'users.id', '=', 'carts.user_id')
-            ->where($where)
-            ->select(
-            'carts.id as cart_id',
-            // 'carts.status as cart_status', //TODO:uncomment
-            'food.id as food_id',
-            'food.name as food_name',
-            'restaurants.id as restaurant_id',
-            'restaurants.title as restaurant_title',
-            'cart_food.quantity as count',
-            'cart_food.price as price',
-        )
-            ->get()
-            ->groupBy('restaurant_id')
-            ->values()
-            ->map(function ($item) {
-            $result['id'] = $item->first()->cart_id;
-            $result['restaurant'] = [
-                'title' => $item->first()->restaurant_title,
-                'image' => Image::where('imageable_id', $item->first()->restaurant_id)->where('imageable_type', 'App\Models\Restaurant')->first() ?Image::where('imageable_id', $item->first()->restaurant_id)->where('imageable_type', 'App\Models\Restaurant')->first()->path : null,
-            ];
-            $result['foods'] = $item->map(function ($item) {
-                    return [
-                    'id' => $item->food_id,
-                    'title' => $item->food_name,
-                    'count' => $item->count,
-                    'price' => $item->price,
-                    // 'image' => Image::where('imageable_id', $item->food_id)->where('imageable_type', 'App\Models\Food')->first() ? Image::where('imageable_id', $item->food_id)->where('imageable_type', 'App\Models\Food')->first()->path : null //TODO: uncomment
-                    ];
-                }
-                );
-                return $result;
-            })
-            ->values()
-            ;
-
-        return $carts;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +21,12 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = $this->cartFormatter();
+        $carts = Cart::
+            where('user_id', auth()->id())
+            ->get();
+
+        $carts = CartResource::collection($carts);
+
         return response(compact('carts'));
     }
 
@@ -118,7 +77,13 @@ class CartController extends Controller
      */
     public function show(Request $request)
     {
-        $carts = $this->cartFormatter($request->cart_id);
+        $carts = Cart::
+            where('user_id', auth()->id())
+            ->where('id', $request->cart_id)
+            ->get();
+
+        $carts = CartResource::collection($carts);
+
         return response(['data' => $carts]);
     }
 

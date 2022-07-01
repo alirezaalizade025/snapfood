@@ -53,7 +53,7 @@ class RestaurantController extends Controller
         $schedule = $request->validate([
             'schedule' => 'array',
         ])['schedule'];
-
+        
         $schedule = collect($schedule)
             ->filter(function ($item) {
             return $item['open_time'] != null && $item['close_time'] != null;

@@ -32,7 +32,6 @@ class ScheduleCast implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes)
     {
-        // TODO: Implement set() method.
         return $value;
     }
 }

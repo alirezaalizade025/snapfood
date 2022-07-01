@@ -14,9 +14,13 @@ class Cart extends Model
 
     protected $guarded = [];
 
+    // public function user()
+    // {
+    //     return $this->hasManyThrough(User::class, CartUser::class, 'cart_id', 'id');
+    // }
     public function user()
     {
-        return $this->hasManyThrough(User::class, CartUser::class, 'cart_id', 'id');
+        return $this->belongsTo(User::class);
     }
 
     public function comments()
@@ -27,5 +31,16 @@ class Cart extends Model
     public function cartFood()
     {
         return $this->hasMany(CartFood::class);
+    }
+
+    public function cartRestaurants()
+    {
+        return $this->hasMany(CartRestaurant::class);
+        // return $this->hasManyThrough(Restaurant::class, CartRestaurant::class, 'cart_restaurant.cart_id', 'restaurants.id');
+    }
+
+    public function foods()
+    {
+        return $this->hasManyThrough(Food::class, CartFood::class, 'cart_food.cart_id', 'food.id');
     }
 }
