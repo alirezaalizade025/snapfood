@@ -39,7 +39,7 @@ class AddressController extends Controller
         if ($user->addresses()->create($request->toArray())) {
             return response(['msg' => 'address added successfully'], 200);
         }
-        return response()->json('hi');
+
     }
 
     /**

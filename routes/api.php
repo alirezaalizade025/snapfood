@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AddressController;
@@ -48,3 +49,9 @@ Route::middleware('auth:sanctum')->controller(CommentController::class)->prefix(
     Route::get('/', 'show');
     Route::post('/', 'store');
 });
+
+Route::controller(AuthController::class)->prefix('users')->group(function () {
+    Route::post('/register', 'register');
+    Route::post('/login', 'login');
+});
+Route::post('/users/logout', [AuthController::class , 'logout'])->middleware('auth:sanctum');
