@@ -20,7 +20,7 @@ class CommentFactory extends Factory
     {
         return [
             'user_id' => User::where('role', 'customer')->get()->random()->id,
-            'cart_id' => Cart::all()->random()->unique()->id,
+            'cart_id' => Cart::all()->unique()->random()->id,
             'score' => $this->faker->numberBetween(1, 5),
             'content' => $this->faker->sentence,
         ];

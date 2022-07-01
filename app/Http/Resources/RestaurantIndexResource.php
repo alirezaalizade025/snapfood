@@ -22,7 +22,7 @@ class RestaurantIndexResource extends JsonResource
         }
         )->implode(', '),
             'address' => $this->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
-            // 'phone' => $this->phone, // TODO:uncomment phone
+            'phone' => $this->phone,
             'is_open' => $this->status == 'active' ? true : false,
             'image' => isset($this->image) ? $this->image->path : null,
             'score' => $this->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),

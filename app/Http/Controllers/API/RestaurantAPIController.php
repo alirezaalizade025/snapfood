@@ -37,7 +37,7 @@ class RestaurantAPIController extends Controller
                 }
                 )->implode(', '),
                 'address' => $restaurant->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
-                // 'phone' => $restaurant->phone, // TODO:uncomment phone
+                'phone' => $restaurant->phone,
                 'is_open' => $restaurant->status == 'active' ? true : false,
                 'image' => isset($restaurant->image) ? $restaurant->image->path : null,
                 'score' => $restaurant->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
