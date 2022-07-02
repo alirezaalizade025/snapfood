@@ -5,7 +5,7 @@
 .scrollbar::-webkit-scrollbar {
     width: 5px;
     height: 5px;
-  }
+}
 
 .scrollbar::-webkit-scrollbar-track {
     border-radius: 100vh;
@@ -20,4 +20,45 @@
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
     background: #c0a0b9;
+}
+
+.container-card {
+    display: grid;
+    place-items: center;
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 10px;
+    background: linear-gradient(#ffeab0, white);
+    color: black;
+    overflow: hidden;
+}
+.container-card::before {
+    content: "";
+    width: 60px;
+    height: 300px;
+    left: 45px;
+    top: -70px;
+    position: absolute;
+    transform: rotate(40deg);
+    background: linear-gradient(#00e5ff, #b400fb);
+}
+.container-card:hover:before {
+    animation: animate 5s linear infinite;
+}
+@keyframes animate {
+    0% {
+        transform: rotate(40deg);
+    }
+    100% {
+        transform: rotate(390deg);
+    }
+}
+.container-card::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    background: linear-gradient(#ffeab0, white);
+    border-radius: 5px;
+    color: black;
 }

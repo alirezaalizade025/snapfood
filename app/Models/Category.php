@@ -12,4 +12,9 @@ class Category extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function restaurants()
+    {
+        return $this->hasManyThrough(Restaurant::class, CategoryRestaurant::class, 'category_id', 'id', 'id', 'restaurant_id');
+    }
 }
