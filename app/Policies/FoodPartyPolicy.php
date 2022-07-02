@@ -3,11 +3,11 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Address;
+use App\Models\FoodParty;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AddressPolicy
+class FoodPartyPolicy
 {
     use HandlesAuthorization;
 
@@ -19,22 +19,22 @@ class AddressPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->role == 'customer') {
+        if ($user->role == 'admin') {
             return Response::allow();
         }
-        return Response::deny('You are not authorized to view Address');
+        return Response::deny('You can\'t see this page');
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Address  $address
+     * @param  \App\Models\FoodParty  $foodParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Address $address)
+    public function view(User $user, FoodParty $foodParty)
     {
-
+    //
     }
 
     /**
@@ -45,60 +45,63 @@ class AddressPolicy
      */
     public function create(User $user)
     {
-        if ($user->whereIn('role', ['customer', 'restaurant'])) {
+        if ($user->role == 'admin') {
             return Response::allow();
         }
-        return Response::deny('You are not authorized to Add Address');
+        return Response::deny('You can\'t create food party');
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Address  $address
+     * @param  \App\Models\FoodParty  $foodParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Address $address)
+    public function update(User $user)
     {
-        if ($user->whereIn('role', ['customer', 'restaurant']) && $user->id == $address->addressable_id) {
+        if ($user->role == 'admin') {
             return Response::allow();
         }
-        return Response::deny('You are not authorized to Add Address');
+        return Response::deny('You can\'t update food party');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Address  $address
+     * @param  \App\Models\FoodParty  $foodParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Address $address)
+    public function delete(User $user)
     {
-        //
+        if ($user->role == 'admin') {
+            return Response::allow();
+        }
+        return Response::deny('You can\'t delete food party');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Address  $address
+     * @param  \App\Models\FoodParty  $foodParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Address $address)
+    public function restore(User $user, FoodParty $foodParty)
     {
-        //
+    //
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Address  $address
+     * @param  \App\Models\FoodParty  $foodParty
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Address $address)
+    public function forceDelete(User $user, FoodParty $foodParty)
     {
-        //
+    //
     }
 }

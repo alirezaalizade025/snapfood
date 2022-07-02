@@ -26,11 +26,13 @@ class AuthController extends Controller
             'location_title' => ['required', 'string', 'max:255'],
             'latitude' => ['required', 'regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
             'longitude' => ['required', 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/'],
-
         ]);
 
         // hash password
         $request->merge(['password' => Hash::make($request->password)]);
+        
+        $request->merge(['role' => 'customer']);
+
         $user = User::create($request->all());
         $user->addresses()->create([
             'title' => $request->location_title,

@@ -43,7 +43,7 @@
                 <x-jet-responsive-nav-link href="{{ route('restaurant.index') }}" :active="request()->routeIs('restaurant.index')">
                     {{ __('Restarant') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('discount.index') }}" :active="request()->routeIs('discount.index')">
+                <x-jet-responsive-nav-link href="{{ route('foodParty.index') }}" :active="request()->routeIs('foodParty.index')">
                     {{ __('Food Party') }}
                 </x-jet-responsive-nav-link>
             @endif

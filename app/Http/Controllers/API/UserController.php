@@ -11,7 +11,9 @@ class UserController extends Controller
 {
     public function update(UpdateUserRequest $request, $id)
     {
-        
+        $user = auth()->user();
+        $this->authorize('update', $user);
+
         if($request->user()->id != $id) {
             return response()->json(['error' => 'You can only update your own account.'], 403);
         }
@@ -20,7 +22,6 @@ class UserController extends Controller
             $request['password'] = bcrypt($request->password);
         }
 
-        $user = User::findOrFail($id);
         $user->update($request->all());
         return response()->json(['msg' => 'Account information updated'], 200);
     }

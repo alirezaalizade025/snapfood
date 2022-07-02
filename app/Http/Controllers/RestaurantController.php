@@ -14,11 +14,13 @@ class RestaurantController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', Restaurant::class);
         return view('dashboard.restaurant');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', Restaurant::class);
         $request->validate([
             'restaurant.title' => 'required|min:2',
             'restaurant.phone' => 'required|numeric|digits:11',
@@ -53,7 +55,7 @@ class RestaurantController extends Controller
         $schedule = $request->validate([
             'schedule' => 'array',
         ])['schedule'];
-        
+
         $schedule = collect($schedule)
             ->filter(function ($item) {
             return $item['open_time'] != null && $item['close_time'] != null;
@@ -81,8 +83,12 @@ class RestaurantController extends Controller
 
     public function show($id)
     {
-        // TODO:show if user is owner of restaurant
-        $restaurantInfo = ResTaurant::where('user_id', auth()->user()->id)->get()->first();
+        $restaurantInfo = Restaurant::where('user_id', auth()->user()->id)->get()->first();
+
+        if ($restaurantInfo != null) {
+            $this->authorize('view', $restaurantInfo);
+        }
+        
         return view('dashboard.myRestaurant', compact('restaurantInfo'));
     }
 
@@ -92,6 +98,7 @@ class RestaurantController extends Controller
         if (in_array('status', $request->all())) {
             $user = User::find(auth()->id());
             if ($user->role == 'admin') {
+                $this->authorize('changeConfirm', $restaurant);
                 if ($restaurant->confirm == 'accept') {
                     $restaurant->confirm = 'denied';
                     $restaurant->status = 'inactive';
@@ -102,6 +109,7 @@ class RestaurantController extends Controller
                 $column = 'confirm';
             }
             elseif ($user->role == 'restaurant') {
+                $this->authorize('changeStatus', $restaurant);
                 if ($restaurant->confirm != 'accept') {
                     return json_encode(['status' => 'error', 'message' => 'You can\'t active until your restaurant be confirmed']);
                 }
@@ -119,6 +127,7 @@ class RestaurantController extends Controller
 
             return json_encode(['status' => 'success', 'message' => 'Restaurant status updated']);
         }
+        $this->authorize('update', $restaurant);
         $data = $request->validate([
             'restaurant.id' => 'required',
             'restaurant.title' => 'required|min:2',

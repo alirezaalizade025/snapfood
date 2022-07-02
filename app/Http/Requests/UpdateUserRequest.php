@@ -13,7 +13,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->id != $this->route('id')) {
+        if (auth()->id() != $this->route('id')) {
             return false;
         }
         return true;

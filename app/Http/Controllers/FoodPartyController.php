@@ -7,18 +7,16 @@ use Illuminate\Http\Request;
 
 class FoodPartyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-    //
+        $this->authorize('viewAny', FoodParty::class);
+        return view('dashboard.foodParty');
     }
 
     public function store(Request $request)
     {
+        $this->authorize('create', FoodParty::class);
         $data = $request->validate([
             'name' => 'required|min:2|max:255|unique:food_parties',
             'discount' => 'required|numeric|between:0,99.99'
@@ -39,7 +37,9 @@ class FoodPartyController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->authorize('update', FoodParty::class);
         $foodParty = FoodParty::find($id);
+
         if (in_array('status', $request->all())) {
             if ($foodParty->status == 'active') {
                 $foodParty->status = 'inactive';
@@ -64,6 +64,7 @@ class FoodPartyController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('delete', FoodParty::class);
         $foodParty = FoodParty::find($id);
         if (!is_null($foodParty)) {
             $foodParty->delete();
