@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['fast-food', 'traditional', 'fine-dining', 'chinese']),
+            'name' => $this->faker->name,
+            'category_id' => Category::where('category_id', null)->get()->random()->id
         ];
     }
 }

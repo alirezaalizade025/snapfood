@@ -9,7 +9,7 @@ class PageController extends Controller
 {
     public function home()
     {
-        $categories = Category::all();
+        $categories = Category::where('category_id', null)->get();
         return view('home', compact('categories'));
     }
 
@@ -20,7 +20,7 @@ class PageController extends Controller
      */
     public function showCategoryRestaurant($id)
     {
-        $category = Category::with('restaurants')->find($id);
+        $category = Category::find($id);
         return view('category.categoryIndex', compact('category'));
     }
 }

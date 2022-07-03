@@ -27,7 +27,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Category::factory(4)->create();
+        Category::create(['name' => 'fast food']);
+        Category::create(['name' => 'traditional']);
+        Category::create(['name' => 'international']);
+        Category::create(['name' => 'sea food']);
+        Category::factory(30)->create();
         User::factory()->create([
             'name' => 'Admin',
             'phone' => '091234567890',
@@ -36,14 +40,14 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'bank_account_number' => '1234567891234',
         ]);
-        User::factory(40)->create();
-        Restaurant::factory(3)->create();
-        CategoryRestaurant::factory(5)->create();
+        User::factory(200)->create();
+        Restaurant::factory(50)->create();
+        CategoryRestaurant::factory(75)->create();
         FoodParty::factory(5)->create();
         Food::factory(100)->create();
-        Address::factory(10)->create();
-        Cart::factory(10)->create();
-        Comment::factory(10)->create();
+        Address::factory(200)->create();
+        Cart::factory(75)->create();
+        Comment::factory(1000)->create();
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
         CartFood::factory(100)->create();
