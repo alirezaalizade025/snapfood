@@ -12,7 +12,7 @@
             placeholder="search restaurant" class="input input-bordered input-warning  w-full max-w-xs" />
     </div>
     @foreach ($restaurants as $restaurant)
-        <a href="{{ route('restaurant.show', $restaurant->id) }}"
+        <a href="{{ route('restaurant-food.show', $restaurant->id) }}"
             class="card bg-base-100 shadow-xl shadow-yellow-800/70 image-full h-64 hover:-translate-y-2 hover:outline-dashed outline-offset-4 transition duration-300">
             <figure>
                 @isset($restaurant->image)
@@ -47,7 +47,7 @@
         </a>
     @endforeach
     <div class="w-full mt-10 flex justify-center items-center col-span-3 gap-5">
-        {{ $restaurants->links() }}
+        {{ count($restaurants) > 0 ? $restaurants->links() : null }}
     </div>
     {{-- TODO:fix factory for generate each restaurant a address and fix group by in this component to group by restaurant id --}}
 </div>

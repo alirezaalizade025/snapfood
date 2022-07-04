@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Category;
+namespace App\Http\Livewire\Customer\Category;
 
 use Livewire\Component;
 use App\Models\Category;
@@ -29,6 +29,6 @@ class ShowRestaurantToolbar extends Component
     }
     public function render()
     {
-        return view('livewire.category.show-restaurant-toolbar');
+        return view('livewire.customer.category.show-restaurant-toolbar');
     }
 }

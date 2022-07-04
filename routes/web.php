@@ -12,6 +12,7 @@ use App\Http\Controllers\PageController;
 Route::controller(PageController::class)->group(function () {
     Route::get('/', 'home')->name('home');
     Route::get('/category/{id}', 'showCategoryRestaurant')->name('category.show');
+    Route::get('/restaurant/{id}', 'showRestaurantFood')->name('restaurant-food.show');
 });
 
 Route::middleware([

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Category;
 use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoryController;
@@ -15,6 +16,9 @@ class ModalAddFoodType extends Component
     public $model = 'Category';
     public $discount;
     public $name;
+    public $mainCategories = [];
+    public $subCategory;
+
     protected $rules = [
         'name' => 'required|min:2|max:255|unique:categories',
     ];
@@ -31,17 +35,19 @@ class ModalAddFoodType extends Component
     public function storeFoodType()
     {
         $request = new Request();
+        
         $request->replace([
             'name' => $this->name,
+            'category_id' => isset($this->subCategory) & $this->subCategory != 'main' ? $this->subCategory : null,
         ]);
 
         $response = app(CategoryController::class)->store($request);
         $response = json_decode($response, true);
         if ($response['status'] == 'success') {
             $this->notification()->send([
-                'title'       => 'Category Added!',
+                'title' => 'Category Added!',
                 'description' => $response['message'],
-                'icon'        => $response['status']
+                'icon' => $response['status']
             ]);
             $this->showingModal = false;
             $this->emit('refreshCategoryTable');
@@ -65,6 +71,7 @@ class ModalAddFoodType extends Component
     public function showModal()
     {
         $this->showingModal = true;
+        $this->mainCategories = Category::where('category_id', null)->get();
         $this->resetErrorBag();
     }
 

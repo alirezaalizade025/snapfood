@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Category;
+namespace App\Http\Livewire\Customer\Category;
 
 use Livewire\Component;
 use App\Models\Category;
@@ -35,7 +35,12 @@ class ShowRestaurants extends Component
         }
 
         $subCategory = isset($this->subCategory) && !empty($this->subCategory) ? $this->subCategory : Category::where('category_id', $this->category->id)->get()->pluck('id');
-        $restaurants = Restaurant::
+        
+        if (count($subCategory) == 0) {
+            return collect([]);
+        }
+        
+        return Restaurant::
             join('category_restaurants', 'category_restaurants.restaurant_id', '=', 'restaurants.id')
             ->join('categories', 'categories.id', '=', 'category_restaurants.category_id')
             ->join('addresses', 'addresses.addressable_id', '=', 'restaurants.id')
@@ -56,12 +61,11 @@ class ShowRestaurants extends Component
             ->orderBy($this->sortBy, 'asc')
             ->paginate(15);
 
-        return $restaurants;
     }
 
     public function render()
     {
-        return view('livewire.category.show-restaurants', [
+        return view('livewire.customer.category.show-restaurants', [
             'restaurants' => $this->getRestaurants(),
         ]);
     }

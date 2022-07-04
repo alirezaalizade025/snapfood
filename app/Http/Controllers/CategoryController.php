@@ -22,9 +22,10 @@ class CategoryController extends Controller
 
         $data = $request->validate([
             'name' => 'required|min:2|unique:categories,name',
+            'category_id' => 'nullable',
         ]);
-
-        if (Category::create(['name' => $data['name']])) {
+  
+        if (Category::create($data)) {
             return json_encode(['status' => 'success', 'message' => 'Food type add successfully']);
         }
         return json_encode(['status' => 'error', 'message' => 'Food type can\'t add now!']);
