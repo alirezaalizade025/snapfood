@@ -51,6 +51,5 @@ class DatabaseSeeder extends Seeder
         WeekSchedule::factory(6)->create();
         Image::factory(100)->create();
         CartFood::factory(100)->create();
-        CartRestaurant::factory(10)->create();
     }
 }

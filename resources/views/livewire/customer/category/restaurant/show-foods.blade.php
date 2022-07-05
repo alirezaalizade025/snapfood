@@ -1,10 +1,14 @@
-<div class="w-fill h-full bg-gradient-to-r from-cyan-200 to-cyan-50 p-10">
+<div class="w-fill h-full bg-gradient-to-r from-cyan-100 to-cyan-50 p-10">
     <div class="grid lg:grid-cols-2 gap-2">
         @isset($categories)
             @foreach ($categories as $category)
-            <div class="col-span-full text-center bg-gradient-to-b from-slate-300 to-slate-100 rounded border">{{ $category->title }}</div>
+                <div class="col-span-full text-center font-bold">
+                    <div
+                        class="bg-gradient-to-b rounded-t-xl from-slate-300 to-slate-100 w-1/3 hover:w-full border transition-all duration-300 m-auto">
+                        {{ $category->title }}</div>
+                </div>
                 @foreach ($category as $food)
-                    <div class="bg-gradient-to-b from-green-100 border rounded-xl overflow-auto drop-shadow-xl">
+                    <div class="bg-gradient-to-b from-green-100 to-green-50 border rounded-xl overflow-auto drop-shadow-xl">
                         <div class="flex">
                             @isset($food->image)
                                 <img src="{{ optional($food->image)->path }}" class="object-cover w-32 h-32">
@@ -24,7 +28,8 @@
                                 <div class="flex justify-between px-3">
                                     <div class="font-bold rounded-xl p-2 text-green-500">{{ $food->final_price }} $
                                     </div>
-                                    <div class="rounded-full cursor-pointer py-1 px-2 bg-gradient-to-br from-orange-500 to-orange-200 text-white self-center">Add</div>
+                                    <div class="rounded-full cursor-pointer py-1 px-2 bg-gradient-to-br from-orange-500 to-orange-200 text-white self-center hover:from-sky-500 hover:scale-110 transition duration-200"
+                                        wire:click="addToCart({{ $food->id }})">Add</div>
                                 </div>
                         </div>
                     </div>

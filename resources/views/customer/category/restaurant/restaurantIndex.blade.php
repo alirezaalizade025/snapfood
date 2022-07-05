@@ -8,12 +8,11 @@
                 scroll in page titles
                 {{-- <livewire:customer.category.show-restaurant-toolbar :category="$category"/> --}}
             </div>
-            <div class="lg:col-span-7 col-span-10 rounded-3xl overflow-auto  border">
+            <div class="lg:col-span-7 col-span-10 rounded-3xl overflow-auto border drop-shadow-xl">
                 <livewire:customer.category.restaurant.show-foods :restaurant="$restaurant" />
             </div>
-            <div class="lg:col-span-3 col-span-10 sticky shadow-xl shadow-cyan-300/30 p-5 rounded-3xl">
-                cart
-                {{-- <livewire:customer.category.show-restaurants :category="$category" /> --}}
+            <div class="lg:col-span-3 col-span-10 sticky drop-shadow-xl border max-h-screen overflow-auto rounded-3xl">
+                @livewire('customer.cart.side-cart', ['restaurant' => $restaurant], key($restaurant->id))
             </div>
         </div>
     </div>

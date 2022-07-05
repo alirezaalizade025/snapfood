@@ -18,11 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::apiResource(name:'addresses',controller:UserController::class)
-//    ->middleware(middleware:'auth:sanctum');
-
-// Route::get('/addresses', [AddressController::class, 'show'])->middleware(middleware:'auth:sanctum');
-// Route::post('/addresses', [AddressController::class, 'store'])->middleware(middleware:'auth:sanctum');
 Route::middleware('auth:sanctum')->controller(AddressController::class)->group(function () {
     Route::get('/addresses', 'index');
     Route::post('/addresses', 'store');
@@ -42,7 +37,9 @@ Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('ca
     Route::get('/{cart_id}', 'show');
     Route::post('/add', 'store');
     Route::patch('/add', 'update');
+    Route::patch('/decrease', 'decrease');
     Route::post('/{cart_id}/pay', 'sendToPay');
+    Route::get('/restaurant/{restaurant_id}', 'userCartByRestaurant');
 });
 
 Route::middleware('auth:sanctum')->controller(CommentController::class)->prefix('comments')->group(function () {

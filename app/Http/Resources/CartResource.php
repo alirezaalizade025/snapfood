@@ -14,22 +14,22 @@ class CartResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return
         [
             'id' => $this->id,
-            'restaurant' => $this->cartRestaurants->map(function ($item) {
-            return [
-                    'title' => $item->restaurant->title,
-                    'image' => $item->restaurant->image ? $item->restaurant->image->path : null,
-                ];
-        }),
+            'restaurant' => [
+                'title' => $this->restaurant->title,
+                'image' => $this->restaurant->image ? $this->restaurant->image->path : null,
+            ],
+
             'foods' => $this->cartFood->map(fn($food) => [
-                'id' => $food->food->id,
-                'title' => $food->food->name,
-                'restaurant' => $food->food->restaurant->title,
-                'count' => $food->quantity,
-                'price' => $food->price,
-            ])->sortBy('restaurant')->values(),
+        'id' => $food->food->id,
+        'title' => $food->food->name,
+        'restaurant' => $food->food->restaurant->title,
+        'count' => $food->quantity,
+        'price' => $food->price,
+        ])->values(),
         ];
     }
 }

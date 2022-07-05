@@ -10,6 +10,11 @@ class ShowFoods extends Component
 {
     public $restaurant;
 
+    public function addToCart($id)
+    {
+        $this->emit('addItemToCart', $id);
+    }
+
     public function fetchData()
     {
         $restaurant = Restaurant::

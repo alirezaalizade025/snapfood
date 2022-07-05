@@ -18,6 +18,7 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(Restaurant::class)->constrained();
             $table->enum('status', [0, 1, 2, 3, 4])->default(0);
             $table->enum('cart_number', [1, 2])->default(1);
             $table->float('total_price', 11, 2)->default(0);
