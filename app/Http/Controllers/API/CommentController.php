@@ -84,8 +84,7 @@ class CommentController extends Controller
                 )
                 ;
             }) ?? ['msg' => 'food not found'];
-        $tt = $comments;
-        return $tt;
+        return $comments;
     }
 
     /**

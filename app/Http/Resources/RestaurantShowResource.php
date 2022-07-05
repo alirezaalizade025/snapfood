@@ -26,7 +26,7 @@ class RestaurantShowResource extends JsonResource
             'phone' => $this->phone,
             'is_open' => $this->status == 'active' ? true : false,
             'image' => isset($this->image) ? $this->image->path : null,
-            'score' => $this->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
+            'score' => round($this->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(), 2),
             'comment_count' => $this->carts->map(fn($cart) => $cart->comments->count())->sum(),
             'schedule' => $this->weekSchedules->keyBy('day')->map(function ($item) {
             return [
@@ -35,6 +35,13 @@ class RestaurantShowResource extends JsonResource
             ];
         })
         ];
+
+        if ($restaurant['is_open'] == 'active') {
+            $today = strtolower(now()->format('l'));
+            if(now()->format('H:m') < $restaurant['schedule'][$today]['end'] || now()->format('H:m') > $restaurant['schedule'][$today]['start']){
+                $restaurant['is_open'] = false;
+            }
+        }
 
         // for add null if no schedule for that day
         collect($days)->diffKeys($restaurant['schedule'])->each(function ($item, $key) use ($restaurant) {

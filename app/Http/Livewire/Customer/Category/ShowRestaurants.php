@@ -28,6 +28,7 @@ class ShowRestaurants extends Component
 
     public function getRestaurants($subCategory = null)
     {
+        // TODO: set actual user's lat long for calc distance
         $where = [['restaurants.confirm', 'accept']];
 
         if ($this->search) {
@@ -56,6 +57,7 @@ class ShowRestaurants extends Component
         )
             ->having('distance', '<', 5000000000) //TODO:fix this km
             ->where($where)
+            ->where('addressable_type', 'App\Models\Restaurant')
             ->whereIn('category_restaurants.category_id', $subCategory)
             ->groupBy('addresses.id')
             ->orderBy($this->sortBy, 'asc')

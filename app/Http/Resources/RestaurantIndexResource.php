@@ -25,8 +25,15 @@ class RestaurantIndexResource extends JsonResource
             'phone' => $this->phone,
             'is_open' => $this->status == 'active' ? true : false,
             'image' => isset($this->image) ? $this->image->path : null,
-            'score' => $this->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
+            'score' => round($this->score, 2),
         ];
+
+        if ($restaurant['is_open'] == 'active') {
+            $today = strtolower(now()->format('l'));
+            if(now()->format('H:m') < $restaurant['schedule'][$today]['end'] || now()->format('H:m') > $restaurant['schedule'][$today]['start']){
+                $restaurant['is_open'] = false;
+            }
+        }
 
         return $restaurant;
     }

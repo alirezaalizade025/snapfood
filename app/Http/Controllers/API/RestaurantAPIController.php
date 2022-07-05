@@ -5,11 +5,12 @@ namespace App\Http\Controllers\API;
 use App\Models\Category;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RestaurantShowResource;
 use App\Http\Resources\RestaurantFoodsResource;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Resources\RestaurantIndexResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RestaurantAPIController extends Controller
 {
@@ -20,40 +21,49 @@ class RestaurantAPIController extends Controller
      */
     public function index(Request $request)
     {
-        $restaurants = Restaurant::filter($request)
-            ->whereHas('category', function ($query) use ($request) {
-            if ($request->has('type')) {
-                $query->where('category_id', $request->type);
-            }
-        })
+        $userAddress = auth()->user()->addresses()->where('is_current_location', true)->get()->first();
 
-            ->get()
-            ->map(function ($restaurant) {
-            return [
-            'id' => $restaurant->id,
-            'title' => $restaurant->title,
-            'type' => $restaurant->category->map(function ($item) {
-                    return $item->category->name;
-                }
-                )->implode(', '),
-                'address' => $restaurant->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
-                'phone' => $restaurant->phone,
-                'is_open' => $restaurant->status == 'active' ? true : false,
-                'image' => isset($restaurant->image) ? $restaurant->image->path : null,
-                'score' => $restaurant->carts->map(fn($cart) => $cart->comments->avg('score'))->avg(),
-                ];
-            });
-        // $restaurants = RestaurantIndexResource::collection($restaurants);
-
-        if (isset($request['score_gt'])) {
-            $restaurants = $restaurants->filter(function ($restaurant) use ($request) {
-                return $restaurant['score'] >= $request['score_gt'] ?? 0;
-            })->values();
+        //filters
+        $where[] = ['restaurants.confirm', 'accept'];
+        if ($request->has('score_gt')) {
+            $where[] = ['score', '>=', $request->score_gt];
         }
+        ;
+        if ($request->has('type')) {
+            $where[] = ['categories.category_id', $request->type];
+        }
+        ;
+        if ($request->has('is_open')) {
+            $where[] = ['restaurants.status', true];
+        }
+        ;
 
-        // TODO:refactor score filter
+        //find full details
+        $restaurants = Restaurant::
+            join('category_restaurants', 'category_restaurants.restaurant_id', '=', 'restaurants.id')
+            ->join('categories', 'categories.id', '=', 'category_restaurants.category_id')
+            ->join('addresses', 'addresses.addressable_id', '=', 'restaurants.id')
+            ->join('carts', 'carts.restaurant_id', '=', 'restaurants.id')
+            ->join('comments', 'comments.cart_id', '=', 'carts.id')
+            ->with('category')
+            ->select(
+            'restaurants.*',
+            DB::raw('AVG(comments.score) AS score'),
+            'addresses.latitude',
+            'addresses.longitude',
+            "addresses.id as address_id",
+            DB::raw("6371 * acos(cos(radians(" . $userAddress['latitude'] . ")) * cos(radians(addresses.latitude)) * cos(radians(addresses.longitude) - radians(" . $userAddress['longitude'] . ")) + sin(radians(" . $userAddress['latitude'] . ")) * sin(radians(addresses.latitude))) AS distance"),
+        )
+            ->having('distance', '<', 5000) //TODO:fix this km
+            ->where('restaurants.confirm', 'accept')
+            ->where($where)
+            ->groupBy('addresses.id')
+            ->groupBy('restaurants.id')
+            ->orderBy('distance', 'asc')
+            ->get();
 
-
+        $restaurants = RestaurantIndexResource::collection($restaurants);
+        
         if ($restaurants->isEmpty()) {
             return response(
             ['msg' => 'No restaurants found'], 404);
@@ -104,36 +114,4 @@ class RestaurantAPIController extends Controller
         ;
     }
 
-// public function createFormat($foods)
-// {
-//     $foods = $foods->map(function ($food) {
-//         $item['id'] = $food->id;
-//         $item['title'] = $food->name;
-//         $item['price'] = $food->price;
-
-//         if ($food->discount != null && $food->discount != 0) {
-//             $item['off'] = ['label' => $food->discount . '%', 'factor' => 1 - $food->discount / 100];
-//         }
-//         //if have food party discount ignored
-//         if ($food->foodParty != null) {
-//             $item['off'] = ['label' => $food->foodParty->name, 'factor' => 1 - $food->foodParty->discount / 100];
-//         }
-
-//         $item['raw_material'] = $food->rawMaterials->implode('name', ', ');
-//         $item['image'] = $food->image ? $food->image->path : null;
-//         $item['category_id'] = $food->category_id;
-
-//         return $item;
-
-//     })
-//         ->groupBy('category_id')->map(function ($food, $index) {
-//         $item['id'] = $index;
-//         $item['title'] = Category::find($index)->name;
-//         $item['foods'] = $food;
-//         return $item;
-//     })
-//         ->sortBy(['title', 'asc'])->values();
-//     ;
-//     return $foods;
-// }
 }
