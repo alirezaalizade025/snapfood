@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Address;
 use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,7 +34,11 @@ class AddressFactory extends Factory
             $address['addressable_id'] = User::where('role', 'customer')->get()->random()->id;
         }
         else {
-            $address['addressable_id'] = Restaurant::all()->unique()->random()->id;
+            $id = Restaurant::get()->unique()->random()->id;
+            if (Restaurant::find($id)->addressInfo) {
+                $address['addressable_type'] = 'App\Models\User';
+            }
+            $address['addressable_id'] = $id;
         }
         return $address;
     }
