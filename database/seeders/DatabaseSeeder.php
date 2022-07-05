@@ -40,12 +40,22 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
             'bank_account_number' => '1234567891234',
         ]);
-        User::factory(200)->create();
-        Restaurant::factory(50)->create();
+        User::factory(200)->create()->each(function($user) {
+            for($i = 0; $i < rand(1,3); $i++) {
+                $user->addresses()->save(Address::factory()->make());
+            }
+        });
+
+        Restaurant::factory(50)->create()->each(function ($restaurant) {
+            $restaurant->addressInfo()->save(Address::factory()->make());
+            // $restaurant->image()->save(Image::factory()->make());
+            // $restaurant->category()->saveMany(Category::inRandomOrder()->take(rand(1, 3))->get());
+            // $restaurant->saveMany(WeekSchedule::factory(rand(1, 3))->make());
+        });
         CategoryRestaurant::factory(75)->create();
         FoodParty::factory(5)->create();
         Food::factory(100)->create();
-        Address::factory(200)->create();
+        // Address::factory(200)->create();
         Cart::factory(75)->create();
         Comment::factory(1000)->create();
         WeekSchedule::factory(6)->create();
