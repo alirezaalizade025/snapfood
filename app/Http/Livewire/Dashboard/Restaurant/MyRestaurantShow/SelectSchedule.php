@@ -6,6 +6,7 @@ use Livewire\Component;
 use WireUi\Traits\Actions;
 use App\Models\WeekSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class SelectSchedule extends Component
 {
@@ -36,7 +37,7 @@ class SelectSchedule extends Component
         $request->headers->set('Accept', 'application/json');
         $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
 
-        $response = app()->handle($request);
+        $response = Route::dispatch($request);
 
         if ($response->status() == 200) {
             $schedule = collect(json_decode($response->getContent())->schedule)

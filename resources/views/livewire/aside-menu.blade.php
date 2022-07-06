@@ -38,7 +38,7 @@
             </x-jet-responsive-nav-link>
             @if (auth()->user()->role == 'admin')
                 <x-jet-responsive-nav-link href="{{ route('foodType.index') }}" :active="request()->routeIs('foodType.index')">
-                    {{ __('Food Type') }}
+                    {{ __('Category') }}
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('restaurant.index') }}" :active="request()->routeIs('restaurant.index')">
                     {{ __('Restarant') }}
@@ -50,6 +50,9 @@
             @if (auth()->user()->role == 'restaurant')
                 <x-jet-responsive-nav-link href="{{ route('restaurant.show', auth()->id()) }}" :active="request()->routeIs('restaurant.show')">
                     {{ __('My Restaurant') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('restaurant.orders', auth()->user()->restaurant->id) }}" :active="request()->routeIs('restaurant.orders')">
+                    {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
             @endif
         </ul>

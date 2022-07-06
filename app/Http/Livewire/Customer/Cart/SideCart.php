@@ -6,6 +6,7 @@ use App\Models\Food;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 
 class SideCart extends Component
@@ -24,7 +25,7 @@ class SideCart extends Component
         $request->headers->set('Accept', 'application/json');
         $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
 
-        $response = app()->handle($request);
+        $response = Route::dispatch($request);
 
         if ($response->status() == 200) {
             $this->emit('refreshComponent');
@@ -40,7 +41,7 @@ class SideCart extends Component
         $request->headers->set('Accept', 'application/json');
         $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
 
-        $response = app()->handle($request);
+        $response = Route::dispatch($request);
         if ($response->status() == 200) {
             $this->emit('refreshComponent');
         }
@@ -57,7 +58,7 @@ class SideCart extends Component
             $request->headers->set('Accept', 'application/json');
             $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
 
-            $response = app()->handle($request);
+            $response = Route::dispatch($request);
             if ($response->status() == 200) {
                 $this->emit('refreshComponent');
             }
@@ -75,7 +76,7 @@ class SideCart extends Component
         $request = Request::create('/api/carts/restaurant/' . $this->restaurant->id, 'GET');
         $request->headers->set('Accept', 'application/json');
         $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
-        $response = app()->handle($request);
+        $response = Route::dispatch($request);
         if ($response->status() == 200) {
             $response = collect(json_decode($response->getContent())->data)->first();
             if ($response) {

@@ -30,8 +30,9 @@ Route::middleware([
         }
         )->name('category.edit');
 
-        Route::resource('/foodType', CategoryController::class);
-        Route::resource('/food', FoodController::class);
+        Route::resource('dashboard/foodType', CategoryController::class);
+        Route::resource('dashboard/food', FoodController::class);
         Route::resource('dashboard/restaurant', RestaurantController::class);
-        Route::get('/foodParty', [FoodPartyController::class , 'index'])->name('foodParty.index');
+        Route::get('dashboard/foodParty', [FoodPartyController::class , 'index'])->name('foodParty.index');
+        Route::get('dashboard/orders', [Restaurant::class , 'orders'])->name('restaurant.orders');
     });
