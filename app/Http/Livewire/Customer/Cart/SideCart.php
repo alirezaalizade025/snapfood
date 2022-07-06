@@ -51,19 +51,23 @@ class SideCart extends Component
 
     public function addItemToCart($id)
     {
-        $request = Request::create('/api/carts/add', 'POST', ['food_id' => $id, 'count' => 1]);
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
 
-        $response = app()->handle($request);
-        if ($response->status() == 200) {
-            $this->emit('refreshComponent');
+        if (auth()->check()) {
+            $request = Request::create('/api/carts/add', 'POST', ['food_id' => $id, 'count' => 1]);
+            $request->headers->set('Accept', 'application/json');
+            $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
 
+            $response = app()->handle($request);
+            if ($response->status() == 200) {
+                $this->emit('refreshComponent');
+            }
+            else {
+            // TODO:show message
+            }
         }
         else {
-        // TODO:show message
+            redirect()->route('login');
         }
-
     }
 
     public function fetchData()

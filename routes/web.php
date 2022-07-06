@@ -32,6 +32,6 @@ Route::middleware([
 
         Route::resource('/foodType', CategoryController::class);
         Route::resource('/food', FoodController::class);
-        Route::resource('/restaurant', RestaurantController::class);
+        Route::resource('dashboard/restaurant', RestaurantController::class);
         Route::get('/foodParty', [FoodPartyController::class , 'index'])->name('foodParty.index');
     });

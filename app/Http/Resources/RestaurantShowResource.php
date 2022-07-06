@@ -30,8 +30,8 @@ class RestaurantShowResource extends JsonResource
             'comment_count' => $this->carts->map(fn($cart) => $cart->comments->count())->sum(),
             'schedule' => $this->weekSchedules->keyBy('day')->map(function ($item) {
             return [
-            'start' => $item->open_time,
-            'end' => $item->close_time
+            'start' => $item->start,
+            'end' => $item->end
             ];
         })
         ];

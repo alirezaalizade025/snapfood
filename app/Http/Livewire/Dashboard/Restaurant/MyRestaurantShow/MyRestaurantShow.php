@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Restaurant\MyRestaurantShow;
 
 use Livewire\Component;
 use App\Models\Category;
@@ -9,6 +9,7 @@ use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use App\Models\CategoryRestaurant;
 use App\Http\Controllers\RestaurantController;
+use phpDocumentor\Reflection\Types\Null_;
 
 class MyRestaurantShow extends Component
 {
@@ -31,6 +32,7 @@ class MyRestaurantShow extends Component
         'restaurant.phone' => 'required|numeric|digits:11',
         'restaurant.status' => 'required|min:2',
         'restaurant.bank_account' => 'required|digits:16',
+        'restaurant.delivery_fee' => 'required|numeric',
     ];
 
     public function setSchedule($schedule)
@@ -115,7 +117,7 @@ class MyRestaurantShow extends Component
     public function fetchData()
     {
         $id = auth()->user()->id;
-        $this->foodTypes = Category::all();
+        $this->foodTypes = Category::whereNot('category_id', Null)->get()->sortBy('name');
         $this->restaurant = Restaurant::where('user_id', $id)->get()->first();
         if (!empty($this->restaurant)) {
             $this->restaurantCategory = CategoryRestaurant::where('restaurant_id', $this->restaurant->id)->get()->map(function ($item) {
@@ -138,6 +140,6 @@ class MyRestaurantShow extends Component
 
     public function render()
     {
-        return view('livewire.my-restaurant-show');
+        return view('livewire.dashboard.restaurant.my-restaurant-show.my-restaurant-show');
     }
 }

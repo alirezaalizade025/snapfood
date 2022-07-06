@@ -17,7 +17,7 @@ class WeekSchedule extends Model
     protected $guarded = [];
     protected $casts = [
         'day' => ScheduleCast::class ,
-        'open_time' => ScheduleTimeCast::class ,
-        'close_time' => ScheduleTimeCast::class ,
+        'start' => ScheduleTimeCast::class ,
+        'end' => ScheduleTimeCast::class ,
     ];
 }

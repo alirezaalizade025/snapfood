@@ -1,4 +1,4 @@
-<div class="w-fill h-full bg-gradient-to-r from-cyan-100 to-cyan-50 p-10">
+<div class="w-fill h-full bg-gradient-to-r from-[#70acef] to-[#a5f1d8] p-10">
     <div class="grid lg:grid-cols-2 gap-2">
         @isset($categories)
             @foreach ($categories as $category)
@@ -22,14 +22,17 @@
                                     <div class="flex items-center gap-3 mt-3 px-3">
                                         <div class=" p-2 text-left line-through">{{ $food->price }}$</div>
                                         <div class="self-center p-1 bg-rose-500 text-white rounded-full text-sm">
-                                            {{ $food->discount }}% off</div>
+                                            {{ $food->discount }}% off
+                                        </div>
                                     </div>
                                 @endisset
                                 <div class="flex justify-between px-3">
                                     <div class="font-bold rounded-xl p-2 text-green-500">{{ $food->final_price }} $
                                     </div>
-                                    <div class="rounded-full cursor-pointer py-1 px-2 bg-gradient-to-br from-orange-500 to-orange-200 text-white self-center hover:from-sky-500 hover:scale-110 transition duration-200"
-                                        wire:click="addToCart({{ $food->id }})">Add</div>
+                                    @Auth
+                                        <div class="rounded-full cursor-pointer py-1 px-2 bg-gradient-to-br from-orange-500 to-orange-200 text-white self-center hover:from-sky-500 hover:scale-110 transition duration-200"
+                                            wire:click="addToCart({{ $food->id }})">Add</div>
+                                    @endauth
                                 </div>
                         </div>
                     </div>

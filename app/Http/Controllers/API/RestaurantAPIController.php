@@ -91,6 +91,25 @@ class RestaurantAPIController extends Controller
         return response()->json($restaurant, 200);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Restaurant  $restaurant
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    public function showForDashboard($id)
+    {
+        try {
+            $restaurant = Restaurant::where([['id', $id]])->firstOrFail();
+        }
+        catch (ModelNotFoundException $e) {
+            return response(['msg' => 'restaurant not found'], 404);
+        }
+        $restaurant = RestaurantShowResource::collection([$restaurant])->first();
+
+        return response()->json($restaurant, 200);
+    }
+
     public function foods($id)
     {
         try {

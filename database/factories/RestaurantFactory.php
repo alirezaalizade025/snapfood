@@ -24,6 +24,7 @@ class RestaurantFactory extends Factory
             'phone' => $this->faker->regexify('09\\d{9}$'),
             'confirm' => $this->faker->randomElement(['accept', 'waiting', 'denied']),
             'bank_account' => $this->faker->regexify('\\d{16}$'),
+            'delivery_fee' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
 }

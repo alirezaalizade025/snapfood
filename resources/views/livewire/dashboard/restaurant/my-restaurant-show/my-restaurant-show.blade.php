@@ -56,25 +56,42 @@
             <div class="text-red-500 text-sm">{{ $message }}</div>
         @enderror
     </div>
+    <div>
+        <div class="font-bold text-2xl">
+            Delivery Cost
+        </div>
+        <input type="text" wire:model="restaurant.delivery_fee" class="p-3 rounded-xl w-full resize-none">
+        @error('restaurant.delivery_fee')
+            <div class="text-red-500 text-sm">{{ $message }}</div>
+        @enderror
+    </div>
     @if ($formType == 'update')
         <div class="flex gap-5 items-center">
-            <div wire:click="changeStatus"
-                class="py-3 px-10 text-gray-600 rounded-xl flex w-1/2 h-1/2 font-bold text-2xl justify-center items-center m-auto cursor-pointer {{ $restaurant['status'] == 'active' ? 'bg-green-400' : 'bg-yellow-500' }}">
-                {{ $restaurant['status'] }}</div>
-            <div
-                class="py-3 px-10 text-gray-600 rounded-xl flex w-1/2 h-1/2 font-bold text-2xl justify-center items-center m-auto {{ $restaurant['confirm'] == 'accept' ? 'bg-green-400' : ($restaurant['confirm'] == 'waiting' ? 'bg-orange-400' : 'bg-red-400') }}">
-                {{ $restaurant['confirm'] }}</div>
+            @if ($restaurant['confirm'] == 'accept')
+                <div wire:click="changeStatus"
+                    class="py-3 px-10 text-gray-600 rounded-xl flex w-1/2 font-bold text-2xl justify-center items-center m-auto cursor-pointer {{ $restaurant['status'] == 'active' ? 'bg-green-400' : 'bg-yellow-500' }}">
+                    {{ $restaurant['status'] }}
+                </div>
+            @else
+                <div
+                    class="py-3 px-10 text-gray-600 rounded-xl flex w-1/2 font-bold text-2xl justify-center items-center m-auto {{ $restaurant['confirm'] == 'accept' ? 'bg-green-400' : ($restaurant['confirm'] == 'waiting' ? 'bg-orange-400' : 'bg-red-400') }}">
+                    {{ $restaurant['confirm'] }}
+                </div>
+                <span class="border rounded drop-shadow-lg">please wait until admin confirm you, then you can
+                    active/deactive your own restaurant</span>
+            @endif
         </div>
     @endif
 
     <div class="flex justify-end items-end">
+        @error('latitude')
+            <span class="text-red-500 text-sm">Restaurant location on map required!</span>
+        @enderror
+        @error('schedule')
+            <span class="text-red-500 text-sm">Restaurant schedule is not fixed</span>
+        @enderror
         <div wire:click="updateRestaurant"
             class="p-3 bg-indigo-400 text-white rounded-xl text-center cursor-pointer hover:bg-indigo-500">save</div>
     </div>
-    @error('latitude')
-        <span class="text-red-500 text-sm">Restaurant location on map required!</span>
-    @enderror
-    @error('schedule')
-        <span class="text-red-500 text-sm">Restaurant schedule is not fixed</span>
-    @enderror
+
 </div>

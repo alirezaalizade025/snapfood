@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Restaurant::class)->constrained();
             $table->integer('day');
-            $table->time('open_time')->nullable();
-            $table->time('close_time')->nullable();
+            $table->time('start')->nullable();
+            $table->time('end')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -34,10 +34,8 @@
     @endforeach
 
     @if ($tileHost === 'mapbox')
-        let url{{ $mapId }} =
-            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{ config('maps.mapbox.access_token', null) }}';
-    @elseif
-        ($tileHost === 'openstreetmap')
+        let url{{ $mapId }} = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={{ config('maps.mapbox.access_token', null) }}';
+    @elseif ($tileHost === 'openstreetmap')
         let url{{ $mapId }} = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     @else
         let url{{ $mapId }} = '{{ $tileHost }}';

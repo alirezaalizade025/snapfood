@@ -5,7 +5,7 @@
             <h3 class="font-black text-2xl my-4">My Resturant</h3>
             <div
                 class="bg-gradient-to-t from-teal-100 mt-5 mx-auto p-10 rounded-xl outline-2 outline-sky-300 outline-offset-4 outline-dotted">
-                <livewire:select-schedule />
+                <livewire:dashboard.restaurant.my-restaurant-show.select-schedule />
             </div>
             <div
                 class="bg-gradient-to-l from-sky-100 mt-5 mx-auto p-10 rounded-xl outline-2 outline-sky-300 outline-offset-4 outline-dotted">
@@ -17,7 +17,7 @@
                 </x-maps-leaflet>
             </div>
             <div class="mt-5">
-                <livewire:my-restaurant-show class="mt-5" />
+                <livewire:dashboard.restaurant.my-restaurant-show.my-restaurant-show class="mt-5" />
             </div>
 
         </div>

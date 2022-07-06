@@ -21,7 +21,7 @@ class FoodFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'price' => $this->faker->randomNumber(6),
+            'price' => $this->faker->randomFloat(2, 0, 100),
             'category_id' => Category::all()->random()->id,
             'discount' => $this->faker->randomNumber(2),
             'food_party_id' => FoodParty::all()->random()->id,

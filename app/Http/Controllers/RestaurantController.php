@@ -25,6 +25,7 @@ class RestaurantController extends Controller
             'restaurant.title' => 'required|min:2',
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.bank_account' => 'required|digits:16',
+            'restaurant.delivery_fee' => 'required|numeric',
         ]);
 
         $category = $request->validate([
@@ -42,6 +43,7 @@ class RestaurantController extends Controller
         $restaurant->user_id = auth()->id();
         $restaurant->phone = $request->restaurant['phone'];
         $restaurant->bank_account = $request->restaurant['bank_account'];
+        $restaurant->delivery_fee = $request->restaurant['delivery_fee'];
         $restaurant->save();
 
         //add location with morph to addresses table
@@ -58,18 +60,19 @@ class RestaurantController extends Controller
 
         $schedule = collect($schedule)
             ->filter(function ($item) {
-            return $item['open_time'] != null && $item['close_time'] != null;
+            return $item['start'] != null && $item['end'] != null;
         })
             ->map(function ($item, $key) use ($restaurant) {
 
             $restaurant->weekSchedules()->updateOrCreate(
             ['day' => $key, 'restaurant_id' => $restaurant->id],
-            ['open_time' => $item['open_time'], 'close_time' => $item['close_time']]
+            ['start' => $item['start'], 'end' => $item['end']]
             );
         });
 
-        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $restaurant->id)->delete();
-
+        WeekSchedule::whereNotIn('day', $schedule->keys())
+            ->where('restaurant_id', $restaurant->id)
+            ->delete();
 
         $categoryRestaurant = new CategoryRestaurant();
         collect($category)->map(function ($item) use ($categoryRestaurant, $restaurant) {
@@ -88,7 +91,7 @@ class RestaurantController extends Controller
         if ($restaurantInfo != null) {
             $this->authorize('view', $restaurantInfo);
         }
-        
+
         return view('dashboard.myRestaurant', compact('restaurantInfo'));
     }
 
@@ -134,6 +137,7 @@ class RestaurantController extends Controller
             'restaurant.phone' => 'required|numeric|digits:11',
             'restaurant.status' => 'required|min:2',
             'restaurant.bank_account' => 'required|digits:16',
+            'restaurant.delivery_fee' => 'required|numeric',
         ]);
 
         $category = $request->validate([
@@ -152,13 +156,13 @@ class RestaurantController extends Controller
 
         $schedule = collect($schedule)
             ->filter(function ($item) {
-            return $item['open_time'] != null && $item['close_time'] != null;
+            return $item['start'] != null && $item['end'] != null;
         })
             ->map(function ($item, $key) use ($restaurant) {
 
             $restaurant->weekSchedules()->updateOrCreate(
             ['day' => $key, 'restaurant_id' => $restaurant->id],
-            ['open_time' => $item['open_time'], 'close_time' => $item['close_time']]
+            ['start' => $item['start'], 'end' => $item['end']]
             );
         });
 

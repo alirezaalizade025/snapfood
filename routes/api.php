@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->patch('/user/{id}', [UserController::class , 
 Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->prefix('restaurants')->group(function () {
     Route::get('/', 'index');
     Route::get('/{restaurant_id}', 'show');
+    Route::get('/{restaurant_id}/dashboard', 'showForDashboard');
     Route::get('/{restaurant_id}/foods', 'foods');
 });
 

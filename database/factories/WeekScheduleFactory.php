@@ -19,8 +19,8 @@ class WeekScheduleFactory extends Factory
         return [
             'restaurant_id' => 1,
             'day' => $this->faker->unique()->numberBetween(1, 7),
-            'open_time' => $this->faker->time('H:i'),
-            'close_time' => $this->faker->time('H:i'),
+            'start' => $this->faker->time('H:i'),
+            'end' => $this->faker->time('H:i'),
         ];
     }
 }
