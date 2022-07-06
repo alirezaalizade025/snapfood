@@ -14,9 +14,13 @@ class FoodController extends Controller
 
     public function index()
     {
-        if (is_null(Restaurant::where('user_id', auth()->id())->get()->first()) && auth()->user()->role != 'admin') {
-            return redirect()->back()->withErrors('You must create a restaurant first');
+        if (is_null($restaurant = Restaurant::where('user_id', auth()->id())->get()->first()) && auth()->user()->role != 'admin') {
+            return redirect('dashboard')->withErrors('You must create a restaurant first');
         }
+        if ($restaurant->confirm != 'accept') {
+            return redirect('dashboard')->withErrors('Your restaurant is not confirmed yet');
+        }
+
         return view('dashboard.food');
     }
 

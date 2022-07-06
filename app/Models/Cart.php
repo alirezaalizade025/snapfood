@@ -11,13 +11,8 @@ class Cart extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
     protected $guarded = [];
 
-    // public function user()
-    // {
-    //     return $this->hasManyThrough(User::class, CartUser::class, 'cart_id', 'id');
-    // }
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -33,15 +28,9 @@ class Cart extends Model
         return $this->hasMany(CartFood::class);
     }
 
-    // public function cartRestaurants()
-    // {
-    //     return $this->hasMany(CartRestaurant::class);
-    // }
-
     public function restaurant()
     {
         return $this->belongsTo(Restaurant::class);
-        // return $this->hasManyThrough(Restaurant::class, CartRestaurant::class, 'cart_restaurant.cart_id', 'restaurants.id');
     }
 
     public function foods()

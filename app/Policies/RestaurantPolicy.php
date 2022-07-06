@@ -70,6 +70,21 @@ class RestaurantPolicy
     }
 
     /**
+     * Determine whether the user can see/update the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Restaurant  $restaurant
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function order(User $user, Restaurant $restaurant)
+    {
+        if ($user->role == 'admin' || ($user->role == 'restaurant' && $user->id == $restaurant->user_id)) {
+            return Response::allow();
+        }
+        return Response::deny('You can\'t see orders');
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user

@@ -191,4 +191,21 @@ class RestaurantController extends Controller
         return json_encode(['status' => 'success', 'message' => 'Restaurant updated']);
     }
 
+    public function orders($id)
+    {
+        $restaurant = Restaurant::find($id);
+        
+        if ($restaurant->confirm != 'accept') {
+            return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+        }
+
+        if ($restaurant != null) {
+            $this->authorize('order', $restaurant);
+        }
+
+
+        return view('dashboard.myOrders', compact('restaurant'));
+
+    }
+
 }
