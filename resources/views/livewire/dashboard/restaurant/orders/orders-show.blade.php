@@ -1,4 +1,7 @@
 <div>
+    <div class="my-2">
+        <input wire:model.debounce.500ms="search" type="text" class="rounded-full drop-shadow-xl p-3" placeholder="search code">
+    </div>
     <div class="grid grid-cols-2 gap-5">
         @foreach ($carts as $cart)
             <div class="bg-gradient-to-br from-[#fdd8dd] to-[#ddfff7] rounded-xl border drop-shadow-lg p-5">

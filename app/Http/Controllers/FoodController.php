@@ -28,6 +28,7 @@ class FoodController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Food::class);
         $food = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique_food_name:food,name,restaurant_id, ' . Restaurant::where('user_id', auth()->id())->get()->first()->id],
             'price' => 'required|numeric',
@@ -66,6 +67,9 @@ class FoodController extends Controller
     public function update(Request $request, $id)
     {
         $food = Food::find($id);
+
+        $this->authorize('update', $food);
+
         if (in_array('status', $request->all())) {
             if (auth()->user()->role == 'admin') {
                 if ($food->status == 'active') {
@@ -131,15 +135,12 @@ class FoodController extends Controller
 
     }
 
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
     public function destroy($id)
     {
         $food = Food::find($id);
+
+        $this->authorize('delete', $food);
+
         if (!is_null($food)) {
             $food->delete();
             $message = ['status' => 'success', 'message' => $food->name . ' deleted successfully'];

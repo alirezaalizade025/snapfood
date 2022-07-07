@@ -25,6 +25,8 @@ class CartController extends Controller
             where('user_id', auth()->id())
             ->get();
 
+        $this->authorize('view', $carts->first());
+
         $carts = CartResource::collection($carts);
 
         return response(compact('carts'));
@@ -38,6 +40,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Cart::class);
         try {
             $food = Food::findOrFail($request->food_id);
         }
@@ -52,7 +55,7 @@ class CartController extends Controller
         );
 
         $foodWithDiscount = isset($food->food_party_id) ? (1 - $food->foodParty->discount / 100) * $food->price : (isset($food->discount) ? (1 - $food->discount / 100) * $food->price : $food->price);
-        
+
         $cartFood = CartFood::where(['cart_id' => $cart->id, 'food_id' => $food->id])->get()->first();
         if ($cartFood) {
             $cartFood->quantity += $request->count;
@@ -84,6 +87,8 @@ class CartController extends Controller
             ->where('id', $request->cart_id)
             ->get();
 
+        $this->authorize('view', $carts->first());
+
         $carts = CartResource::collection($carts);
 
         return response(['data' => $carts]);
@@ -110,6 +115,8 @@ class CartController extends Controller
         ['restaurant_id' => $food->restaurant_id],
         ['cart_number' => 1],
         );
+
+        $this->authorize('update', $cart);
 
         $foodWithDiscount = isset($food->food_party_id) ? (1 - $food->foodParty->discount / 100) * $food->price : (isset($food->discount) ? (1 - $food->discount / 100) * $food->price : $food->price);
 
@@ -151,6 +158,8 @@ class CartController extends Controller
         ['restaurant_id' => $food->restaurant_id],
         ['cart_number' => 1],
         );
+
+        $this->authorize('update', $cart);
 
         $foodWithDiscount = isset($food->food_party_id) ? (1 - $food->foodParty->discount / 100) * $food->price : (isset($food->discount) ? (1 - $food->discount / 100) * $food->price : $food->price);
 
@@ -196,6 +205,8 @@ class CartController extends Controller
             ->where('id', $request->cart_id)
             ->get();
 
+        $this->authorize('update', $cart);
+
         $cart = CartResource::collection($cart);
 
         return response(['msg' => 'cart sending to pay page', 'cart' => $cartID]);
@@ -203,11 +214,13 @@ class CartController extends Controller
 
     public function userCartByRestaurant(Request $request)
     {
-        // dd($request->all());
         $carts = Cart::
             where('user_id', auth()->id())
             ->where('restaurant_id', $request->restaurant_id)
             ->get();
+
+        $this->authorize('userCartByRestaurant', $carts->first());
+
         $carts = CartResource::collection($carts);
 
         return response(['data' => $carts]);
@@ -216,6 +229,9 @@ class CartController extends Controller
     public function removeFromCart($id)
     {
         $cart = Cart::where('cart_number', 1)->where('user_id', auth()->user()->id)->get()->first();
+
+        $this->authorize('update', $cart);
+
         $cartFood = CartFood::where('cart_id', $cart->id)->where('id', $id)->get()->first();
         $cartFood->delete();
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
