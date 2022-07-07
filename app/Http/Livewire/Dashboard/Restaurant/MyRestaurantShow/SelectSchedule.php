@@ -33,26 +33,28 @@ class SelectSchedule extends Component
 
     public function fetchData()
     {
-        $request = Request::create('/api/restaurants/' . auth()->user()->restaurant->id . '/dashboard', 'GET');
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
+        if (auth()->user()->restaurant) {
+            $request = Request::create('/api/restaurants/' . auth()->user()->restaurant->id . '/dashboard', 'GET');
+            $request->headers->set('Accept', 'application/json');
+            $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
 
-        $response = Route::dispatch($request);
+            $response = Route::dispatch($request);
 
-        if ($response->status() == 200) {
-            $schedule = collect(json_decode($response->getContent())->schedule)
-                ->map(function ($item) {
-                return $item ? collect($item)->toArray(): ['start'=>'', 'end'=>''];
-            })
-                ->toArray();
-            $days = ['saturday' => 1, 'sunday' => 2, 'monday' => 3, 'tuesday' => 4, 'wednesday' => 5, 'thursday' => 6, 'friday' => 7];
-            foreach ($schedule as $key => $value) {
-                $this->schedule[$days[$key]] = $value;
+            if ($response->status() == 200) {
+                $schedule = collect(json_decode($response->getContent())->schedule)
+                    ->map(function ($item) {
+                    return $item ? collect($item)->toArray() : ['start' => '', 'end' => ''];
+                })
+                    ->toArray();
+                $days = ['saturday' => 1, 'sunday' => 2, 'monday' => 3, 'tuesday' => 4, 'wednesday' => 5, 'thursday' => 6, 'friday' => 7];
+                foreach ($schedule as $key => $value) {
+                    $this->schedule[$days[$key]] = $value;
+                }
+                $this->emit('refreshComponent');
             }
-            $this->emit('refreshComponent');
-        }
-        else {
-        // TODO:show message
+            else {
+            // TODO:show message
+            }
         }
     }
 

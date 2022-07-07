@@ -39,7 +39,7 @@
 
                  <figure class="w-1/5 h-54">
                      @isset($food->image->path)
-                         <img src="{{ $food->image->path ?? null }}" alt="food">
+                         <img src="{{ asset('storage/photos/food/' . $food->image->path) ?? null }}" alt="food">
                      @else
                          <div class="bg-gray-200"></div>
                      @endisset

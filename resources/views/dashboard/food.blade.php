@@ -12,12 +12,12 @@
                 @endif
             </div>
             <div class="px-10 py-5">
-                <livewire:food-table class="mt-5" />
+                <livewire:dashboard.restaurant.food.food-table class="mt-5" />
             </div>
             <div class="mt-5">
             </div>
         </div>
-        <livewire:modal-add-food />
-        <livewire:edit-food />
+        <livewire:dashboard.restaurant.food.modal-add-food />
+        <livewire:dashboard.restaurant.food.edit-food />
     </div>
 </x-app-layout>

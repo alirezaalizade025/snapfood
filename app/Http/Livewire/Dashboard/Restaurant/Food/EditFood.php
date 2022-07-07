@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Restaurant\Food;
 
 use Livewire\Component;
 use App\Models\Category;
@@ -66,7 +66,7 @@ class EditFood extends Component
 
     public function render()
     {
-        return view('livewire.edit-food');
+        return view('livewire.dashboard.restaurant.food.edit-food');
     }
 
     public function showModal($model, $id)

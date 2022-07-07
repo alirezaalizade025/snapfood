@@ -193,11 +193,17 @@ class RestaurantController extends Controller
 
     public function orders($id)
     {
-        $restaurant = Restaurant::find($id);
-        
-        if ($restaurant->confirm != 'accept') {
+        if (auth()->user()->restaurant) {
+            $restaurant = auth()->user()->restaurant;
+            if ($restaurant->confirm != 'accept') {
+                return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+            }
+        }
+        else {
+            $restaurant = Restaurant::find($id);
             return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
         }
+
 
         if ($restaurant != null) {
             $this->authorize('order', $restaurant);

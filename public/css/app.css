@@ -4347,6 +4347,12 @@ body[dir="rtl"] .checkbox:checked,
 .h-14 {
   height: 3.5rem;
 }
+.h-40 {
+  height: 10rem;
+}
+.h-36 {
+  height: 9rem;
+}
 .max-h-60 {
   max-height: 15rem;
 }
@@ -4454,6 +4460,12 @@ body[dir="rtl"] .checkbox:checked,
 }
 .w-14 {
   width: 3.5rem;
+}
+.w-80 {
+  width: 20rem;
+}
+.w-64 {
+  width: 16rem;
 }
 .min-w-0 {
   min-width: 0px;
@@ -5657,6 +5669,10 @@ body[dir="rtl"] .checkbox:checked,
 }
 .fill-current {
   fill: currentColor;
+}
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 .object-cover {
   -o-object-fit: cover;

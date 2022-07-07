@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Restaurant\Food;
 
 use App\Models\Food;
 use Livewire\Component;
@@ -9,11 +9,13 @@ use App\Models\FoodParty;
 use App\Models\Restaurant;
 use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
+use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 
 class ModalAddFood extends Component
 {
     use Actions;
+    use WithFileUploads;
     public $showingModal = false;
     public $title = 'Add Food';
     public $model;
@@ -24,6 +26,7 @@ class ModalAddFood extends Component
     public $finalPrice;
     public $name;
     public $restaurant_id;
+    public $photo;
     public $category = [
         'id' => '',
         'name' => ''
@@ -33,8 +36,13 @@ class ModalAddFood extends Component
     public $i = 0;
     public $listeners = [
         'hideMe' => 'hideModal',
-        'showAddFoodModal' => 'showModal'
+        'showAddFoodModal' => 'showModal',
+        'imageUploaded' => 'imageUploaded',
     ];
+    function imageUploaded($photo)
+    {
+        $this->photo = $photo;
+    }
 
     public function addInput($i)
     {
@@ -92,10 +100,16 @@ class ModalAddFood extends Component
         $response = app("App\Http\Controllers\\" . $this->model . "Controller")->store($request);
         $response = json_decode($response, true);
         $this->notification()->send([
-            'title'       => 'Food Edited!',
+            'title' => 'Food Added!',
             'description' => $response['message'],
-            'icon'        => $response['status']
+            'icon' => $response['status']
         ]);
+
+        if ($response['status'] == 'success' && $this->photo != null) {
+            $this->savePhoto($response['id']);
+        }
+
+
         $this->showingModal = false;
         $this->emit('refreshFoodTable');
         $this->name = '';
@@ -106,7 +120,7 @@ class ModalAddFood extends Component
             'id' => '',
             'name' => ''
         ];
-        $this->image = '';
+        $this->photo = '';
         $this->rawMaterials = [];
     }
 
@@ -128,7 +142,7 @@ class ModalAddFood extends Component
 
     public function render()
     {
-        return view('livewire.modal-add-food');
+        return view('livewire.dashboard.restaurant.food.modal-add-food');
     }
 
     public function showModal()
@@ -138,4 +152,17 @@ class ModalAddFood extends Component
         $this->showingModal = true;
         $this->resetErrorBag();
     }
+
+    public function savePhoto($id)
+    {
+        $this->validate([
+            'photo' => 'mimes:jpg,jpeg,png|max:5120', // 5MB Max
+        ]);
+        $fileName = now()->timestamp . '-' . $id . '.' . $this->photo->extension();
+        $this->photo->storeAs('public/photos/food', $fileName);
+        Food::find($id)->image()->create([
+            'path' => $fileName
+        ]);
+    }
+
 }

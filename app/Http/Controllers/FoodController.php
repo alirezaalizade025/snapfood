@@ -56,7 +56,7 @@ class FoodController extends Controller
                         RawMaterial::create(['name' => $material, 'food_id' => $food->id]);
                     }
                 }
-                return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.']);
+                return json_encode(['status' => 'success', 'message' => $food->name . ' added successfully.', 'id' => $food->id]);
             }
         }
         return json_encode(['status' => 'success', 'message' => 'Error in adding food.']);
@@ -96,7 +96,7 @@ class FoodController extends Controller
                 $column = 'status';
             }
             $food->save();
-            return json_encode(['status' => 'success', 'message' => $food->name . ' ' . $column . ' updated']);
+            return json_encode(['status' => 'success', 'message' => $food->name . ' ' . $column . ' updated', 'id' => $food->id]);
         }
         // TODO:unique food name on update
         $data = $request->validate(

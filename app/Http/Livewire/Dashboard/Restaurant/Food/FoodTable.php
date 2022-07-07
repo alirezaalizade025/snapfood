@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Restaurant\Food;
 
 use App\Models\Food;
 use Livewire\Component;
@@ -92,7 +92,7 @@ class FoodTable extends Component
 
     public function render()
     {
-        return view('livewire.food-table', [
+        return view('livewire.dashboard.restaurant.food.food-table', [
             'foods' => $this->fetchData()
         ]);
     }
