@@ -137,7 +137,7 @@ class ModalAddFood extends Component
         else {
             $this->foodParties = FoodParty::all();
         }
-        $this->foodTypes = Category::all();
+        $this->foodTypes = Category::where('category_id', '!=', null)->get();
     }
 
     public function render()

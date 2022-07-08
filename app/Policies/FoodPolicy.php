@@ -58,7 +58,7 @@ class FoodPolicy
      */
     public function update(User $user, Food $food)
     {
-        if ($user->id == $food->restaurant->user_id) {
+        if ($user->id == $food->restaurant->user_id || $user->role == 'admin') {
             return Response::allow();
         }
         return Response::deny('You are not authorized to update this food.');

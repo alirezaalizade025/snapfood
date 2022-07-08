@@ -4377,6 +4377,12 @@ body[dir="rtl"] .checkbox:checked,
 .min-h-\[calc\(100vh-4rem\)\] {
   min-height: calc(100vh - 4rem);
 }
+.min-h-full {
+  min-height: 100%;
+}
+.min-h-\[\] {
+  min-height: ;
+}
 .w-5 {
   width: 1.25rem;
 }

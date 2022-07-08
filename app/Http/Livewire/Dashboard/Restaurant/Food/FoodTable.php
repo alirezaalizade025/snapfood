@@ -40,6 +40,7 @@ class FoodTable extends Component
     public function fetchData()
     {
         $where = [];
+        
         if (auth()->user()->role != 'admin') {
             if ($this->foodType != null && $this->foodType != 'All') {
                 $where[] = ['food.category_id', '=', $this->foodType];
@@ -87,7 +88,7 @@ class FoodTable extends Component
             $this->foodParties = FoodParty::all();
         }
 
-        $this->foodTypes = Category::all();
+        $this->foodTypes = Category::where('category_id', '!=', null)->get();
     }
 
     public function render()

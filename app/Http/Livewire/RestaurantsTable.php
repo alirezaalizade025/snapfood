@@ -40,7 +40,7 @@ class RestaurantsTable extends Component
 
     public function fetchData()
     {
-        $this->foodTypes = Category::all();
+        $this->foodTypes = Category::where('category_id', '!=', null)->get();
 
         $where = [];
         if ($this->foodType != null && $this->foodType != 'All') {

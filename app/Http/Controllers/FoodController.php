@@ -17,7 +17,7 @@ class FoodController extends Controller
         if (is_null($restaurant = Restaurant::where('user_id', auth()->id())->get()->first()) && auth()->user()->role != 'admin') {
             return redirect('dashboard')->withErrors('You must create a restaurant first');
         }
-        if ($restaurant->confirm != 'accept') {
+        if (auth()->user()->role != 'admin' && $restaurant->confirm != 'accept') {
             return redirect('dashboard')->withErrors('Your restaurant is not confirmed yet');
         }
 
@@ -129,7 +129,7 @@ class FoodController extends Controller
                     }
                 }
             }
-            return json_encode(['status' => 'success', 'message' => $food->name . ' updated']);
+            return json_encode(['status' => 'success', 'message' => $food->name . ' updated', 'id' => $food->id, 'image' => $food->image]);
         }
 
 
