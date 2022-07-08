@@ -203,12 +203,14 @@ class CartController extends Controller
         $cart = Cart::
             where('user_id', auth()->id())
             ->where('id', $request->cart_id)
-            ->get();
+            ->get()->first();
 
         $this->authorize('update', $cart);
 
-        $cart = CartResource::collection($cart);
+        $cart->status = "1";
+        $cart->save();
 
+        // $cart = CartResource::collection($cart);
         return response(['msg' => 'cart sending to pay page', 'cart' => $cartID]);
     }
 
@@ -219,10 +221,15 @@ class CartController extends Controller
             ->where('restaurant_id', $request->restaurant_id)
             ->get();
 
+            return $carts;
+        if (empty($carts)) {
+            return response([]);
+        }
+
         $this->authorize('userCartByRestaurant', $carts->first());
 
         $carts = CartResource::collection($carts);
-
+        
         return response(['data' => $carts]);
     }
 
