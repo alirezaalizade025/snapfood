@@ -88,7 +88,7 @@ class EditFood extends Component
         if ($item->foodParty != null) {
             $this->foodParty = $item->foodParty->toArray();
         }
-        $this->image = $item->image->path;
+        $this->image = optional($item->image)->path;
         $this->photo;
         $this->foodType = $item->category->toArray();
         $this->showingModal = true;

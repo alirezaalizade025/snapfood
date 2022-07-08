@@ -5,6 +5,9 @@ namespace App\Http\Livewire\Customer\Category\Restaurant;
 use App\Models\Food;
 use Livewire\Component;
 use App\Models\Restaurant;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Route;
 
 class ShowFoods extends Component
 {
@@ -17,31 +20,20 @@ class ShowFoods extends Component
 
     public function fetchData()
     {
-        $restaurant = Restaurant::
-            where([['confirm', 'accept']])
-            ->find($this->restaurant->id);
-        if ($restaurant) {
-            return ($restaurant->foods->groupBy('category_id')->map(function ($category) {
-                $category->map(function($food) {
-                    if (isset($food->food_type_id)) {
-                        $food->final_price = $food->price * (1 - $food->foodParty->discount / 100);
-                    }
-                    elseif (isset($food->discount)) {
-                        $food->final_price = $food->price * (1 - $food->discount / 100);
-                    }
-                    else {
-                        $food->final_price = $food->price;
-                    }
-                    return $food;
-                });
-                $category->title = $category->first()->category->name;
-                return $category;
-            }));
-        }
-        else {
-            return abort(404);
+        $request = Request::create('/api/restaurants/' . $this->restaurant->id . '/foods', 'GET');
+        $request->headers->set('Accept', 'application/json');
+        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
+
+        $response = Route::dispatch($request);
+        if ($response->status() == 200) {
+            $foodByCategory = json_decode($response->getContent())->data;
         }
 
+        if (isset($foodByCategory)) {
+            return $foodByCategory;
+        }
+
+        return abort(404, 'Restaurant Not found');
     }
 
     public function render()

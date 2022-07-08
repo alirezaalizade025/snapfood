@@ -1,6 +1,6 @@
 <div class="space-y-1 p-2">
     @auth
-        @if (count($carts) && isset($carts['foods']) && count($carts['foods']))
+        @if ($carts->count() && isset($carts['foods']) && count($carts['foods']))
             @foreach ($carts['foods'] as $food)
                 <div
                     class="border p-4 bg-gradient-to-r from-white to-emerald-50 drop-shadow-md grid grid-cols-5 gap-2 text-center @if ($loop->first) rounded-t-xl @endif">

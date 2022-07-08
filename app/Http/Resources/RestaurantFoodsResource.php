@@ -22,10 +22,10 @@ class RestaurantFoodsResource extends JsonResource
             $food['off'] = ['label' => $this->discount . '%', 'factor' => number_format(1 - $this->discount / 100, 2)];
         }
         //if have this party discount ignored
-        if ($this->thisParty != null) {
-            $food['off'] = ['label' => $this->thisParty->name, 'factor' => number_format(1 - $this->thisParty->discount / 100, 2)];
+        if ($this->foodParty != null) {
+            $food['off'] = ['label' => $this->foodParty->name, 'factor' => number_format(1 - $this->foodParty->discount / 100, 2)];
         }
-
+        $food['final_price'] = $this->price * (isset($food['off']) ? $food['off']['factor'] : 1);
         $food['raw_material'] = $this->rawMaterials->implode('name', ', ');
         $food['image'] = $this->image ? $this->image->path : null;
         $food['category_id'] = $this->category_id;

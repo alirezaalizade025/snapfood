@@ -21,11 +21,8 @@ class SideCart extends Component
 
     public function increaseCount($id)
     {
-        $request = Request::create('/api/carts/add', 'PATCH', ['food_id' => $id, 'count' => 1]);
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
-
-        $response = Route::dispatch($request);
+        $request = new Request(['food_id' => $id, 'count' => 1]);
+        $response = app('App\Http\Controllers\API\CartController')->update($request);
 
         if ($response->status() == 200) {
             $this->emit('refreshComponent');
@@ -37,11 +34,8 @@ class SideCart extends Component
 
     public function decreaseCount($id)
     {
-        $request = Request::create('/api/carts/decrease', 'PATCH', ['food_id' => $id, 'count' => 1]);
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
-
-        $response = Route::dispatch($request);
+        $request = new Request(['food_id' => $id, 'count' => 1]);
+        $response = app('App\Http\Controllers\API\CartController')->decrease($request);
         if ($response->status() == 200) {
             $this->emit('refreshComponent');
         }
@@ -54,11 +48,9 @@ class SideCart extends Component
     {
 
         if (auth()->check()) {
-            $request = Request::create('/api/carts/add', 'POST', ['food_id' => $id, 'count' => 1]);
-            $request->headers->set('Accept', 'application/json');
-            $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
+            $request = new Request(['food_id' => $id, 'count' => 1]);
+            $response = app('App\Http\Controllers\API\CartController')->store($request);
 
-            $response = Route::dispatch($request);
             if ($response->status() == 200) {
                 $this->emit('refreshComponent');
             }
@@ -73,10 +65,8 @@ class SideCart extends Component
 
     public function fetchData()
     {
-        $request = Request::create('/api/carts/restaurant/' . $this->restaurant->id, 'GET');
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
-        $response = Route::dispatch($request);
+        $request = new Request(['restaurant_id' => $this->restaurant->id]);
+        $response = app('App\Http\Controllers\API\CartController')->userCartByRestaurant($request);
         if ($response->status() == 200) {
             $response = collect(json_decode($response->getContent())->data)->first();
             if ($response) {
@@ -87,8 +77,7 @@ class SideCart extends Component
         else {
             $response = false;
         }
-
-        return (array)$response;
+        return collect($response);
     }
 
     public function render()

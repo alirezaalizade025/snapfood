@@ -119,13 +119,13 @@ class RestaurantAPIController extends Controller
             return response(['msg' => 'restaurant not found'], 404);
         }
 
-        $foods = $restaurant
-            ->foods()
-            ->get();
+        $foods = $restaurant->foods()->where('status', 1)->get();
+
         return ['data' => RestaurantFoodsResource::collection($foods)->
-            groupBy('category_id')->map(function ($food, $index) {
+            groupBy('category_id')->map(function ($food, $index) use($restaurant) {
             $item['id'] = $index;
             $item['title'] = Category::find($index)->name;
+            $item['delivery_fee'] = $restaurant->delivery_fee;
             $item['foods'] = $food;
             return $item;
         })

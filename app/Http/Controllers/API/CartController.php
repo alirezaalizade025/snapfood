@@ -40,6 +40,7 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->authorize('create', Cart::class);
         try {
             $food = Food::findOrFail($request->food_id);
@@ -225,10 +226,12 @@ class CartController extends Controller
             return response([]);
         }
 
-        $this->authorize('userCartByRestaurant', $carts->first());
+        if ($carts->count()) {
+            $this->authorize('userCartByRestaurant', $carts->first());
+        }
 
         $carts = CartResource::collection($carts);
-        
+
         return response(['data' => $carts]);
     }
 
