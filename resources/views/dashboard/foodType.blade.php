@@ -13,7 +13,8 @@
         </div>
         <div class="mt-5">
         </div>
+        @livewire('modal-edit-food-type')
         <livewire:modal-add-food-type />
-        <livewire:modal-edit-food-type />
+        {{-- <livewire:modal-edit-food-type /> --}}
     </div>
 </x-app-layout>

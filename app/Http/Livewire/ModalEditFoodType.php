@@ -17,7 +17,7 @@ class ModalEditFoodType extends Component
     public $showFlesh;
     protected $listeners = [
         'hideMe' => 'hideModal',
-        'showModalEditFoodType' => 'showModal',
+        'showModalEditCategory' => 'showModal',
     ];
 
 
@@ -28,9 +28,9 @@ class ModalEditFoodType extends Component
 
     public function showModal($typeID, $name)
     {
+        $this->showingModal = true;
         $this->name = $name;
         $this->typeID = $typeID;
-        $this->showingModal = true;
         $this->resetErrorBag();
     }
 

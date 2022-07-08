@@ -221,7 +221,6 @@ class CartController extends Controller
             ->where('restaurant_id', $request->restaurant_id)
             ->get();
 
-            return $carts;
         if (empty($carts)) {
             return response([]);
         }
