@@ -6378,6 +6378,18 @@ body[dir="rtl"] .checkbox:checked,
 .text-2xs {
   font-size: 0.65rem;
 }
+.text-\[20px\] {
+  font-size: 20px;
+}
+.text-\[2rem\] {
+  font-size: 2rem;
+}
+.text-\[1rem\] {
+  font-size: 1rem;
+}
+.text-\[1\.5rem\] {
+  font-size: 1.5rem;
+}
 .font-medium {
   font-weight: 500;
 }

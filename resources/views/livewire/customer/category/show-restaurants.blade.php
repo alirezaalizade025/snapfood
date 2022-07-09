@@ -25,6 +25,7 @@
         </figure>
         <div class="card-body">
             <h2 class="card-title">{{ $restaurant->title }}</h2>
+            {{ $restaurant->id }}
                 <div class="rating rating-sm flex gap-5">
                     <div>
                         @for ($i = 1; $i <= 5; $i++)

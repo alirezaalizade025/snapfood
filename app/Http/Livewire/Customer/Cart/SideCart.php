@@ -21,7 +21,7 @@ class SideCart extends Component
 
     public function increaseCount($id)
     {
-        $request = new Request(['food_id' => $id, 'count' => 1]);
+        $request = new Request(['cart_id' => $this->carts['id'], 'food_id' => $id, 'count' => 1]);
         $response = app('App\Http\Controllers\API\CartController')->update($request);
 
         if ($response->status() == 200) {
@@ -34,7 +34,7 @@ class SideCart extends Component
 
     public function decreaseCount($id)
     {
-        $request = new Request(['food_id' => $id, 'count' => 1]);
+        $request = new Request(['cart_id' => $this->carts['id'], 'food_id' => $id, 'count' => 1]);
         $response = app('App\Http\Controllers\API\CartController')->decrease($request);
         if ($response->status() == 200) {
             $this->emit('refreshComponent');
@@ -69,7 +69,7 @@ class SideCart extends Component
         $response = app('App\Http\Controllers\API\CartController')->userCartByRestaurant($request);
         if ($response->status() == 200) {
             $response = collect(json_decode($response->getContent())->data)->first();
-            if ($response) {
+            if ($response->foods) {
                 $this->total_price = collect($response->foods)->sum('price');
                 $this->total_final_price = collect($response->foods)->sum('final_price');
                 $this->total_count = collect($response->foods)->sum('count');

@@ -21,26 +21,11 @@ class Restaurant extends Model
     use SoftDeletes;
 
     protected $guarded = [];
-    // protected $appends = ['distance'];
-
-    // public function getDistanceAttribute()
-    // {
-    //     return rand(1,10);  
-    // }
-
-
-    // public function ScopeDistance($query, $from_latitude, $from_longitude, $distance)
-    // {
-    //     // This will calculate the distance in km
-    //     // if you want in miles use 3959 instead of 6371
-    //     $raw = DB::raw('ROUND ( ( 6371 * acos( cos( radians(' . $from_latitude . ') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(' . $from_longitude . ') ) + sin( radians(' . $from_latitude . ') ) * sin( radians( latitude ) ) ) ) ) AS distance');
-    //     return $query->select('*')->addSelect($raw)->orderBy('distance', 'ASC')->groupBy('distance')->having('distance', '<=', $distance);
-    // }
 
     public function category()
     {
         // TODO:check for using category in phase 1 & 2
-        return $this->hasManyThrough(Category::class, CategoryRestaurant::class, 'restaurant_id', 'id');
+        return $this->hasManyThrough(Category::class, CategoryRestaurant::class, 'restaurant_id', 'id', 'id', 'category_id');
     }
 
     public function addressInfo()
@@ -52,11 +37,6 @@ class Restaurant extends Model
     {
         return $this->morphOne(Image::class , 'imageable');
     }
-
-    // public function comments()
-    // {
-    //     return $this->hasManyThrough(Comment::class, Cart::class);
-    // }
 
     public function foods()
     {

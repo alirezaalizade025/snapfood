@@ -10,6 +10,9 @@
                         <div class="bg-clip-text text-transparent bg-gradient-to-r from-[#f0735a] to-[#dd2476]">
                             {{ $restaurant->title }}
                         </div>
+                        <div class="text-[1.5rem] text-sky-500">
+                            #{{ $restaurant->category->pluck('name')->implode(' #') }}
+                        </div>
                         <div class="mt-20 bg-clip-text text-transparent text-lg bg-gradient-to-r from-[#f0735a] to-[#dd2476]">
                             {{ $restaurant->addressInfo->address }}
                         </div>

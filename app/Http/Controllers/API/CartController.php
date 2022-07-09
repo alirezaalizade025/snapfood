@@ -41,7 +41,6 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->authorize('create', Cart::class);
         try {
             $food = Food::findOrFail($request->food_id);
@@ -49,12 +48,13 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['status', 0], ['restaurant_id', $food->restaurant_id]])
+        $cart = Cart::where([['user_id', auth()->id()], ['status', '0'], ['restaurant_id', $food->restaurant_id]])
             ->firstOrCreate(
         ['user_id' => auth()->user()->id],
         ['restaurant_id' => $food->restaurant_id],
         ['cart_number' => 1],
         );
+
 
         $foodWithDiscount = isset($food->food_party_id) ? (1 - $food->foodParty->discount / 100) * $food->price : (isset($food->discount) ? (1 - $food->discount / 100) * $food->price : $food->price);
 
@@ -111,12 +111,18 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
-            ->firstOrCreate(
-        ['user_id' => auth()->user()->id],
-        ['restaurant_id' => $food->restaurant_id],
-        ['cart_number' => 1],
-        );
+        if (!$request->has('cart_id')) {
+            $cart = Cart::where([['user_id', auth()->id()], ['status', '0'], ['restaurant_id', $food->restaurant_id]])
+                ->get()->first();
+        }
+        else {
+            $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
+                ->firstOrCreate(
+            ['user_id' => auth()->user()->id],
+            ['restaurant_id' => $food->restaurant_id],
+            ['cart_number' => 1],
+            );
+        }
 
         $this->authorize('update', $cart);
 
@@ -210,6 +216,7 @@ class CartController extends Controller
         $carts = Cart::
             where('user_id', auth()->id())
             ->where('restaurant_id', $request->restaurant_id)
+            ->where('status', '0')
             ->get();
 
         if (empty($carts)) {
