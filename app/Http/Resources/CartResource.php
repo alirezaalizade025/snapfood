@@ -18,8 +18,10 @@ class CartResource extends JsonResource
         return
         [
             'id' => $this->id,
+            'status' =>$this->status,
             'restaurant' => [
                 'title' => $this->restaurant->title,
+                'delivery_fee' => $this->restaurant->delivery_fee,
                 'image' => $this->restaurant->image ? $this->restaurant->image->path : null,
             ],
 
@@ -36,6 +38,7 @@ class CartResource extends JsonResource
                     
                 ];
                 $food['final_price'] = $food['price'] * (isset($food['off']) ? $food['off']['factor'] : 1);
+                $food['total_price'] = $food['final_price'] * $food['count'];
                 return $food;
         })->values(),
         ];

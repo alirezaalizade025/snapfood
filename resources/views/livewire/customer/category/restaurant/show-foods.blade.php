@@ -11,10 +11,10 @@
                 @foreach ($category->foods as $food)
                     <div class="bg-gradient-to-b from-[#96d2de] to-sky-100 border rounded-xl overflow-auto drop-shadow-xl">
                         <div class="flex h-full">
-                            <div class="self-center">
+                            <div class="">
                                 @isset($food->image)
                                     <img src="{{ asset('storage/photos/food/' . $food->image) }}"
-                                        class="object-cover w-32 h-32 rounded-xl">
+                                        class="object-cover w-32 h-32 rounded-br-xl">
                                 @else
                                     <img src="https://tailus.io/sources/blocks/food-delivery/preview/images/icon.png"
                                         class="object-cover max-w-[8rem] max-h-[8rem] p-1 border-r">

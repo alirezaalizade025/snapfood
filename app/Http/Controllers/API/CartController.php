@@ -23,6 +23,7 @@ class CartController extends Controller
     {
         $carts = Cart::
             where('user_id', auth()->id())
+            ->orderBy('status')
             ->get();
 
         $this->authorize('view', $carts->first());
@@ -48,7 +49,7 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['cart_number', 1], ['restaurant_id', $food->restaurant_id]])
+        $cart = Cart::where([['user_id', auth()->id()], ['status', 0], ['restaurant_id', $food->restaurant_id]])
             ->firstOrCreate(
         ['user_id' => auth()->user()->id],
         ['restaurant_id' => $food->restaurant_id],
@@ -110,7 +111,7 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['cart_number', 1], ['restaurant_id', $food->restaurant_id]])
+        $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
             ->firstOrCreate(
         ['user_id' => auth()->user()->id],
         ['restaurant_id' => $food->restaurant_id],
@@ -153,7 +154,7 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['cart_number', 1], ['restaurant_id', $food->restaurant_id]])
+        $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
             ->firstOrCreate(
         ['user_id' => auth()->user()->id],
         ['restaurant_id' => $food->restaurant_id],
@@ -186,17 +187,6 @@ class CartController extends Controller
             return response(['msg' => 'Food Updated to cart successfully', 'cart_id' => $cart->id]);
         }
         return response(['msg' => 'Cart not found'], 404);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Cart $cart)
-    {
-    // TODO: destroy cart implement in destroy
     }
 
     public function sendToPay(Request $request, $cartID)
@@ -235,14 +225,28 @@ class CartController extends Controller
         return response(['data' => $carts]);
     }
 
-    public function removeFromCart($id)
+    public function removeFromCart($cart_id, $food_id)
     {
-        $cart = Cart::where('cart_number', 1)->where('user_id', auth()->user()->id)->get()->first();
-
+        $cart = Cart::where('user_id', auth()->id())->get()->first();
         $this->authorize('update', $cart);
 
-        $cartFood = CartFood::where('cart_id', $cart->id)->where('id', $id)->get()->first();
+        $cartFood = CartFood::where([['cart_id', $cart_id], ['food_id', $food_id]])->get()->first();
+
         $cartFood->delete();
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
+    }
+
+    public function reorder($id)
+    {
+        $cart = Cart::where('user_id', auth()->id())->find($id);
+
+        foreach ($cart->cartFood as $cartFood) {
+            $response = $this->store(new Request(['food_id' => $cartFood->food_id, 'count' => $cartFood->quantity]));
+            if ($response->status() != 200) {
+                return $response;
+            }
+        }
+        return $response;
+
     }
 }

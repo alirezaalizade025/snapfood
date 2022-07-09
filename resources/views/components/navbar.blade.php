@@ -30,7 +30,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="block md:px-4 transition hover:text-yellow-700">
+                                <a href="{{ route('cart.show', auth()->id()) }}" class="block md:px-4 transition hover:text-yellow-700">
                                     <span>Cart</span>
                                 </a>
                             @endauth
