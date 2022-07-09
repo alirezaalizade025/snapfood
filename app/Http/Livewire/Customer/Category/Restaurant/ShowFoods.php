@@ -22,7 +22,7 @@ class ShowFoods extends Component
     {
         $request = Request::create('/api/restaurants/' . $this->restaurant->id . '/foods', 'GET');
         $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . '1|GheIVySS3mXtw3vte0GX3b1ZcsxM2wnoSvnfGHq6');
+        $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
 
         $response = Route::dispatch($request);
         if ($response->status() == 200) {
@@ -33,7 +33,6 @@ class ShowFoods extends Component
             return $foodByCategory;
         }
 
-        return abort(404, 'Restaurant Not found');
     }
 
     public function render()

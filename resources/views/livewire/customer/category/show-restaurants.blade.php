@@ -25,7 +25,6 @@
         </figure>
         <div class="card-body">
             <h2 class="card-title">{{ $restaurant->title }}</h2>
-            {{ $restaurant->id }}
                 <div class="rating rating-sm flex gap-5">
                     <div>
                         @for ($i = 1; $i <= 5; $i++)
@@ -35,13 +34,10 @@
                     </div>
                     {{ $restaurant->score !=null ? number_format($restaurant->score, 2) : 'N/A' }}
                 </div>
-                {{ $restaurant->category->implode('name', ', ') }}
+                {{ '#' . $restaurant->category->implode('name', ' #') }}
                 <div class="mt-auto">
-                    <div class="backdrop-blur-sm bg-white/30 p-1 rounded-full flex justify-center">Send cost:
-                        <span>
-                            10000
-                            {{-- TODO:send cost add to db and myrestaurant show --}}
-                        </span>
+                    <div class="backdrop-blur-sm bg-white/30 p-1 rounded-full flex justify-center gap-2">
+                        Send cost: <span>{{ $restaurant->delivery_fee }}</span>
                     </div>
                 </div>
             </div>

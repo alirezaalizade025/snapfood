@@ -5,7 +5,7 @@
         <x-navbar></x-navbar>
         <div class="bg-gradient-to-b from-yellow-50 min-h-screen w-full pt-40 p-10 grid grid-cols-10 gap-10">
             <div class="col-span-10 shadow-xl shadow-cyan-300/30 rounded-3xl overflow-auto">
-                <div class="w-full h-full bg-gradient-to-r from-[#adb6ef] to-[#92e7f5] flex">
+                <div class="w-full h-full bg-gradient-to-r from-[#c0ecf3] to-[#ffe5c6] flex">
                     <div class="font-bold text-4xl p-10">
                         <div class="bg-clip-text text-transparent bg-gradient-to-r from-[#f0735a] to-[#dd2476]">
                             {{ $restaurant->title }}

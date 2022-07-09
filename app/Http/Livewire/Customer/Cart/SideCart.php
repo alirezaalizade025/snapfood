@@ -71,6 +71,7 @@ class SideCart extends Component
             $response = collect(json_decode($response->getContent())->data)->first();
             if ($response) {
                 $this->total_price = collect($response->foods)->sum('price');
+                $this->total_final_price = collect($response->foods)->sum('final_price');
                 $this->total_count = collect($response->foods)->sum('count');
             }
         }
