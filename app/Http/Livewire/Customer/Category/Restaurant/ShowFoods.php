@@ -20,11 +20,8 @@ class ShowFoods extends Component
 
     public function fetchData()
     {
-        $request = Request::create('/api/restaurants/' . $this->restaurant->id . '/foods', 'GET');
-        $request->headers->set('Accept', 'application/json');
-        $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
+        $response = app('App\Http\Controllers\API\RestaurantAPIController')->foods($this->restaurant->id);
 
-        $response = Route::dispatch($request);
         if ($response->status() == 200) {
             $foodByCategory = json_decode($response->getContent())->data;
         }

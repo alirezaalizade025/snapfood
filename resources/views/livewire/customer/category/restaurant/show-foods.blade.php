@@ -11,6 +11,9 @@
                 @foreach ($category->foods as $food)
                     <div class="bg-gradient-to-b from-[#96d2de] to-sky-100 border rounded-xl overflow-auto drop-shadow-xl">
                         <div class="flex h-full">
+                            <div class="absolute right-3 top-1">
+                                <i wire:click="$emit('showFoodModal', {{ $food->id }})" class="fa-solid fa-comments bg-clip-text text-transparent bg-gradient-to-r from-[#5ab1f0] to-[#dd2476] text-lg cursor-pointer hover:scale-150 transition-all duration-150 hover:drop-shadow-lg"></i>
+                            </div>
                             <div class="">
                                 @isset($food->image)
                                     <img src="{{ asset('storage/photos/food/' . $food->image) }}"
@@ -20,8 +23,8 @@
                                         class="object-cover max-w-[8rem] max-h-[8rem] p-1 border-r">
                                 @endisset
                             </div>
-                            <div class="flex-grow text-center">
-                                <span class=" p-2 font-bold text-lg">{{ $food->title }}</span>
+                            <div class="flex-grow">
+                                <div class="font-bold text-lg  pr-12">{{ $food->title }}</div>
                                 <div>
                                     {{ $food->raw_material }}
                                 </div>
@@ -55,3 +58,4 @@
     @endisset
 </div>
 </div>
+

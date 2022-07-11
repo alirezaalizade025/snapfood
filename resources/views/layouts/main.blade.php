@@ -23,6 +23,8 @@
 
 <body>
     @yield('content')
+    <x-notifications z-index="z-50" />
+    <wireui:scripts />
     <script src="{{ mix('js/app.js') }}" defer></script>
 </body>
 

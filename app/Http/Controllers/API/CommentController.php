@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Cart;
 use App\Models\Food;
 use App\Models\Comment;
+use App\Models\CartFood;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\AddCommentRequest  $request
+     * @param  AddCommentRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(AddCommentRequest $request)
@@ -34,10 +35,10 @@ class CommentController extends Controller
         $cart = Cart::find($request->cart_id);
         if ($cart->user_id != auth()->id()) {
             return response(['msg' => 'You can not add comment to this cart'], 403);
-        }
+        } //TODO:add policy to check if user can add comment to this cart 
 
-        if ($cart->comments()->create(['user_id' => auth()->id(),'score' => $request->score, 'content' => $request->message])) {
-            return response (['msg' => 'comment created successfully'], 200);
+        if ($cart->comments()->create(['user_id' => auth()->id(), 'score' => $request->score, 'content' => $request->message])) {
+            return response(['msg' => 'comment created successfully'], 200);
         }
 
         return response($cart);
@@ -67,7 +68,7 @@ class CommentController extends Controller
     public function findCommentsByRestaurant(int $id)
     {
         $comments = optional(Restaurant::find($id), function ($restaurant) {
-            return CommentRestaurantResource::collection($restaurant->carts->map(fn($cart) => $cart->comments)->flatten());
+            return CommentRestaurantResource::collection($restaurant->carts->map(fn($cart) => $cart->comments->sortBy('created_at'))->flatten());
         }) ?? ['msg' => 'restaurant not found'];
 
         return $comments;
@@ -80,6 +81,10 @@ class CommentController extends Controller
             return $food->cartFood
             ->map(function ($food) {
                     return CommentFoodResource::collection($food->cart->comments)->first();
+                }
+                )
+                ->filter(function ($comment) {
+                    return $comment != null;
                 }
                 )
                 ;

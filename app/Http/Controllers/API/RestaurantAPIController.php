@@ -121,7 +121,7 @@ class RestaurantAPIController extends Controller
 
         $foods = $restaurant->foods()->where('status', 1)->get();
 
-        return ['data' => RestaurantFoodsResource::collection($foods)->
+        return response(['data' => RestaurantFoodsResource::collection($foods)->
             groupBy('category_id')->map(function ($food, $index) use($restaurant) {
             $item['id'] = $index;
             $item['title'] = Category::find($index)->name;
@@ -129,7 +129,7 @@ class RestaurantAPIController extends Controller
             $item['foods'] = $food;
             return $item;
         })
-            ->sortBy(['title', 'asc'])->values()];
+            ->sortBy(['title', 'asc'])->values()]);
         ;
     }
 

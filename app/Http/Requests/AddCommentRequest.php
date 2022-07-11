@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Cart;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddCommentRequest extends FormRequest
@@ -13,10 +14,16 @@ class AddCommentRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->check()) {
-            return true;
+        $cart_id = $this->input('cart_id');
+
+        $cart = Cart::find($cart_id);
+
+        if ($cart->user_id != auth()->id() || $cart->comments()->where('user_id', auth()->id())->exists()) {
+            return false;
         }
-        return false;
+
+        return true;
+
     }
 
     /**

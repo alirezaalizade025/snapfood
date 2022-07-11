@@ -21,4 +21,9 @@ class CartFood extends Model
     {
         return $this->belongsTo(Cart::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'cart_id');
+    }
 }

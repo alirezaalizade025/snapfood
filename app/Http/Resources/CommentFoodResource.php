@@ -16,10 +16,8 @@ class CommentFoodResource extends JsonResource
     {
         return [
             'author' => ['name' => $this->user->name],
-            'foods' => $this->cart->cartFood->map(function ($food) {
-                return $food->food->name;
-            }),
-            'created_at' => $this->created_at->diffForHumans(),
+            'foods' => $this->cart->foods->pluck('name'),
+            'created_at' => $this->created_at,
             'score' => $this->score,
             'content' => $this->content
         ];
