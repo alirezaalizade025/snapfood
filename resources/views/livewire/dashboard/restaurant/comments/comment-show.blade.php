@@ -5,14 +5,21 @@
             <div class="border-r border-sky-400 pr-3 flex flex-col w-56 pb-1 items-center">
                 <div class="bg-gray-200 rounded p-2">{{ collect($comment->foods)->implode(', ') }}</div>
                 <div class="mt-3">{{ $comment->created_at }}</div>
-                <div class="mt-auto mx-auto flex gap-5">
-                    <i wire:click="deleteComment({{ $comment->id }})"
-                        class="fa-solid fa-ban text-2xl font-bold text-red-500 hover:scale-125 hover:drop-shadow-2xl cursor-pointer">
-                    </i>
-                    <div class="text-sm text-red-400 font-bold rounded self-center">
-                        {{ $comment->delete_request ? 'Requested' : null }}
+                @if (auth()->user()->role == 'restaurant')
+                    <div class="mt-auto mx-auto flex gap-5">
+                        <i wire:click="banComment({{ $comment->id }})"
+                            class="fa-solid fa-ban text-2xl font-bold text-red-500 hover:scale-125 hover:drop-shadow-2xl cursor-pointer">
+                        </i>
+                        <div class="text-sm text-red-400 font-bold rounded self-center">
+                            {{ $comment->delete_request ? 'Requested' : null }}
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="mt-auto mx-auto flex gap-5">
+                        <i wire:click="deleteComment({{ $comment->id }})"
+                            class="fa-solid fa-trash text-2xl font-bold text-red-500 hover:scale-125 hover:drop-shadow-2xl cursor-pointer"></i>
+                    </div>
+                @endif
             </div>
             <div class="w-full">
                 <div class="mb-5 flex justify-between items-center">
@@ -33,11 +40,13 @@
                         <form wire:submit.prevent="setAnswer(Object.fromEntries(new FormData($event.target)))">
                             <div class="flex justify-between px-5">
                                 <div>answer</div>
-                                <button>
-                                    <i
-                                        class="fa-solid fa-paper-plane text-lg font-bold text-blue-500 hover:scale-125 hover:drop-shadow-2xl cursor-pointer">
-                                    </i>
-                                </button>
+                                @if (auth()->user()->role == 'restaurant')
+                                    <button>
+                                        <i
+                                            class="fa-solid fa-paper-plane text-lg font-bold text-blue-500 hover:scale-125 hover:drop-shadow-2xl cursor-pointer">
+                                        </i>
+                                    </button>
+                                @endif
                             </div>
                             <textarea name="answer" class="resize-none w-full h-20 bg-gray-50 rounded-xl p-3"></textarea>
                             <input type="hidden" name="comment_id" value="{{ $comment->id }}">

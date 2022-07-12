@@ -20,7 +20,7 @@ class RestaurantFactory extends Factory
     {
         return [
             'title' => $this->faker->name,
-            'user_id' => User::where('role', 'restaurant')->get()->random()->id,
+            'user_id' => User::where('role', 'restaurant')->get()->unique()->random()->id,
             'phone' => $this->faker->regexify('09\\d{9}$'),
             'confirm' => $this->faker->randomElement(['accept', 'waiting', 'denied']),
             'bank_account' => $this->faker->regexify('\\d{16}$'),

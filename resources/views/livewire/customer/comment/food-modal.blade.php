@@ -54,6 +54,12 @@
                         </div>
                         <div class="flex flex-col justify-between">
                             <div>{{ optional($comment)->content }}</div>
+                            @if (optional($comment)->answer)
+                                <div class="bg-rose-100 rounded-xl m-2 p-2">
+                                    <div class="font-bold">replayed:</div> 
+                                    {{ optional($comment)->answer }}
+                                </div>
+                            @endif
                             <div class="flex gap-3">
                                 @if (optional($comment)->content)
                                     @forelse (optional($comment)->foods as $food)

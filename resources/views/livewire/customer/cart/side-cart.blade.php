@@ -38,10 +38,14 @@
                 </div>
             </div>
             @auth
-                <div class="px-5 pt-3">
+                <div class="px-5 pt-3 w-full">
                     {{-- button for sent to checkout page --}}
-                    <button
-                        class="bg-gradient-to-r from-cyan-500 to-cyan-50 w-full p-3 rounded hover:outline outline-cyan-400 outline-offset-2 font-bold text-white border transition duration-300 hover:scale-105">Payment</button>
+                    <a href="{{ route('payment.show', $carts['id']) }}">
+                        <div
+                            class="w-full text-center bg-gradient-to-r from-cyan-500 to-cyan-50 p-3 rounded hover:outline outline-cyan-400 outline-offset-2 font-bold text-white border transition duration-300 hover:scale-105">
+                            Payment
+                        </div>
+                    </a>
                 </div>
             @endauth
         @endif

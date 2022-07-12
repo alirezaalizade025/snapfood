@@ -23,7 +23,6 @@ class UploadFile extends Component
     }
     public function doUpload($id)
     {
-        dd('hi');
         $this->photo->storeAs('photos', now()->timestamp . '-' . $id . '.' . $this->photo->extension());
     }
 

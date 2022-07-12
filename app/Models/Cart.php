@@ -35,6 +35,6 @@ class Cart extends Model
 
     public function foods()
     {
-        return $this->hasManyThrough(Food::class, CartFood::class, 'cart_food.cart_id', 'food.id');
+        return $this->hasManyThrough(Food::class, CartFood::class, 'cart_food.cart_id', 'food.id', 'id', 'food_id');
     }
 }

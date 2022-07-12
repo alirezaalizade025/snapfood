@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddCommentRequest;
 use App\Http\Resources\CommentFoodResource;
+use App\Http\Resources\CommentAdminResource;
 use App\Http\Resources\CommentRestaurantResource;
 
 class CommentController extends Controller
@@ -74,6 +75,13 @@ class CommentController extends Controller
         return $comments;
     }
 
+    public function findCommentsForAdmin()
+    {
+        $comments = CommentAdminResource::collection(Comment::where('delete_request', true)->get());
+
+        return response($comments);
+    }
+
     public function findCommentsByFood(int $id)
     {
 
@@ -95,12 +103,20 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Comment  $comment
+     * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request)
     {
-    //
+        $comment = Comment::find($request->comment_id);
+        // TODO:add policy
+        if ($comment) {
+            $comment->delete();
+            return response(['msg' => 'Delete request updated successfully']);
+        }
+        else {
+            return response(['msg' => 'comment not found'], 402);
+        }
     }
 
     public function setAnswer(Request $request)

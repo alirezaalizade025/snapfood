@@ -101,7 +101,6 @@ class MyRestaurantShow extends Component
 
     public function handelCategory($id)
     {
-        // dd($this->restaurantCategory);
         if ($this->restaurantCategory != null && $this->restaurantCategory->contains('id', $id)) {
             $this->restaurantCategory = collect($this->restaurantCategory)
                 ->filter(function ($item, $index) use ($id) {

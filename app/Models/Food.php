@@ -18,9 +18,7 @@ class Food extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $guarded = [
-
-    ];
+    protected $guarded = [];
     public function category()
     {
         return $this->belongsTo(Category::class);

@@ -216,6 +216,19 @@ class RestaurantController extends Controller
 
     public function comments()
     {
+        if (auth()->user()->role != 'admin') {
+            if (auth()->user()->restaurant) {
+                $restaurant = auth()->user()->restaurant;
+                if ($restaurant->confirm != 'accept') {
+                    return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+                }
+            }
+            else {
+                $restaurant = Restaurant::find(optional(auth()->user()->restaurant)->id);
+                return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+            }
+        }
+
         return view('dashboard.comments');
     }
 

@@ -46,6 +46,7 @@ class FoodModal extends Component
         if ($response->status() == 200) {
             $comments = collect(json_decode($response->getContent())->comments);
         }
+
         $this->food = Food::find($food_id);
         if ($this->food->food_party_id != null) {
             $this->food->off = [
@@ -59,6 +60,7 @@ class FoodModal extends Component
                 'factor' => 1 - $this->food->discount / 100
             ];
         }
+
         $this->food->final_price = $this->food->price * ($this->food->off['factor'] ?? 1);
         $this->score = $comments->avg('score');
         $this->comments = $comments;
@@ -78,7 +80,6 @@ class FoodModal extends Component
         if ($this->showingModal) {
             $this->fetchData();
         }
-        // dd($this->showingModal);
         return view('livewire.customer.comment.food-modal');
     }
 
