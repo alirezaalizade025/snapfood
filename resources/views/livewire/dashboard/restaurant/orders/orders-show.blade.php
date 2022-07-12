@@ -1,6 +1,32 @@
 <div>
-    <div class="my-2">
-        <input wire:model.debounce.500ms="search" type="text" class="rounded-full drop-shadow-xl p-3" placeholder="search code">
+    <div class="flex justify-between items-center my-5">
+        <div class="my-2">
+            <input wire:model.debounce.500ms="search" type="text" class="rounded-full drop-shadow-xl p-3"
+                placeholder="search code">
+        </div>
+        <div class="flex gap-5 rounded-full backdrop-blur-lg bg-teal-500/10 p-2 select-none drop-shadow-xl">
+            <label for="investigation">
+                <input id="investigation" type="checkbox" value="1" wire:click="filterStatus('1')"
+                    class="peer hidden"  @checked(in_array('1', $status))>
+                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Ivestigation
+                </div>
+            </label>
+            <label for="prepering">
+                <input id="prepering" type="checkbox" value="2" wire:click="filterStatus('2')" class="peer hidden">
+                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Perepring
+                </div>
+            </label>
+            <label for="sending">
+                <input id="sending" type="checkbox" value="3" wire:click="filterStatus('3')" class="peer hidden">
+                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">sending
+                </div>
+            </label>
+            <label for="delivered">
+                <input id="delivered" type="checkbox" value="4" wire:click="filterStatus('4')" class="peer hidden">
+                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Delivered
+                </div>
+            </label>
+        </div>
     </div>
     <div class="grid grid-cols-2 gap-5">
         @foreach ($carts as $cart)
@@ -49,7 +75,7 @@
                         <div>{{ $food->quantity }}</div>
                     @endforeach
                     <div class="font-bold border-t border-indigo-500">Total</div>
-                    <div class="font-bold border-t border-indigo-500">{{ $cart->total_price }}</div>
+                    <div class="font-bold border-t border-indigo-500">{{ $cart->final_price }} $</div>
                 </div>
             </div>
         @endforeach

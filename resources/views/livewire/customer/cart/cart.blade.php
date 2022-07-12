@@ -52,7 +52,7 @@
                 <div class="text-sm">delivery {{ $cart->restaurant->delivery_fee }} $</div>
                 <div>{{ $cart->total + $cart->restaurant->delivery_fee }} $</div>
                 @if ($cart->status == '0')
-                    <a href="">
+                    <a href="{{ route('payment.show' , $cart->id) }}">
                         <div
                             class=" bg-gradient-to-l from-cyan-400 p-3 hover:scale-110 transition duration-300 rounded-r-full text-rose-500">
                             payment
