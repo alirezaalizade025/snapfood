@@ -15,13 +15,16 @@ class CommentRestaurantResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'author' => ['name' => $this->user->name],
             'foods' => $this->cart->cartFood->map(function ($food) {
                 return $food->food->name;
             }),
             'created_at' => $this->created_at->diffForHumans(),
             'score' => $this->score,
-            'content' => $this->content
+            'content' => $this->content,
+            'answer' => trim($this->answer),
+            'delete_request' => $this->delete_request,
         ];
     }
 }

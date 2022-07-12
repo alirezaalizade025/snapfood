@@ -214,4 +214,9 @@ class RestaurantController extends Controller
 
     }
 
+    public function comments()
+    {
+        return view('dashboard.comments');
+    }
+
 }

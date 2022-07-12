@@ -102,4 +102,35 @@ class CommentController extends Controller
     {
     //
     }
+
+    public function setAnswer(Request $request)
+    {
+        $comment = Comment::find($request->comment_id);
+        // TODO:add policy
+
+        $request->validate([
+            'answer' => 'required|string|max:255',
+        ]);
+
+        $comment->answer = trim($request->answer);
+        $comment->save();
+
+        return response(['msg' => 'answer set successfully']);
+
+    }
+
+    public function deleteRequest(Request $request)
+    {
+        $comment = Comment::find($request->comment_id);
+        // TODO:add policy
+        if ($comment) {
+            $comment->delete_request = $comment->delete_request == true ? false : true;
+            $comment->save();
+            return response(['msg' => 'Delete request updated successfully']);
+        }
+        else {
+            return response(['msg' => 'comment not found'], 402);
+        }
+
+    }
 }

@@ -19,7 +19,9 @@ class CommentFoodResource extends JsonResource
             'foods' => $this->cart->foods->pluck('name'),
             'created_at' => $this->created_at,
             'score' => $this->score,
-            'content' => $this->content
+            'content' => $this->content,
+            'answer' => trim($this->answer)
+            // TODO:show answer to customer
         ];
     }
 }
