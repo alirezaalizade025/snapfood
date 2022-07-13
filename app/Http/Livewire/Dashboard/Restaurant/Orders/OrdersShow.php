@@ -4,8 +4,9 @@ namespace App\Http\Livewire\Dashboard\Restaurant\Orders;
 
 use App\Models\Cart;
 use Livewire\Component;
-use Illuminate\Support\Facades\Http;
+use App\Jobs\DeliveryDelay;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Http;
 
 class OrdersShow extends Component
 {
@@ -21,8 +22,12 @@ class OrdersShow extends Component
     {
         $cart = Cart::find($cartId);
         if ($cart->status != 4) {
-            $cart->status = "$status";
-            $cart->update();
+            // $cart->status = "$status";
+            // $cart->update();
+
+            if ($status == 4) {
+                dispatch(new DeliveryDelay($cart))->delay(now()->addHour());
+            }
             $this->emitSelf('refreshComponent');
         }
     }

@@ -15,6 +15,7 @@ Route::controller(PageController::class)->group(function () {
     Route::get('/restaurant/{id}', 'showRestaurantFood')->name('restaurant-food.show');
     Route::get('/payment/{id}', 'showPayment')->name('payment.show');
     Route::post('/payment/store', 'handlePayment')->name('payment.store');
+    Route::get('/{id}/carts', 'carts')->name('cart.show');
 });
 
 Route::middleware([
@@ -37,6 +38,5 @@ Route::middleware([
         Route::resource('dashboard/restaurant', RestaurantController::class);
         Route::get('dashboard/foodParty', [FoodPartyController::class , 'index'])->name('foodParty.index');
         Route::get('dashboard/{id}/orders', [RestaurantController::class , 'orders'])->name('restaurant.orders');
-        Route::get('/{id}/carts', [PageController::class , 'carts'])->name('cart.show');
         Route::get('/dashboard/comments', [RestaurantController::class , 'comments'])->name('restaurant.comments');
     });

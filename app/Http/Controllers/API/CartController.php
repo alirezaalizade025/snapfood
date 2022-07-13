@@ -187,6 +187,10 @@ class CartController extends Controller
             }
             else {
                 $cartFood->delete();
+                $cartFood = CartFood::where('cart_id', $cart->id)->get();
+                if ($cartFood->count() < 1) {
+                    $cart->forceDelete();
+                }
                 return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
 
             }
@@ -240,6 +244,10 @@ class CartController extends Controller
         $cartFood = CartFood::where([['cart_id', $cart_id], ['food_id', $food_id]])->get()->first();
 
         $cartFood->delete();
+        $cartFood = CartFood::where('cart_id', $cart->id)->get();
+        if ($cartFood->count() < 1) {
+            $cart->forceDelete();
+        }
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
     }
 
