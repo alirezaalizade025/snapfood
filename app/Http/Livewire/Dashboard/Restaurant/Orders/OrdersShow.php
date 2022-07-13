@@ -7,6 +7,9 @@ use Livewire\Component;
 use App\Jobs\DeliveryDelay;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Http;
+use App\Notifications\DeliveredNotification;
+use App\Notifications\PreparingNotification;
+use App\Notifications\DeliveringNotification;
 
 class OrdersShow extends Component
 {
@@ -14,6 +17,11 @@ class OrdersShow extends Component
     public $restaurant;
     public $search;
     public $status = ['1'];
+    public $emailClasses = [
+        PreparingNotification::class ,
+        DeliveringNotification::class ,
+        DeliveredNotification::class ,
+    ];
     protected $listeners = [
         'refreshComponent' => '$refresh',
     ];
@@ -22,13 +30,28 @@ class OrdersShow extends Component
     {
         $cart = Cart::find($cartId);
         if ($cart->status != 4) {
-            // $cart->status = "$status";
-            // $cart->update();
+            $cart->status = "$status";
+            $cart->update();
+
+            $this->sendMail($status, $cart);
 
             if ($status == 4) {
                 dispatch(new DeliveryDelay($cart))->delay(now()->addHour());
             }
             $this->emitSelf('refreshComponent');
+        }
+    }
+
+    public function sendMail($status, $cart)
+    {
+        if ($status == 2) {
+            $cart->user->notify(new PreparingNotification($cart));
+        }
+        elseif ($status == 3) {
+            $cart->user->notify(new DeliveringNotification($cart));
+        }
+        elseif ($status == 4) {
+            $cart->user->notify(new DeliveredNotification($cart));
         }
     }
 
@@ -50,12 +73,12 @@ class OrdersShow extends Component
             $where[] = ['id', $this->search];
         }
         $this->carts = Cart::where('restaurant_id', $this->restaurant->id)
-        ->whereIn('status', $this->status)
-        ->where($where)
-        ->orderBy('status')
-        ->orderBy('updated_at')
-        ->get()
-        ->map(function ($cart) {
+            ->whereIn('status', $this->status)
+            ->where($where)
+            ->orderBy('status')
+            ->orderBy('updated_at')
+            ->get()
+            ->map(function ($cart) {
             $cart->food = $cart->cartFood->each(function ($cart) {
                     $cart->final_price = $cart->price * $cart->quantity;
                 }
