@@ -4574,6 +4574,15 @@ body[dir="rtl"] .checkbox:checked,
 .w-14 {
   width: 3.5rem;
 }
+.w-1\/4 {
+  width: 25%;
+}
+.w-\[\] {
+  width: ;
+}
+.w-\[100px\] {
+  width: 100px;
+}
 .min-w-0 {
   min-width: 0px;
 }

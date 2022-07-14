@@ -9,6 +9,18 @@
             <div class="p-2 text-2xl text-center">{{ $reports->total() }} </div>
         </div>
     </div>
+    {{ $normalPicker }}
+    <div class="flex justify-between mb-3">
+        <div class="flex gap-5">
+            <x-datetime-picker without-timezone label="Start Date" placeholder="Start Date"
+                parse-format="DD-MM-YYYY HH:mm" wire:model="startDate" wire:change="$refresh" />
+            <x-datetime-picker without-timezone label="End Date" placeholder="End Date"
+                parse-format="DD-MM-YYYY HH:mm" wire:model="endDate" wire:change="$refresh" />
+        </div>
+        <div>
+            <input type="text" class="p-3 rounded-full" placeholder="search code">
+        </div>
+    </div>
     <div
         class="grid grid-cols-5 text-center bg-gradient-to-r from-[#a28ddf] to-[#ec9aaf] p-2 rounded-t-xl text-white font-bold text-lg">
         <div class="capitalize">ID</div>
@@ -46,3 +58,32 @@
 <div class="w-full m-auto">
     {{ $reports->links() }}
 </div>
+
+<script type="text/javascript">
+    $(function() {
+
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                    'month').endOf('month')]
+            }
+        }, cb);
+
+        cb(start, end);
+
+    });
+</script>

@@ -9,6 +9,7 @@ use App\Models\Restaurant;
 use App\Models\WeekSchedule;
 use Illuminate\Http\Request;
 use App\Models\CategoryRestaurant;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class RestaurantController extends Controller
 {
@@ -220,12 +221,31 @@ class RestaurantController extends Controller
 
         if ($restaurant != null) {
             $this->authorize('order', $restaurant);
-        } else {
+        }
+        else {
             return redirect('dashboard')->withErrors('Restaurant Not Found!');
         }
 
+        $settings1 = [
+            'chart_title' => 'Reports',
+            'chart_type' => 'line',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\Cart',
+            'group_by_field' => 'created_at',
+            'group_by_period' => 'day',
+            'aggregate_function' => 'count',
+            'filter_field' => 'created_at',
+            'filter_days' => '30',
+            'group_by_field_format' => 'Y-m-d H:i:s',
+            'column_class' => 'col-md-12',
+            'entries_number' => '5',
+            'translation_key' => 'cart',
+            'continuous_time' => true,
+        ];
 
-        return view('dashboard.reports', compact('restaurant'));
+        $chart = new LaravelChart($settings1);
+
+        return view('dashboard.reports', compact('restaurant', 'chart'));
 
     }
 
