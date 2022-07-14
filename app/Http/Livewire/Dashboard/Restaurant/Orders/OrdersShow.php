@@ -35,8 +35,8 @@ class OrdersShow extends Component
 
             $this->sendMail($status, $cart);
 
-            if ($status == 4) {
-                dispatch(new DeliveryDelay($cart))->delay(now()->addHour());
+            if ($status == 3) {
+                dispatch(new DeliveryDelay($cart))->delay(now()->addSeconds(20));
             }
             $this->emitSelf('refreshComponent');
         }

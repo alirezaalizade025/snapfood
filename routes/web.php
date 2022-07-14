@@ -38,5 +38,6 @@ Route::middleware([
         Route::resource('dashboard/restaurant', RestaurantController::class);
         Route::get('dashboard/foodParty', [FoodPartyController::class , 'index'])->name('foodParty.index');
         Route::get('dashboard/{id}/orders', [RestaurantController::class , 'orders'])->name('restaurant.orders');
+        Route::get('/dashboard/reports', [RestaurantController::class , 'reports'])->name('restaurant.reports');
         Route::get('/dashboard/comments', [RestaurantController::class , 'comments'])->name('restaurant.comments');
     });

@@ -21,11 +21,6 @@
                 <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">sending
                 </div>
             </label>
-            <label for="delivered">
-                <input id="delivered" type="checkbox" value="4" wire:click="filterStatus('4')" class="peer hidden">
-                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Delivered
-                </div>
-            </label>
         </div>
     </div>
     <div class="grid grid-cols-2 gap-5">

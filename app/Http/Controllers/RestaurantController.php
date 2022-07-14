@@ -196,12 +196,12 @@ class RestaurantController extends Controller
         if (auth()->user()->restaurant) {
             $restaurant = auth()->user()->restaurant;
             if ($restaurant->confirm != 'accept') {
-                return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+                return redirect('dashboard')->withErrors('You can\'t see order until your restaurant be confirmed');
             }
         }
         else {
             $restaurant = Restaurant::find($id);
-            return redirect('dashboard')->withErrors('You can\'t order until your restaurant be confirmed');
+            return redirect('dashboard')->withErrors('You can\'t see order until your restaurant be confirmed');
         }
 
 
@@ -213,6 +213,23 @@ class RestaurantController extends Controller
         return view('dashboard.myOrders', compact('restaurant'));
 
     }
+
+    public function reports()
+    {
+        $restaurant = auth()->user()->restaurant;
+
+        if ($restaurant != null) {
+            $this->authorize('order', $restaurant);
+        } else {
+            return redirect('dashboard')->withErrors('Restaurant Not Found!');
+        }
+
+
+        return view('dashboard.reports', compact('restaurant'));
+
+    }
+
+
 
     public function comments()
     {

@@ -35,6 +35,8 @@ class DeliveryDelay implements ShouldQueue
      */
     public function handle()
     {
-        $this->user->notify(new DeliveryDelayNotification($this->cart));
+        if ($this->cart->status != 4) {
+            $this->user->notify(new DeliveryDelayNotification($this->cart));
+        }
     }
 }

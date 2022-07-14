@@ -57,6 +57,9 @@
                 <x-jet-responsive-nav-link href="{{ route('restaurant.orders', auth()->id()) }}" :active="request()->routeIs('restaurant.orders')">
                     {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('restaurant.reports') }}" :active="request()->routeIs('restaurant.reports')">
+                    {{ __('Reports') }}
+                </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('restaurant.comments') }}" :active="request()->routeIs('restaurant.comments')">
                     {{ __('Comments') }}
                 </x-jet-responsive-nav-link>
