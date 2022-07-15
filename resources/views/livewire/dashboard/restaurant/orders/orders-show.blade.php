@@ -7,18 +7,24 @@
         <div class="flex gap-5 rounded-full backdrop-blur-lg bg-teal-500/10 p-2 select-none drop-shadow-xl">
             <label for="investigation">
                 <input id="investigation" type="checkbox" value="1" wire:click="filterStatus('1')"
-                    class="peer hidden"  @checked(in_array('1', $status))>
-                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Ivestigation
+                    class="peer hidden" @checked(in_array('1', $status))>
+                <div
+                    class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">
+                    Ivestigation
                 </div>
             </label>
             <label for="prepering">
                 <input id="prepering" type="checkbox" value="2" wire:click="filterStatus('2')" class="peer hidden">
-                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">Perepring
+                <div
+                    class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">
+                    Perepring
                 </div>
             </label>
             <label for="sending">
                 <input id="sending" type="checkbox" value="3" wire:click="filterStatus('3')" class="peer hidden">
-                <div class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">sending
+                <div
+                    class="bg-gradient-to-r peer-checked:from-indigo-400 peer-checked:to-teal-400 peer-checked:text-white peer-checked:font-black transition duration-150 p-2 rounded-full drop-shadow-xl cursor-pointer hover:scale-95 hover:translate-y-[0.125rem] peer-checked:outline outline-white">
+                    sending
                 </div>
             </label>
         </div>
@@ -57,11 +63,14 @@
                                 <span class="mx-2">></span>
                                 <div wire:click="changeStatus({{ $cart->id }}, 4)"
                                     class="hover:text-indigo-600 hover:scale-110 cursor-pointer transition duration-200 rounded-lg p-1 @if ($cart->status == 4) bg-indigo-400 text-white @endif">
-                                    delivered</div>
+                                    delivered
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="bg-gray-300 rounded-xl p-2 mb-3">
+                    {{ $cart->user->addresses()->where('is_current_location', 1)->get()->first()->address }}</div>
                 <div class="grid grid-cols-2 gap-2">
                     <div class="font-bold border-b border-black">Food</div>
                     <div class="font-bold border-b border-black">Quantity</div>

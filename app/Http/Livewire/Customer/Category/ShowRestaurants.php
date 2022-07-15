@@ -29,7 +29,7 @@ class ShowRestaurants extends Component
     public function getRestaurants($subCategory = null)
     {
         // TODO: set actual user's lat long for calc distance
-        $where = [['restaurants.confirm', 'accept']];
+        $where = [['restaurants.status', 1], ['restaurants.confirm', 'accept']];
 
         if ($this->search) {
             $where[] = ['restaurants.title', 'like', '%' . $this->search . '%'];

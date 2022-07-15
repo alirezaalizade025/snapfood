@@ -46,6 +46,9 @@ class CartController extends Controller
         $this->authorize('create', Cart::class);
         try {
             $food = Food::findOrFail($request->food_id);
+            if ($food->restaurant->status == 'inactive') {
+                return response(['message' => 'Food not found'], 404);
+            }
         }
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
@@ -250,19 +253,20 @@ class CartController extends Controller
     }
 
     public function removeFromCart(Request $request)
-    {     
-        $cart = Cart::where('user_id', auth()->id())->get()->first();
+    {
+        $cart = Cart::find($request->cart_id);
         $this->authorize('update', $cart);
 
         $cartFood = CartFood::where([['cart_id', $request->cart_id], ['food_id', $request->food_id]])->get()->first();
         if (!$cartFood) {
             return response(['msg' => 'Cart not found'], 404);
         }
-        
+
         $cartFood->delete();
 
         $cartFood = CartFood::where('cart_id', $cart->id)->get();
-        if ($cart->cart_food == null) {
+
+        if (CartFood::where([['cart_id', $request->cart_id], ['food_id', $request->food_id]])->get()->count() < 1) {
             $cart->forceDelete();
         }
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);

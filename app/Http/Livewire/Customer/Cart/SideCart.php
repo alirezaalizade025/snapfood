@@ -7,6 +7,7 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\CartController;
 
 
 class SideCart extends Component
@@ -49,8 +50,7 @@ class SideCart extends Component
 
         if (auth()->check()) {
             $request = new Request(['food_id' => $id, 'count' => 1]);
-            $response = app('App\Http\Controllers\API\CartController')->store($request);
-
+            $response = app(CartController::class)->store($request);
             if ($response->status() == 200) {
                 $this->emit('refreshComponent');
             }
