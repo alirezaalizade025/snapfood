@@ -25,7 +25,7 @@ class RestaurantFoodsResource extends JsonResource
         if ($this->foodParty != null) {
             $food['off'] = ['label' => $this->foodParty->name, 'factor' => number_format(1 - $this->foodParty->discount / 100, 2)];
         }
-        $food['final_price'] = $this->price * (isset($food['off']) ? $food['off']['factor'] : 1);
+        $food['final_price'] = number_format($this->price * (isset($food['off']) ? $food['off']['factor'] : 1), 2);
         $food['raw_material'] = $this->rawMaterials->implode('name', ', ');
         $food['image'] = $this->image ? $this->image->path : null;
         $food['category_id'] = $this->category_id;

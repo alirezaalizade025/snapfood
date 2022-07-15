@@ -37,8 +37,8 @@ class CartResource extends JsonResource
 
                     
                 ];
-                $food['final_price'] = $food['price'] * (isset($food['off']) ? $food['off']['factor'] : 1);
-                $food['total_price'] = $food['final_price'] * $food['count'];
+                $food['final_price'] = round($food['price'] * (isset($food['off']) ? $food['off']['factor'] : 1), 2);
+                $food['total_price'] = round($food['final_price'] * $food['count'], 2);
                 return $food;
         })->values(),
         ];

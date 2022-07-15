@@ -38,7 +38,8 @@ class Cart extends Component
      */
     public function remove($cart_id, $food_id)
     {
-        $response = app('App\Http\Controllers\API\CartController')->removeFromCart($cart_id, $food_id);
+        $request = new Request(['cart_id' => $cart_id, 'food_id' => $food_id]);
+        $response = app('App\Http\Controllers\API\CartController')->removeFromCart($request);
         if ($response->status() == 200) {
             $this->fetchData();
         }

@@ -19,9 +19,7 @@ class RestaurantShowResource extends JsonResource
         $restaurant = [
             'id' => $this->id,
             'title' => $this->title,
-            'type' => $this->category->map(function ($item) {
-            return $item->category->name;
-        })->implode(', '),
+            'type' => $this->category->pluck('name')->implode(', '),
             'address' => $this->addressInfo()->get(['address', 'latitude', 'longitude'])->first(),
             'phone' => $this->phone,
             'is_open' => $this->status == 'active' ? true : false,

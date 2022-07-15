@@ -12,6 +12,7 @@ class ShowReports extends Component
     public $normalPicker;
     public $startDate;
     public $endDate;
+    public $search;
 
     public function fetchData()
     {
@@ -21,6 +22,9 @@ class ShowReports extends Component
         }
         if ($this->endDate) {
             $where[] = ['created_at', '<=', Carbon::parse($this->endDate)->format('Y-m-d H:i:s')];
+        }
+        if ($this->search) {
+            $where[] = ['id', $this->search];
         }
 
         $this->total_income = Cart::where('restaurant_id', auth()->user()->restaurant->id)

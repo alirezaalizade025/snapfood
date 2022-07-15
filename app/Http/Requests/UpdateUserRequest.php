@@ -13,9 +13,6 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->id() != $this->route('id')) {
-            return false;
-        }
         return true;
     }
 
@@ -29,7 +26,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:11',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $this->route('id'),
+            'email' => 'required|string|email|max:255|unique:users,email,' . auth()->id(),
             'password' => 'sometimes|string|min:6',
             'bank_account_number' => 'required|digits:16'
         ];

@@ -26,7 +26,9 @@ class CartController extends Controller
             ->orderBy('status')
             ->get();
 
-        $this->authorize('view', $carts->first());
+        if ($carts->count() > 0) {
+            $this->authorize('view', $carts->first());
+        }
 
         $carts = CartResource::collection($carts);
 
@@ -89,7 +91,9 @@ class CartController extends Controller
             ->where('id', $request->cart_id)
             ->get();
 
-        $this->authorize('view', $carts->first());
+        if ($carts->count() > 0) {
+            $this->authorize('view', $carts->first());
+        }
 
         $carts = CartResource::collection($carts);
 
@@ -160,12 +164,18 @@ class CartController extends Controller
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Food not found'], 404);
         }
-        $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
-            ->firstOrCreate(
-        ['user_id' => auth()->user()->id],
-        ['restaurant_id' => $food->restaurant_id],
-        ['cart_number' => 1],
-        );
+        if (!$request->has('cart_id')) {
+            $cart = Cart::where([['user_id', auth()->id()], ['status', '0'], ['restaurant_id', $food->restaurant_id]])
+                ->get()->first();
+        }
+        else {
+            $cart = Cart::where([['user_id', auth()->id()], ['id', $request->cart_id], ['restaurant_id', $food->restaurant_id]])
+                ->firstOrCreate(
+            ['user_id' => auth()->user()->id],
+            ['restaurant_id' => $food->restaurant_id],
+            ['cart_number' => 1],
+            );
+        }
 
         $this->authorize('update', $cart);
 
@@ -173,7 +183,7 @@ class CartController extends Controller
 
 
         try {
-            $cartFood = CartFood::where('cart_id', $cart->id)->where('food_id', $food->id)->get()->first();
+            $cartFood = $cart->cartFood()->where('food_id', $food->id)->get()->first();
         }
         catch (ModelNotFoundException $e) {
             return response(['msg' => 'Cart not found'], 404);
@@ -188,13 +198,14 @@ class CartController extends Controller
             else {
                 $cartFood->delete();
                 $cartFood = CartFood::where('cart_id', $cart->id)->get();
-                if ($cartFood->count() < 1) {
+                if ($cart->cart_food == null) {
                     $cart->forceDelete();
                 }
+
                 return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);
 
             }
-            return response(['msg' => 'Food Updated to cart successfully', 'cart_id' => $cart->id]);
+            return response(['msg' => 'Food Updated on cart successfully', 'cart_id' => $cart->id]);
         }
         return response(['msg' => 'Cart not found'], 404);
     }
@@ -205,7 +216,9 @@ class CartController extends Controller
             where('user_id', auth()->id())
             ->where('id', $request->cart_id)
             ->get()->first();
-
+        if (!$cart) {
+            return response(['msg' => 'Cart not found'], 404);
+        }
         $this->authorize('update', $cart);
 
         $cart->status = "1";
@@ -236,16 +249,20 @@ class CartController extends Controller
         return response(['data' => $carts]);
     }
 
-    public function removeFromCart($cart_id, $food_id)
-    {
+    public function removeFromCart(Request $request)
+    {     
         $cart = Cart::where('user_id', auth()->id())->get()->first();
         $this->authorize('update', $cart);
 
-        $cartFood = CartFood::where([['cart_id', $cart_id], ['food_id', $food_id]])->get()->first();
-
+        $cartFood = CartFood::where([['cart_id', $request->cart_id], ['food_id', $request->food_id]])->get()->first();
+        if (!$cartFood) {
+            return response(['msg' => 'Cart not found'], 404);
+        }
+        
         $cartFood->delete();
+
         $cartFood = CartFood::where('cart_id', $cart->id)->get();
-        if ($cartFood->count() < 1) {
+        if ($cart->cart_food == null) {
             $cart->forceDelete();
         }
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);

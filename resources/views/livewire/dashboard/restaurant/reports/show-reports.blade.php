@@ -18,7 +18,7 @@
                 parse-format="DD-MM-YYYY HH:mm" wire:model="endDate" wire:change="$refresh" />
         </div>
         <div>
-            <input type="text" class="p-3 rounded-full" placeholder="search code">
+            <input wire:model="search" type="text" class="p-3 rounded-full" placeholder="search code">
         </div>
     </div>
     <div
@@ -38,15 +38,14 @@
             <div class="capitalize">{{ $report->total_price }} $</div>
             <div class="capitalize text-sm">{{ $report->created_at }}</div>
             <div class="capitalize text-sm">{{ $report->updated_at }}</div>
-            <div class="rounded-xl col-span-full bg-gray-300 grid grid-cols-3 text-md gap-x-5 p-3">
+            <div class="rounded-xl col-span-full bg-gray-300 grid grid-cols-3 text-sm gap-x-5 p-3">
                 <div class="bg-gray-100 rounded-xl">Food Name</div>
                 <div class="bg-gray-100 rounded-xl">Quantity</div>
                 <div class="bg-gray-100 rounded-xl">Price</div>
                 @foreach ($report->cartFood as $food)
                     <div>{{ $food->food->name }}</div>
                     <div>{{ $food->quantity }}</div>
-                    <div class="flex justify-evenly">
-                        <div>{{ $food->price / $food->quantity }} $</div>
+                    <div class="flex justify-center">
                         <div>{{ $food->price }}$</div>
                     </div>
                 @endforeach

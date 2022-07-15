@@ -22,7 +22,7 @@
                         </div>
                     </div>
                     @isset($restaurant->image)
-                        <img src="{{ $restaurant->image->path }}" class="w-72 h-72 ml-auto object-cover" alt="">
+                        <img src="{{ $restaurant->image->path }}" class="w-80 h-full ml-auto object-cover" alt="">
                     @endisset
                 </div>
             </div>

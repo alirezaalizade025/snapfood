@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->controller(AddressController::class)->group(f
 });
 
 Route::middleware('auth:sanctum')->patch('/user/{id}', [UserController::class , 'update']);
+Route::middleware('auth:sanctum')->get('/profile', [UserController::class , 'profile']);
 
 Route::middleware('auth:sanctum')->controller(RestaurantAPIController::class)->prefix('restaurants')->group(function () {
     Route::get('/', 'index');
@@ -39,6 +40,7 @@ Route::middleware('auth:sanctum')->controller(CartController::class)->prefix('ca
     Route::post('/add', 'store');
     Route::patch('/add', 'update');
     Route::patch('/decrease', 'decrease');
+    Route::delete('/remove', 'removeFromCart');
     Route::post('/{cart_id}/pay', 'sendToPay');
     Route::get('/restaurant/{restaurant_id}', 'userCartByRestaurant');
 });

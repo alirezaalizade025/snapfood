@@ -18,7 +18,7 @@ class AddCommentRequest extends FormRequest
 
         $cart = Cart::find($cart_id);
 
-        if ($cart->user_id != auth()->id() || $cart->comments()->where('user_id', auth()->id())->exists()) {
+        if ($cart && ($cart->user_id != auth()->id())) {
             return false;
         }
 
