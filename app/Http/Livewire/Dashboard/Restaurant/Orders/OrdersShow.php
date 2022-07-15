@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dashboard\Restaurant\Orders;
 
 use App\Models\Cart;
 use Livewire\Component;
+use App\Jobs\SendMailJob;
 use App\Jobs\DeliveryDelay;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Http;
@@ -44,14 +45,19 @@ class OrdersShow extends Component
 
     public function sendMail($status, $cart)
     {
+        $user = auth()->user();
         if ($status == 2) {
-            $cart->user->notify(new PreparingNotification($cart));
+            $mail = new PreparingNotification($cart);
+            dispatch(new SendMailJob($user, $mail));
         }
         elseif ($status == 3) {
-            $cart->user->notify(new DeliveringNotification($cart));
+            $mail = new DeliveringNotification($cart);
+            dispatch(new SendMailJob($user, $mail));
+
         }
         elseif ($status == 4) {
-            $cart->user->notify(new DeliveredNotification($cart));
+            $mail = new DeliveredNotification($cart);
+            dispatch(new SendMailJob($user, $mail));
         }
     }
 

@@ -10,15 +10,16 @@ use Illuminate\Notifications\Notification;
 class SuccessPayment extends Notification
 {
     use Queueable;
+    public $cart;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($cart)
     {
-    //
+        $this->cart = $cart;
     }
 
     /**
@@ -43,7 +44,7 @@ class SuccessPayment extends Notification
         return (new MailMessage)
             ->line('Cart with id #' . $notifiable->id . ' has been paid. Food will be sent to you soon.')
             ->line('Cart is investigating now')
-            ->action('Show Carts', route('cart.show', auth()->id()))
+            ->action('Show Carts', route('cart.show', $this->cart->user_id))
             ->line('Thank you for your purchase!');
     }
 

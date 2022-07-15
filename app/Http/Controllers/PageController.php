@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Category;
+use App\Jobs\SendMailJob;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use App\Notifications\SuccessPayment;
@@ -59,13 +60,12 @@ class PageController extends Controller
     public function handlePayment(Request $request)
     {
         if ($request->status == 'success') {
-            $user = auth()->user();
             $cart = Cart::find($request->cart_id);
             $cart->update(['status' => "1"]);
-            $user->notify(new SuccessPayment($cart));
-        }
-        else {
 
+            $user = auth()->user();
+            $mail = new SuccessPayment($cart);
+            dispatch(new SendMailJob($user, $mail));
         }
 
         return redirect()->route('cart.show', auth()->id());
