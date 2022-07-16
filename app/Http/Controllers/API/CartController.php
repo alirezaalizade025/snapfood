@@ -201,7 +201,8 @@ class CartController extends Controller
             else {
                 $cartFood->delete();
                 $cartFood = CartFood::where('cart_id', $cart->id)->get();
-                if ($cart->cart_food == null) {
+
+                if (CartFood::where('cart_id', $request->cart_id)->get()->count() == 0) {
                     $cart->forceDelete();
                 }
 
@@ -266,7 +267,7 @@ class CartController extends Controller
 
         $cartFood = CartFood::where('cart_id', $cart->id)->get();
 
-        if (CartFood::where([['cart_id', $request->cart_id], ['food_id', $request->food_id]])->get()->count() < 1) {
+        if (CartFood::where('cart_id', $request->cart_id)->get()->count() == 0) {
             $cart->forceDelete();
         }
         return response(['msg' => 'Food remove from cart successfully', 'cart_id' => $cart->id]);

@@ -98,10 +98,9 @@ class FoodController extends Controller
             $food->save();
             return json_encode(['status' => 'success', 'message' => $food->name . ' ' . $column . ' updated', 'id' => $food->id]);
         }
-        // TODO:unique food name on update
         $data = $request->validate(
         [
-            'name' => 'required|min:2|max:255|unique:food,name,' . $id,
+            'name' => 'required|min:2|max:255|unique_food_name:food,name,restaurant_id,' . $id,
             'price' => 'required|numeric',
             'discount' => 'sometimes|numeric',
             'food_party_id' => 'nullable|exists:food_parties,id',
@@ -118,7 +117,7 @@ class FoodController extends Controller
             'raw_materials.*' => 'required|min:2|max:255',
         ]);
         $data['status'] = 'inactive';
-        $data['confirm'] = 'denied';
+        $data['confirm'] = 'waiting';
 
         if ($food->update($data)) {
             if (!empty($material)) {

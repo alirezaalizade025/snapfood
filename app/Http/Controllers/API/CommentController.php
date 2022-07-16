@@ -16,14 +16,7 @@ use App\Http\Resources\CommentRestaurantResource;
 
 class CommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,9 +33,7 @@ class CommentController extends Controller
             return response(['message' => 'Cart not found'], 404);
         }
 
-        if ($cart->user_id != auth()->id()) {
-            return response(['msg' => 'You can not add comment to this cart'], 403);
-        } //TODO:add policy to check if user can add comment to this cart 
+        $this->authorize('create', [Comment::class , $cart]);
 
         if ($cart->comments()->create(['user_id' => auth()->id(), 'score' => $request->score, 'content' => $request->message])) {
             return response(['msg' => 'comment created successfully'], 200);
@@ -83,7 +74,11 @@ class CommentController extends Controller
 
     public function findCommentsForAdmin()
     {
-        $comments = CommentAdminResource::collection(Comment::where('delete_request', true)->get());
+        $comments = Comment::where('delete_request', true)->get();
+        if ($comments->count() > 0) {
+            $this->authorize('view', $comments->first());
+        }
+        $comments = CommentAdminResource::collection($comments);
 
         return response($comments);
     }
@@ -115,10 +110,10 @@ class CommentController extends Controller
     public function destroy(Request $request)
     {
         $comment = Comment::find($request->comment_id);
-        // TODO:add policy
+        $this->authorize('delete', $comment);
         if ($comment) {
             $comment->delete();
-            return response(['msg' => 'Delete request updated successfully']);
+            return response(['msg' => 'Delete requested successfully']);
         }
         else {
             return response(['msg' => 'comment not found'], 402);
@@ -128,7 +123,7 @@ class CommentController extends Controller
     public function setAnswer(Request $request)
     {
         $comment = Comment::find($request->comment_id);
-        // TODO:add policy
+        $this->authorize('update', $comment);
 
         $request->validate([
             'answer' => 'required|string|max:255',
@@ -144,7 +139,7 @@ class CommentController extends Controller
     public function deleteRequest(Request $request)
     {
         $comment = Comment::find($request->comment_id);
-        // TODO:add policy
+        $this->authorize('update', $comment);
         if ($comment) {
             $comment->delete_request = $comment->delete_request == true ? false : true;
             $comment->save();

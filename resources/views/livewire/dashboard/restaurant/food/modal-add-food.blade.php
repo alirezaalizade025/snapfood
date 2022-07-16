@@ -45,7 +45,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <span class="text-sm">(if select food party discount be ignored)</span>
+                            <span class="text-sm">(if select party discount will be ignored)</span>
                             @error('food_party_id')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror

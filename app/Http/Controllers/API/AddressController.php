@@ -50,39 +50,51 @@ class AddressController extends Controller
 
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Address  $address
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Request $request)
-    // {
-    // //
-    // }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Address  $address
+     * @return \Illuminate\Http\Response|\Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function show(Request $request)
+    {
+        $user = auth()->user();
+        $addresses = $user->addresses()->find($request->address_id);
+        $this->authorize('view', $addresses);
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \App\Http\Requests\UpdateContactRequest  $request
-    //  * @param  \App\Models\Address  $address
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(UpdateContactRequest $request, Contact $address)
-    // {
-    // //
-    // }
+        return count($addresses) != 0 ?AddressResource::collection($addresses) : response()->json(['msg' => 'No addresses found'], 404);
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Address  $address
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Address $address)
-    // {
-    // //
-    // }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateAddressRequest  $request
+     * @param  \App\Models\Address  $address
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateAddressRequest $request)
+    {
+        $address = auth()->user()->addresses()->find($request->address_id);
+        $this->authorize('update', $address);
+        $address->update($request->toArray());
+        return response(['msg' => 'address updated successfully'], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Address  $address
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Address $address)
+    {
+        $this->authorize('delete', $address);
+        if ($address->delete()) {
+            return response(['msg' => 'address deleted successfully'], 200);
+        }
+        return response(['msg' => 'Can\'t delete address now'], 404);
+    }
 
     /**
      * Set customer current address in storage.
@@ -92,8 +104,7 @@ class AddressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function setCurrentAddress(Request $request, $id)
-    {
-        // TODO:add policy if requested id belong to user
+    {    
         $addresses = $request->user()->addresses();
 
         try {

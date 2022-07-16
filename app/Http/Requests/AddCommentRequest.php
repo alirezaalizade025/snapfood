@@ -14,16 +14,7 @@ class AddCommentRequest extends FormRequest
      */
     public function authorize()
     {
-        $cart_id = $this->input('cart_id');
-
-        $cart = Cart::find($cart_id);
-
-        if ($cart && ($cart->user_id != auth()->id())) {
-            return false;
-        }
-
         return true;
-
     }
 
     /**

@@ -13,7 +13,6 @@ class StoreAddressRequest extends FormRequest
      */
     public function authorize()
     {
-        // TODO:fix authorize
         return true;
     }
 

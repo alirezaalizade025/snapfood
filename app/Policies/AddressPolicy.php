@@ -34,7 +34,10 @@ class AddressPolicy
      */
     public function view(User $user, Address $address)
     {
-
+        if ($user->role == 'customer' && $user->id == $address->addressable_id && $address->addressable_type == 'App\Models\User') {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to view Address');
     }
 
     /**
@@ -75,7 +78,10 @@ class AddressPolicy
      */
     public function delete(User $user, Address $address)
     {
-        //
+        if ($user->whereIn('role', ['customer', 'restaurant']) && $user->id == $address->addressable_id) {
+            return Response::allow();
+        }
+        return Response::deny('You are not authorized to Delete Address');
     }
 
     /**
@@ -87,7 +93,7 @@ class AddressPolicy
      */
     public function restore(User $user, Address $address)
     {
-        //
+    //
     }
 
     /**
@@ -99,6 +105,6 @@ class AddressPolicy
      */
     public function forceDelete(User $user, Address $address)
     {
-        //
+    //
     }
 }

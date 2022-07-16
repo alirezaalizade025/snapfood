@@ -10,6 +10,7 @@ use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\FoodController;
 
 class EditFood extends Component
 {
@@ -101,8 +102,7 @@ class EditFood extends Component
 
     public function updateFood()
     {
-        $request = new Request();
-        $request->replace([
+        $request = new Request([
             'name' => $this->name,
             'price' => $this->price,
             'discount' => $this->discount,
@@ -111,7 +111,7 @@ class EditFood extends Component
             'raw_materials' => $this->rawMaterials,
         ]);
 
-        $response = app("App\Http\Controllers\\" . $this->model . "Controller")->update($request, $this->selectID);
+        $response = app(FoodController::class)->update($request, $this->selectID);
         $response = json_decode($response, true);
         $this->notification()->send([
             'title'       => 'Food Edited!',
@@ -135,7 +135,7 @@ class EditFood extends Component
     public function updated($field)
     {
         $this->validateOnly($field, [
-            'name' => 'required|min:2|max:255|unique:food,name,' . $this->selectID,
+            'name' => 'required|min:2|max:255|unique_food_name:food,name,restaurant_id,' . $this->selectID,
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'foodParty' => 'numeric',
