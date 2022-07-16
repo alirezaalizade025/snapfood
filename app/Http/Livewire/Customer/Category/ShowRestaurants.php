@@ -28,7 +28,6 @@ class ShowRestaurants extends Component
 
     public function getRestaurants($subCategory = null)
     {
-        // TODO: set actual user's lat long for calc distance
         $where = [['restaurants.status', 1], ['restaurants.confirm', 'accept']];
 
         if ($this->search) {
@@ -36,9 +35,18 @@ class ShowRestaurants extends Component
         }
 
         $subCategory = isset($this->subCategory) && !empty($this->subCategory) ? $this->subCategory : Category::where('category_id', $this->category->id)->get()->pluck('id');
-        
+
         if (count($subCategory) == 0) {
             return collect([]);
+        }
+
+        if (auth()->check() && auth()->user()->addresses->count() > 0) {
+            $userAddress = [
+                'lat' => auth()->user()->addresses->where('is_current_location', 1)->first() ? auth()->user()->addresses->where('is_current_location', 1)->first()->latitude : 0,
+                'long' => auth()->user()->addresses->where('is_current_location', 1)->first() ? auth()->user()->addresses->where('is_current_location', 1)->first()->longitude : 0,
+            ];
+        } else {
+            $userAddress = ['lat' => 0, 'long' => 0];
         }
 
         return Restaurant::
@@ -53,16 +61,16 @@ class ShowRestaurants extends Component
             'addresses.latitude',
             'addresses.longitude',
             "addresses.id as address_id",
-            DB::raw("6371 * acos(cos(radians(" . 4.639 . ")) * cos(radians(addresses.latitude)) * cos(radians(addresses.longitude) - radians(" . 53.822 . ")) + sin(radians(" . 4.639 . ")) * sin(radians(addresses.latitude))) AS distance"),
+            DB::raw("6371 * acos(cos(radians(" . $userAddress['lat'] . ")) * cos(radians(addresses.latitude)) * cos(radians(addresses.longitude) - radians(" . $userAddress['long'] . ")) + sin(radians(" . $userAddress['lat'] . ")) * sin(radians(addresses.latitude))) AS distance"),
         )
-            ->having('distance', '<', 5000000) //TODO:fix this km
+            ->having('distance', '<', 500000) //TODO:fix this km
             ->where($where)
             ->where('addressable_type', 'App\Models\Restaurant')
             ->whereIn('category_restaurants.category_id', $subCategory)
             ->groupBy('addresses.id')
             ->orderBy($this->sortBy, 'asc')
             ->paginate(15);
-            
+
 
     }
 

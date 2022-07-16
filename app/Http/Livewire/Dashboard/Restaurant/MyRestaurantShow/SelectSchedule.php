@@ -12,26 +12,21 @@ class SelectSchedule extends Component
 {
     use Actions;
     public $schedule = [
-        1 => ['start' => '08:00', 'end' => '21:00'],
-        2 => ['start' => '08:00', 'end' => '21:00'],
-        3 => ['start' => '08:00', 'end' => '21:00'],
-        4 => ['start' => '08:00', 'end' => '21:00'],
-        5 => ['start' => '08:00', 'end' => '21:00'],
-        6 => ['start' => '08:00', 'end' => '21:00'],
-        7 => ['start' => '08:00', 'end' => '21:00'],
+        1 => ['start' => '', 'end' => ''],
+        2 => ['start' => '', 'end' => ''],
+        3 => ['start' => '', 'end' => ''],
+        4 => ['start' => '', 'end' => ''],
+        5 => ['start' => '', 'end' => ''],
+        6 => ['start' => '', 'end' => ''],
+        7 => ['start' => '', 'end' => ''],
     ];
 
-    public function emitSchedule()
+    public function sendScheduleToForm()
     {
-        $this->notification()->send([
-            'title' => 'Set Schedule!',
-            'description' => 'Schedule Set Successfully',
-            'icon' => 'success'
-        ]);
-        $this->emit('schedule', $this->schedule);
+        $this->emit('scheduleChange', $this->schedule);
     }
 
-    public function fetchData()
+    public function mount()
     {
         if (auth()->user()->restaurant) {
             $request = Request::create('/api/restaurants/' . auth()->user()->restaurant->id . '/dashboard', 'GET');
@@ -53,14 +48,16 @@ class SelectSchedule extends Component
                 $this->emit('refreshComponent');
             }
             else {
-            // TODO:show message
+                $this->notification()->error(
+                    $title = 'Error !!!',
+                    $description = json_decode($response->getContent())->msg
+                );
             }
         }
     }
 
     public function render()
     {
-        $this->fetchData();
         return view('livewire.dashboard.restaurant.my-restaurant-show.select-schedule');
     }
 }

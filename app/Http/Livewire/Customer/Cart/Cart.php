@@ -3,31 +3,41 @@
 namespace App\Http\Livewire\Customer\Cart;
 
 use Livewire\Component;
+use WireUi\Traits\Actions;
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\CartController;
 
 class Cart extends Component
 {
+    use Actions;
     public $carts;
     public function increase($food_id, $cart_id)
     {
         $request = new Request(['cart_id' => $cart_id, 'food_id' => $food_id, 'count' => 1]);
-        $response = app('App\Http\Controllers\API\CartController')->update($request);
+        $response = app(CartController::class)->update($request);
+
         if ($response->status() == 200) {
             $this->fetchData();
         }
         else {
-        // TODO:show msg
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
     public function decrease($food_id, $cart_id)
     {
         $request = new Request(['cart_id' => $cart_id, 'food_id' => $food_id, 'count' => 1]);
-        $response = app('App\Http\Controllers\API\CartController')->decrease($request);
+        $response = app(CartController::class)->decrease($request);
         if ($response->status() == 200) {
             $this->fetchData();
         }
         else {
-        // TODO:show msg
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
     /**
@@ -44,7 +54,10 @@ class Cart extends Component
             $this->fetchData();
         }
         else {
-        // TODO:show msg
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
 
@@ -55,7 +68,10 @@ class Cart extends Component
             $this->fetchData();
         }
         else {
-        // TODO:show msg
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
 

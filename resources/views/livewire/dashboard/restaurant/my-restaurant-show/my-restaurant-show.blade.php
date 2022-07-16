@@ -88,7 +88,7 @@
             <span class="text-red-500 text-sm">Restaurant location on map required!</span>
         @enderror
         @error('schedule')
-            <span class="text-red-500 text-sm">Restaurant schedule is not fixed</span>
+            <span class="text-red-500 text-sm">Restaurant schedule isn't set yet</span>
         @enderror
         <div wire:click="updateRestaurant"
             class="p-3 bg-indigo-400 text-white rounded-xl text-center cursor-pointer hover:bg-indigo-500">save</div>

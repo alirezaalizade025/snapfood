@@ -22,7 +22,7 @@ class MyRestaurantShow extends Component
     public $listeners = [
         'refreshComponent' => 'fetchData',
         'mapClicked' => 'setLocation',
-        'schedule' => 'setSchedule',
+        'scheduleChange' => 'setSchedule',
     ];
 
 
@@ -59,8 +59,7 @@ class MyRestaurantShow extends Component
             return $item['id'];
         })->toArray() : [];
 
-        $request = new Request();
-        $request->replace([
+        $request = new Request([
             'restaurant' => $this->restaurant,
             'latitude' => $this->latitude ?? false,
             'longitude' => $this->longitude ?? false,

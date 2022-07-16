@@ -73,7 +73,6 @@ class OrdersShow extends Component
 
     public function fetchData()
     {
-        // TODO: fetch data from api
         $where = [];
         if ($this->search != null) {
             $where[] = ['id', $this->search];

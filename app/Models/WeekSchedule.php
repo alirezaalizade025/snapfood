@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WeekSchedule extends Model
 {
-    use SoftDeletes;
     use HasFactory;
 
     protected $guarded = [];

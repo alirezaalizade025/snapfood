@@ -12,5 +12,4 @@
             @endforeach
         </div>
     </div>
-    {{-- TODO:add some more filter --}}
 </div>

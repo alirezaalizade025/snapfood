@@ -20,7 +20,6 @@ return new class extends Migration
             $table->integer('day');
             $table->time('start')->nullable();
             $table->time('end')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }

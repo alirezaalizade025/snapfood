@@ -24,7 +24,6 @@ class Restaurant extends Model
 
     public function category()
     {
-        // TODO:check for using category in phase 1 & 2
         return $this->hasManyThrough(Category::class, CategoryRestaurant::class, 'restaurant_id', 'id', 'id', 'category_id');
     }
 

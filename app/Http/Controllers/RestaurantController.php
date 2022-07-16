@@ -151,24 +151,26 @@ class RestaurantController extends Controller
             'longitude' => 'required|numeric'
         ]);
 
-        $schedule = $request->validate([
-            'schedule' => 'array',
-        ])['schedule'];
+        if ($request->schedule) {
+            $schedule = $request->validate([
+                'schedule' => 'array',
+            ])['schedule'];
 
-        $schedule = collect($schedule)
-            ->filter(function ($item) {
-            return $item['start'] != null && $item['end'] != null;
-        })
-            ->map(function ($item, $key) use ($restaurant) {
+            $schedule = collect($schedule)
+                ->filter(function ($item) {
+                return $item['start'] != null && $item['end'] != null;
+            })
+                ->map(function ($item, $key) use ($restaurant) {
 
-            $restaurant->weekSchedules()->updateOrCreate(
-            ['day' => $key, 'restaurant_id' => $restaurant->id],
-            ['start' => $item['start'], 'end' => $item['end']]
-            );
-        });
+                $restaurant->weekSchedules()->updateOrCreate(
+                ['day' => $key, 'restaurant_id' => $restaurant->id],
+                ['start' => $item['start'], 'end' => $item['end']]
+                );
+            });
 
-        WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
-
+            WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
+        }
+        
         $data['restaurant']['confirm'] = 'waiting';
         $data['restaurant']['status'] = 'inactive';
 

@@ -25,7 +25,6 @@ class ModalEditFoodParty extends Component
 
     public function updated($propertyName)
     {
-        // TODO:implement unique for all update
         $this->validateOnly($propertyName, [
             'name' => 'required|min:2|max:255|unique:food_parties,name,' . $this->selectID,
             'discount' => 'required|numeric|between:0,99.99'

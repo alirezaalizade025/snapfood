@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CartController;
+use WireUi\Traits\Actions;
 
 
 class SideCart extends Component
 {
+    use Actions;
     public $restaurant;
     public $total_price;
     public $carts;
@@ -29,7 +31,10 @@ class SideCart extends Component
             $this->emit('refreshComponent');
         }
         else {
-        // TODO:show message
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
 
@@ -41,7 +46,10 @@ class SideCart extends Component
             $this->emit('refreshComponent');
         }
         else {
-        // TODO:show message
+            $this->notification()->error(
+                $title = 'Error !!!',
+                $description = json_decode($response->getContent())->msg
+            );
         }
     }
 
@@ -55,7 +63,10 @@ class SideCart extends Component
                 $this->emit('refreshComponent');
             }
             else {
-            // TODO:show message
+                $this->notification()->error(
+                    $title = 'Error !!!',
+                    $description = json_decode($response->getContent())->msg
+                );
             }
         }
         else {

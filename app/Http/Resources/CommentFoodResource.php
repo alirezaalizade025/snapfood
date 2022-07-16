@@ -21,7 +21,6 @@ class CommentFoodResource extends JsonResource
             'score' => $this->score,
             'content' => $this->content,
             'answer' => trim($this->answer)
-            // TODO:show answer to customer
         ];
     }
 }

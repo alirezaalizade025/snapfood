@@ -14,7 +14,6 @@ Alpine.start();
 
 $('#toggleAside').click(function () {
     $('aside').toggleClass('ml-[100%]', 'slow')
-    // TODO:toggle with animate
 }
 )
 

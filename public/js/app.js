@@ -5249,7 +5249,7 @@ window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"]; // import './.
 
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
 $('#toggleAside').click(function () {
-  $('aside').toggleClass('ml-[100%]', 'slow'); // TODO:toggle with animate
+  $('aside').toggleClass('ml-[100%]', 'slow');
 });
 
 /***/ }),
