@@ -225,6 +225,25 @@ class CartController extends Controller
         }
         $this->authorize('update', $cart);
 
+        $restaurant = $cart->restaurant;
+        //check for open time
+        if ($restaurant->weekSchedules->count() > 0) {
+            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek - 5)->get()->first();
+            if (now()->format('H:i') >= $weekSchedules->open_time && now()->format('H:i') <= $weekSchedules->close_time) {
+                if ($restaurant->status == 'inactive') {
+                    return response()->json(['msg' => 'Restaurant is closed'], 403);
+                }
+            }
+            else {
+                return response()->json(['msg' => 'Restaurant is closed'], 403);
+                ;
+            }
+        }
+        else {
+            return response()->json(['msg' => 'Restaurant is closed'], 403);
+        }
+
+
         $cart->status = "1";
         $cart->save();
 

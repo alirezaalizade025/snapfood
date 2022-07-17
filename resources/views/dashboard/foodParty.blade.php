@@ -9,12 +9,12 @@
                 </div>
             </div>
             <div class="px-10 py-5">
-                <livewire:food-party-table />
+                <livewire:dashboard.admin.food-party.food-party-table />
             </div>
             <div class="mt-5">
             </div>
         </div>
 
-        <livewire:modal-add-food-party />
+        <livewire:dashboard.admin.food-party.modal-add-food-party />
     </div>
 </x-app-layout>

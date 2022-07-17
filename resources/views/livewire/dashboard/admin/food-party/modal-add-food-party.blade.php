@@ -6,9 +6,20 @@
 
 
         <x-slot name="content">
-            <section class="max-w-[100rem] p-6 pb-10 mx-auto bg-lime-200 rounded-md shadow-md dark:bg-gray-800">
+            <section class="max-w-[100rem] p-6 pb-20 mx-auto bg-lime-200 rounded-md shadow-md dark:bg-gray-800">
                 <form>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 mt-4 ">
+                        <div>
+                            <label class="text-black dark:text-gray-200 mb-10" for="discount">Start Time</label>
+                            <x-datetime-picker placeholder="Start Time" without-tips wire:model="start"
+                                :min="now()" interval="1"/>
+                        </div>
+                        <div>
+                            <label class="text-black dark:text-gray-200 mb-10" for="discount">Expire Time</label>
+                            <x-datetime-picker placeholder="Expire Time" without-tips wire:model="expire"
+                                :min="now()" interval="1"/>
+                        </div>
+
                         <div>
                             <label class="text-black dark:text-gray-200" for="username">Name</label>
                             <input id="username" type="text" wire:model="name"
@@ -26,7 +37,6 @@
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
                         </div>
-
                     </div>
                 </form>
         </x-slot>

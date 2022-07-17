@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Admin\FoodParty;
 
 use Livewire\Component;
 use App\Models\FoodParty;
@@ -47,7 +47,7 @@ class FoodPartyTable extends Component
 
     public function render()
     {
-        return view('livewire.food-party-table', [
+        return view('livewire.dashboard.admin.food-party.food-party-table', [
             'foodParties' => $this->fetchData()
         ]);
     }

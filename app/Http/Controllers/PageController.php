@@ -54,6 +54,24 @@ class PageController extends Controller
 
     public function showPayment($id)
     {
+        $restaurant = Cart::find($id)->restaurant;
+
+        //check for open time
+        if ($restaurant->weekSchedules->count() > 0) {
+            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek - 5)->get()->first();
+            if (now()->format('H:i') >= $weekSchedules->open_time && now()->format('H:i') <= $weekSchedules->close_time) {
+                if ($restaurant->status == 'inactive') {
+                    return redirect()->back()->withErrors(['error' => 'Sorry, we are closed now']);
+                }
+            }
+            else {
+                return redirect()->back()->withErrors(['error' => 'Sorry, we are closed now']);;
+            }
+        }
+        else {
+            return back()->withErrors(['error' => 'Sorry, we are closed now']);
+        }
+
         return view('customer.cart.payment', compact('id'));
     }
 

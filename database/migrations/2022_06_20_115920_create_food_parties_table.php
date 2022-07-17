@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('discount');
+            $table->timestamp('start_at')->nullable()->default(null);
+            $table->timestamp('expires_at')->nullable()->default(null);
             $table->timestamps();
             $table->softDeletes();
         });

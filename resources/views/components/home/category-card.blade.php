@@ -1,5 +1,5 @@
 <h2 class="font-black text-2xl text-rose-800">Categories</h2>
-<div class="mb-40 p-10">
+<div class="p-10">
     <div class="grid lg:grid-cols-6 md:grid-cols-3 grid-cols-2 gap-5">
         @foreach ($categories as $category)
             <a href="{{ route('category.show', $category->id) }}"

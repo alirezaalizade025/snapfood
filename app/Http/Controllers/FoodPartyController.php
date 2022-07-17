@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\FoodParty;
 use Illuminate\Http\Request;
 
@@ -19,20 +20,18 @@ class FoodPartyController extends Controller
         $this->authorize('create', FoodParty::class);
         $data = $request->validate([
             'name' => 'required|min:2|max:255|unique:food_parties',
-            'discount' => 'required|numeric|between:0,99.99'
+            'discount' => 'required|numeric|between:0,99.99',
+            'start_at' => 'required|date|after:now',
+            'expires_at' => 'required|date|after:start_at'
         ]);
-
+        $data['start_at'] = Carbon::parse($data['start_at'])->format('Y-m-d H:i:s');
+        $data['expires_at'] = Carbon::parse($data['expires_at'])->format('Y-m-d H:i:s');
 
         if (FoodParty::create($data)) {
             return json_encode(['status' => 'success', 'message' => $data['name'] . ' add successfully']);
         }
         return json_encode(['status' => 'error', 'message' => $data['name'] . ' can\'t  add now!']);
 
-    }
-
-    public function show($id)
-    {
-    //
     }
 
     public function update(Request $request, $id)
@@ -53,8 +52,12 @@ class FoodPartyController extends Controller
 
         $data = $request->validate([
             'name' => 'required|min:2|max:255|unique:food_parties,name,' . $id,
-            'discount' => 'required|numeric|between:0,99.99'
+            'discount' => 'required|numeric|between:0,99.99',
+            'start_at' => 'required|date',
+            'expires_at' => 'required|date|after:start_at'
         ]);
+        $data['start_at'] = Carbon::parse($data['start_at'])->format('Y-m-d H:i:s');
+        $data['expires_at'] = Carbon::parse($data['expires_at'])->format('Y-m-d H:i:s');
 
         if ($foodParty->update($data)) {
             return json_encode(['status' => 'success', 'message' => $data['name'] . ' updated successfully']);

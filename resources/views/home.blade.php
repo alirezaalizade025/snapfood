@@ -9,7 +9,7 @@
                     <div class="relative lg:w-6/12 lg:py-24 xl:py-32">
                         <h1 class="font-bold text-4xl text-yellow-900 md:text-5xl lg:w-10/12">Your favorite dishes, right at
                             your door</h1>
-                        <form action="" class="w-full mt-12">
+                        {{-- <form action="" class="w-full mt-12">
                             <div class="relative flex p-1 rounded-full bg-white border border-yellow-200 shadow-md md:p-2">
                                 <select class="hidden p-3 rounded-full bg-transparent md:block md:p-4" name="domain"
                                     id="domain">
@@ -30,7 +30,7 @@
                                     </svg>
                                 </button>
                             </div>
-                        </form>
+                        </form> --}}
                         <p class="mt-8 text-gray-700 lg:w-10/12">Sit amet consectetur adipisicing elit. <a href="#"
                                 class="text-yellow-700">connection</a> tenetur nihil quaerat suscipit, sunt dignissimos.</p>
                     </div>
@@ -44,5 +44,11 @@
         <div class="mt-40 px-10 bg-gradient-to-t from-rose-50">
             <x-home.category-card :categories="$categories"></x-home.category-card>
         </div>
+        @auth
+            <div class="bg-gradient-to-r from-[#71c5ee] to-[#025091] mt-20 p-10 text-white">
+                <h2 class="font-black text-2xl drop-shadow-lg">Food Party</h2>
+                @livewire('customer.food-party.show-list')
+            </div>
+        @endauth
     </div>
 @endsection

@@ -29,6 +29,8 @@
                             <th class="p-3 rounded">ID</th>
                             <th class="p-3 rounded">Name</th>
                             <th class="p-3 rounded">Discount</th>
+                            <th class="p-3 rounded">Start at</th>
+                            <th class="p-3 rounded">Expire at</th>
                             <th class="p-3 rounded">Updated at</th>
                             <th class="p-3 rounded"></th>
                         </tr>
@@ -48,6 +50,12 @@
                                 </td>
                                 <td class="p-3 rounded space-y-2">
                                     {{ $foodParty->discount }}%
+                                </td>
+                                <td class="p-3 rounded space-y-2">
+                                    {{ $foodParty->start_at }}
+                                </td>
+                                <td class="p-3 rounded space-y-2">
+                                    {{ $foodParty->expires_at }}
                                 </td>
                                 <td class="p-3 text-sm rounded">
                                     {{ $foodParty->updated_at }}
@@ -73,7 +81,7 @@
                 <div class="mt-2">
                     {{ $foodParties->links() }}
                 </div>
-                <livewire:modal-edit-food-party />
+                <livewire:dashboard.admin.food-party.modal-edit-food-party />
             </div>
         </div>
     </div>

@@ -8,24 +8,35 @@
         <x-slot name="content">
             <section class="max-w-[100rem] p-6 mx-auto bg-indigo-400 rounded-md shadow-md dark:bg-gray-800">
                 <form>
-                    <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 mt-4 ">
                         <div>
-                            <label class="text-white dark:text-gray-200">Name</label>
-                            <input type="text" wire:model="name"
+                            <label class="text-black dark:text-gray-200 mb-10">Start Time</label>
+                            <x-datetime-picker placeholder="Start Time" without-tips wire:model="start_at"
+                                :min="now()" />
+                        </div>
+                        <div>
+                            <label class="text-black dark:text-gray-200 mb-10">Expire Time</label>
+                            <x-datetime-picker placeholder="Expire Time" without-tips wire:model="expires_at"
+                                :min="now()" />
+                        </div>
+
+                        <div>
+                            <label class="text-black dark:text-gray-200" for="username">Name</label>
+                            <input id="username" type="text" wire:model="name"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                             @error('name')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
                         </div>
+
                         <div>
-                            <label class="text-white dark:text-gray-200">Discount</label>
-                            <input type="text" wire:model="discount"
+                            <label class="text-black dark:text-gray-200" for="discount">Discount (%)</label>
+                            <input id="discount" type="text" wire:model="discount"
                                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
                             @error('discount')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror
                         </div>
-                    </div>
                 </form>
         </x-slot>
 

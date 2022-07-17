@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Admin\FoodParty;
 
 use Livewire\Component;
 use WireUi\Traits\Actions;
@@ -15,9 +15,14 @@ class ModalAddFoodParty extends Component
     public $model = 'FoodParty';
     public $discount;
     public $name;
+    public $start;
+    public $expire;
+
     protected $rules = [
         'name' => 'required|min:2|max:255|unique:food_parties',
-        'discount' => 'required|numeric|between:0,99.99'
+        'discount' => 'required|numeric|between:0,99.99',
+        'start' => 'required|date|after:now',
+        'expire' => 'required|date|after:start'
     ];
     public $listeners = [
         'hideMe' => 'hideModal',
@@ -31,18 +36,19 @@ class ModalAddFoodParty extends Component
 
     public function storeFoodParty()
     {
-        $request = new Request();
-        $request->replace([
+        $request = new Request([
             'name' => $this->name,
             'discount' => $this->discount,
+            'start_at' => $this->start,
+            'expires_at' => $this->expire
         ]);
         $response = app(FoodPartyController::class)->store($request);
         $response = json_decode($response, true);
         if ($response['status'] == 'success') {
             $this->notification()->send([
-                'title'       => 'Food Party added!',
+                'title' => 'Food Party added!',
                 'description' => $response['message'],
-                'icon'        => $response['status']
+                'icon' => $response['status']
             ]);
             $this->showingModal = false;
             $this->emit('refreshFoodPartyTable');
@@ -71,6 +77,6 @@ class ModalAddFoodParty extends Component
 
     public function render()
     {
-        return view('livewire.modal-add-food-party');
+        return view('livewire.dashboard.admin.food-party.modal-add-food-party');
     }
 }

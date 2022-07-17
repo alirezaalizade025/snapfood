@@ -1,5 +1,4 @@
 <div class="space-y-5">
-    {{-- TODO:add filter for comments --}}
     @foreach ($comments as $comment)
         <div class="bg-white w-full rounded-xl p-5 drop-shadow-2xl flex gap-5">
             <div class="border-r border-sky-400 pr-3 flex flex-col w-56 pb-1 items-center">
