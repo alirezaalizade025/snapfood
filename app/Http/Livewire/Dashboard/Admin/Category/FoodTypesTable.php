@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Admin\Category;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -26,7 +26,7 @@ class FoodTypesTable extends Component
     public function render()
     {
 
-        return view('livewire.food-types-table', [
+        return view('livewire.dashboard.admin.category.food-types-table', [
             'foodTypes' => $this->fetchData()
         ]);
     }

@@ -44,10 +44,13 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Cart::class);
+        if (auth()->user()->role != 'customer') {
+            return response(['msg' => 'Only Customer can order cart!'], 404);
+        }
         try {
             $food = Food::findOrFail($request->food_id);
             if ($food->restaurant->status == 'inactive') {
-                return response(['message' => 'Food not found'], 404);
+                return response(['msg' => 'Restaurant not active'], 404);
             }
         }
         catch (ModelNotFoundException $e) {
@@ -112,6 +115,9 @@ class CartController extends Controller
      */
     public function update(Request $request)
     {
+        if (auth()->user()->role != 'customer') {
+            return response(['msg' => 'Only Customer can order cart!'], 404);
+        }
         try {
             $food = Food::findOrFail($request->food_id);
         }

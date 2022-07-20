@@ -190,7 +190,7 @@ class RestaurantController extends Controller
         $address->address = $location['restaurant']['address'];
         $address->latitude = $location['latitude'];
         $address->longitude = $location['longitude'];
-        $restaurant->addressInfo()->update($address->toArray());
+        $restaurant->addressInfo()->updateOrCreate($address->toArray());
 
         $restaurant->update($data['restaurant']);
 

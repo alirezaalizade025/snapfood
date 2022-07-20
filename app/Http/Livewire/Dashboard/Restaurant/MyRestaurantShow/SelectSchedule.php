@@ -34,7 +34,6 @@ class SelectSchedule extends Component
             $request->headers->set('Authorization', 'Bearer ' . auth()->user()->api_token);
 
             $response = Route::dispatch($request);
-
             if ($response->status() == 200) {
                 $schedule = collect(json_decode($response->getContent())->schedule)
                     ->map(function ($item) {

@@ -22,7 +22,8 @@ class FoodModal extends Component
 
     public $listeners = [
         'hideMe' => 'hideModal',
-        'showFoodModal' => 'showModal'
+        'showFoodModal' => 'showModal',
+        'refreshFoodModal' => 'fetchData'
     ];
 
     public function hideModal()

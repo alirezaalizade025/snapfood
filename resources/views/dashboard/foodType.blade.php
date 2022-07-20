@@ -9,12 +9,13 @@
             </div>
         </div>
         <div class="px-10 py-5">
-            <livewire:food-types-table class="mt-5" />
+            <livewire:dashboard.admin.category.food-types-table class="mt-5" />
         </div>
         <div class="mt-5">
         </div>
-        @livewire('modal-edit-food-type')
-        <livewire:modal-add-food-type />
+        {{-- @livewire('modal-edit-food-type') --}}
+        <livewire:dashboard.admin.category.modal-edit-food-type />
+        <livewire:dashboard.admin.category.modal-add-food-type />
         {{-- <livewire:modal-edit-food-type /> --}}
     </div>
 </x-app-layout>

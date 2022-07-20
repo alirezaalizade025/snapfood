@@ -39,10 +39,11 @@ class CategoryController extends Controller
         $this->authorize('update', $category);
 
         $data = $request->validate([
-            'type' => 'required|min:2|unique:categories,name,' . $id
+            'type' => 'required|min:2|unique:categories,name,' . $id,
+            'category_id' => 'nullable',
         ]);
 
-        if ($category->update(['name' => $data['type']])) {
+        if ($category->update($data)) {
             return json_encode(['status' => 'success', 'message' => $category->name . ' Food type update successfully']);
         }
         return json_encode(['status' => 'error', 'message' => $category->name . ' Food type can\'t update now!']);

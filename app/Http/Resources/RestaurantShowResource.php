@@ -36,8 +36,13 @@ class RestaurantShowResource extends JsonResource
 
         if ($restaurant['is_open'] == 'active') {
             $today = strtolower(now()->format('l'));
-            if (now()->format('H:m') < $restaurant['schedule'][$today]['end'] || now()->format('H:m') > $restaurant['schedule'][$today]['start']) {
+            if (!$restaurant['schedule']->contains($today)) {
                 $restaurant['is_open'] = false;
+            }
+            else {
+                if (now()->format('H:m') < $restaurant['schedule'][$today]['end'] || now()->format('H:m') > $restaurant['schedule'][$today]['start']) {
+                    $restaurant['is_open'] = false;
+                }
             }
         }
 

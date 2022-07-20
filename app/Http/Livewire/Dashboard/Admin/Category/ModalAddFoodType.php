@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\Dashboard\Admin\Category;
 
 use Livewire\Component;
 use App\Models\Category;
@@ -77,6 +77,6 @@ class ModalAddFoodType extends Component
 
     public function render()
     {
-        return view('livewire.modal-add-food-type');
+        return view('livewire.dashboard.admin.category.modal-add-food-type');
     }
 }

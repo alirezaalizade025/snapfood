@@ -48,6 +48,6 @@
         </a>
     @endforeach
     <div class="w-full mt-10 flex justify-center items-center col-span-3 gap-5">
-        {{ count($restaurants) > 0 ? $restaurants->links() : null }}
+        {{ $restaurants->links() }}
     </div>
 </div>

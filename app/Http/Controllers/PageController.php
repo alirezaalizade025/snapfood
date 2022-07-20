@@ -87,11 +87,11 @@ class PageController extends Controller
             return view('dashboard', compact('cartsChart', 'usersChart', 'restaurantsChart', 'commentsChart'));
         }
         elseif (auth()->user()->role == 'restaurant') {
-            $totalFood = auth()->user()->restaurant->foods->count();
-            $totalCarts = auth()->user()->restaurant->carts->count();
-            $totalComments = auth()->user()->restaurant->carts->map(function ($cart) {
+            $totalFood = optional(optional(auth()->user()->restaurant)->foods)->count();
+            $totalCarts = optional(optional(auth()->user()->restaurant)->carts)->count();
+            $totalComments = optional(optional(auth()->user()->restaurant)->carts, fn($cart) => $cart->map(function ($cart) {
                 return $cart->comments->count();
-            })->sum();
+            })->sum());
 
             return view('dashboard', compact('totalFood', 'totalCarts', 'totalComments'));
 
@@ -145,8 +145,8 @@ class PageController extends Controller
 
         //check for open time
         if ($restaurant->weekSchedules->count() > 0) {
-            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek - 5)->get()->first();
-            if (now()->format('H:i') >= $weekSchedules->open_time && now()->format('H:i') <= $weekSchedules->close_time) {
+            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek + 2)->get()->first();  
+            if ($weekSchedules != null && now()->format('H:i') >= $weekSchedules->start && now()->format('H:i') <= $weekSchedules->end) {
                 if ($restaurant->status == 'inactive') {
                     return redirect()->back()->withErrors(['error' => 'Sorry, we are closed now']);
                 }

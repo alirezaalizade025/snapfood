@@ -37,14 +37,13 @@ class NewComment extends Component
         ]);
 
         $response = app(CommentController::class)->store($request);
-        // $response = json_decode($response->getContent());
         if ($response->status() == 200) {
             $this->notification()->send([
                 'title' => 'Comments Added!',
                 'description' => json_decode($response->getContent())->msg,
                 'icon' => 'success'
             ]);
-            // $this->emit('refreshCategoryTable');
+            $this->emit('refreshFoodModal');
             $this->reset();
         }
         else {

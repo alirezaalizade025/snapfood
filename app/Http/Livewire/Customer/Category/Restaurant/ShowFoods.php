@@ -8,6 +8,7 @@ use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\RestaurantAPIController;
 
 class ShowFoods extends Component
 {
@@ -20,7 +21,7 @@ class ShowFoods extends Component
 
     public function fetchData()
     {
-        $response = app('App\Http\Controllers\API\RestaurantAPIController')->foods($this->restaurant->id);
+        $response = app(RestaurantAPIController::class)->foods($this->restaurant->id);
 
         if ($response->status() == 200) {
             $foodByCategory = json_decode($response->getContent())->data;
