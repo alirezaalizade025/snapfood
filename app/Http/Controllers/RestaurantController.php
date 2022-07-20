@@ -92,6 +92,9 @@ class RestaurantController extends Controller
         if ($restaurantInfo != null) {
             $this->authorize('view', $restaurantInfo);
         }
+        else {
+            $this->authorize('create', Restaurant::class);
+        }
 
         return view('dashboard.myRestaurant', compact('restaurantInfo'));
     }
@@ -170,7 +173,7 @@ class RestaurantController extends Controller
 
             WeekSchedule::whereNotIn('day', $schedule->keys())->where('restaurant_id', $data['restaurant']['id'])->delete();
         }
-        
+
         $data['restaurant']['confirm'] = 'waiting';
         $data['restaurant']['status'] = 'inactive';
 
@@ -233,6 +236,9 @@ class RestaurantController extends Controller
             'chart_type' => 'line',
             'report_type' => 'group_by_date',
             'model' => 'App\Models\Cart',
+            'conditions' => [
+                ['name' => 'Food', 'condition' => 'restaurant_id = ' . $restaurant->id, 'color' => 'blue', 'fill' => true],
+            ],
             'group_by_field' => 'created_at',
             'group_by_period' => 'day',
             'aggregate_function' => 'count',

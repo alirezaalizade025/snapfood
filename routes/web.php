@@ -24,15 +24,12 @@ Route::middleware([
     'verified',
     'dashboard'
 ], )->group(function () {
-    Route::get('/dashboard', function () {
-            return view('dashboard');
-        }
-        )->name('dashboard');
         Route::get('/categories', function () {
             return view('dashboard.category');
         }
         )->name('category.edit');
 
+        Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
         Route::resource('dashboard/foodType', CategoryController::class);
         Route::resource('dashboard/food', FoodController::class);
         Route::resource('dashboard/restaurant', RestaurantController::class);
