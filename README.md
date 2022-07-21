@@ -24,7 +24,7 @@ The packages used for backend of this project are:
 
 **restaurant**
 
- - edit restaurant details(titlem category, phone, delivery fee, schedule, address on map)
+ - edit restaurant details(title, category, phone, delivery fee, schedule, address on map)
  - CRUD food
  - see orders and change status (send mail to customer for change, track delay delivery) 
  - see reports (table & chart)
@@ -37,6 +37,10 @@ The packages used for backend of this project are:
  - CRUD personal info
  - CR comments
 
+![alt text](/photos/home.png)
+![alt text](/photos/restaurantsShow.png)
+![alt text](/photos/commentsOnFood.png)
+![alt text](/photos/restaurant.png)
 ![alt text](/photos/adminDashboard.png)
 ![alt text](/photos/restaurantDetiles.png)
 ![alt text](/photos/comments.png)
