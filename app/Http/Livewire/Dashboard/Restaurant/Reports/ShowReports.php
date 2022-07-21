@@ -29,8 +29,13 @@ class ShowReports extends Component
 
         $this->total_income = Cart::where('restaurant_id', auth()->user()->restaurant->id)
             ->where('status', '4')
-            ->select(DB::raw('SUM(total_price) as total_income'))
-            ->get()->first()->total_income;
+            ->with('cartFood')
+            ->get()->map(function($cart) {
+                return $cart->cartFood->map(function($food) {
+                    return $food->price;
+                });
+            })->flatten()->sum();
+
 
 
         return Cart::

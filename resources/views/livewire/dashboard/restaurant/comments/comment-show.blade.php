@@ -1,4 +1,12 @@
 <div class="space-y-5">
+    <div>
+        <select wire:model="selectedFood" class="rounded-xl bg-white p-3">
+            <option>all</option>
+            @foreach ($foods as $food)
+                <option value="{{ $food->id }}">{{ $food->name }}</option>
+            @endforeach
+        </select>
+    </div>
     @foreach ($comments as $comment)
         <div class="bg-white w-full rounded-xl p-5 drop-shadow-2xl flex gap-5">
             <div class="border-r border-sky-400 pr-3 flex flex-col w-56 pb-1 items-center">

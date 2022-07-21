@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Restaurant\Comments;
 
+use App\Models\Food;
 use App\Models\Comment;
 use Livewire\Component;
 use WireUi\Traits\Actions;
@@ -14,6 +15,8 @@ class CommentShow extends Component
     use Actions;
 
     public $comments;
+    public $foods = [];
+    public $selectedFood;
 
     public function setAnswer($form)
     {
@@ -84,7 +87,10 @@ class CommentShow extends Component
     public function fetchData()
     {
         if (auth()->user()->role == 'restaurant') {
-            $request = new Request(['restaurant_id' => auth()->user()->restaurant->id]);
+            $request = new Request([
+                'restaurant_id' => auth()->user()->restaurant->id,
+                'food_id' => $this->selectedFood == 'all' ? null : $this->selectedFood,       
+            ]);
             $response = app(CommentController::class)->show($request);
             if ($response->status() == 200) {
                 $comments = json_decode($response->getContent())->comments;
@@ -96,6 +102,7 @@ class CommentShow extends Component
                     $description = 'Comments can\'t be loaded!'
                 );
             }
+            $this->foods = Food::where('restaurant_id', auth()->user()->restaurant->id)->get();
         } elseif (auth()->user()->role == 'admin') {
             $response = app(CommentController::class)->findCommentsForAdmin();
             $this->comments = \json_decode($response->getContent());

@@ -38,7 +38,8 @@ class AuthController extends Controller
             'title' => $request->location_title,
             'address' => $request->address,
             'latitude' => $request->latitude,
-            'longitude' => $request->longitude
+            'longitude' => $request->longitude,
+            'is_current_location' => true
         ]);
 
         return response([

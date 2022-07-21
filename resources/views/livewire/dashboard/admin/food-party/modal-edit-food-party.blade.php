@@ -12,12 +12,12 @@
                         <div>
                             <label class="text-black dark:text-gray-200 mb-10">Start Time</label>
                             <x-datetime-picker placeholder="Start Time" without-tips wire:model="start_at"
-                                :min="now()" />
+                                :min="now()" interval="1" />
                         </div>
                         <div>
                             <label class="text-black dark:text-gray-200 mb-10">Expire Time</label>
                             <x-datetime-picker placeholder="Expire Time" without-tips wire:model="expires_at"
-                                :min="now()" />
+                                :min="now()" interval="1" />
                         </div>
 
                         <div>

@@ -51,7 +51,7 @@ class CommentController extends Controller
     public function show(Request $request)
     {
         if (isset($request->restaurant_id)) {
-            $comments = $this->findCommentsByRestaurant($request->restaurant_id);
+            $comments = $this->findCommentsByRestaurant($request);
         }
         elseif (isset($request->food_id)) {
             $comments = $this->findCommentsByFood($request->food_id);
@@ -63,11 +63,21 @@ class CommentController extends Controller
         return response(compact('comments'));
     }
 
-    public function findCommentsByRestaurant(int $id)
+    public function findCommentsByRestaurant($request)
     {
-        $comments = optional(Restaurant::find($id), function ($restaurant) {
-            return CommentRestaurantResource::collection($restaurant->carts->map(fn($cart) => $cart->comments->sortBy(['created_at', 'asc']))->flatten());
-        }) ?? ['msg' => 'restaurant not found'];
+        $id = $request->restaurant_id;
+        $food_id = $request->food_id;
+        $comments = optional(Restaurant::find($id), function ($restaurant) use ($food_id) {
+            return CommentRestaurantResource::collection($restaurant->carts
+            ->filter(function ($cart) use ($food_id) {
+                    if ($food_id == null) {
+                        return true;
+                    }
+                    return $cart->foods->contains('id', $food_id);
+                }
+                )
+                ->map(fn($cart) => $cart->comments->sortBy(['created_at', 'asc']))->flatten());
+            }) ?? ['msg' => 'restaurant not found'];
 
         return $comments;
     }
@@ -95,7 +105,7 @@ class CommentController extends Controller
                 ->filter(function ($comment) {
                     return $comment != null;
                 }
-                )
+                )->flatten()
                 ;
             }) ?? ['msg' => 'food not found'];
         return $comments;

@@ -54,7 +54,7 @@ class RestaurantAPIController extends Controller
             "addresses.id as address_id",
             DB::raw("6371 * acos(cos(radians(" . $userAddress['latitude'] . ")) * cos(radians(addresses.latitude)) * cos(radians(addresses.longitude) - radians(" . $userAddress['longitude'] . ")) + sin(radians(" . $userAddress['latitude'] . ")) * sin(radians(addresses.latitude))) AS distance"),
         )
-            ->having('distance', '<', 500000) //TODO:fix this km
+            // ->having('distance', '<', 5) //TODO:fix this km
             ->where('restaurants.confirm', 'accept')
             ->where($where)
             ->groupBy('addresses.id')
