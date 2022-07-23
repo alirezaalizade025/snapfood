@@ -35,7 +35,7 @@
             class="grid grid-cols-5 text-center bg-gradient-to-r from-[#e4dbff] to-[#ffdde6] p-2 text-indigo-500 font-bold text-lg items-center pt-3">
             <div class="capitalize">#{{ $report->id }}</div>
             <div class="capitalize">{{ $report->user->name }}</div>
-            <div class="capitalize">{{ $report->total_price }} $</div>
+            <div class="capitalize"></div>
             <div class="capitalize text-sm">{{ $report->created_at }}</div>
             <div class="capitalize text-sm">{{ $report->updated_at }}</div>
             <div class="rounded-xl col-span-full bg-gray-300 grid grid-cols-3 text-sm gap-x-5 p-3">

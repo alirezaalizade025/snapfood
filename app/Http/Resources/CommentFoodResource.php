@@ -15,9 +15,10 @@ class CommentFoodResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'author' => ['name' => $this->user->name],
             'foods' => $this->cart->foods->pluck('name'),
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->diffForHumans(),
             'score' => $this->score,
             'content' => $this->content,
             'answer' => trim($this->answer)

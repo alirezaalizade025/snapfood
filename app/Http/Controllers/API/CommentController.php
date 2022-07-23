@@ -30,7 +30,7 @@ class CommentController extends Controller
             $cart = Cart::findOrFail($request->cart_id);
         }
         catch (\Exception $e) {
-            return response(['message' => 'Cart not found'], 404);
+            return response(['msg' => 'Cart not found'], 404);
         }
 
         $this->authorize('create', [Comment::class , $cart]);
@@ -76,9 +76,8 @@ class CommentController extends Controller
                     return $cart->foods->contains('id', $food_id);
                 }
                 )
-                ->map(fn($cart) => $cart->comments->sortBy(['created_at', 'asc']))->flatten());
+                ->map(fn($cart) => $cart->comments)->flatten()->sortByDesc('created_at'));
             }) ?? ['msg' => 'restaurant not found'];
-
         return $comments;
     }
 

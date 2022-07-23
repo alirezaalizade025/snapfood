@@ -24,6 +24,7 @@ class CartController extends Controller
         $carts = Cart::
             where('user_id', auth()->id())
             ->orderBy('status')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         if ($carts->count() > 0) {
@@ -233,9 +234,10 @@ class CartController extends Controller
 
         $restaurant = $cart->restaurant;
         //check for open time
+        
         if ($restaurant->weekSchedules->count() > 0) {
-            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek - 5)->get()->first();
-            if (now()->format('H:i') >= $weekSchedules->open_time && now()->format('H:i') <= $weekSchedules->close_time) {
+            $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek + 2)->get()->first();  
+            if ($weekSchedules != null && now()->addMinutes('270')->format('H:i') >= $weekSchedules->start && now()->addMinutes('270')->format('H:i') <= $weekSchedules->end) {
                 if ($restaurant->status == 'inactive') {
                     return response()->json(['msg' => 'Restaurant is closed'], 403);
                 }

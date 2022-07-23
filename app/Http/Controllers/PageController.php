@@ -146,7 +146,7 @@ class PageController extends Controller
         //check for open time
         if ($restaurant->weekSchedules->count() > 0) {
             $weekSchedules = $restaurant->weekSchedules()->where('day', now()->dayOfWeek + 2)->get()->first();  
-            if ($weekSchedules != null && now()->format('H:i') >= $weekSchedules->start && now()->format('H:i') <= $weekSchedules->end) {
+            if ($weekSchedules != null && now()->addMinutes('270')->format('H:i') >= $weekSchedules->start && now()->addMinutes('270')->format('H:i') <= $weekSchedules->end) {
                 if ($restaurant->status == 'inactive') {
                     return redirect()->back()->withErrors(['error' => 'Sorry, we are closed now']);
                 }
