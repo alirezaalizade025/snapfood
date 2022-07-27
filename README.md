@@ -21,6 +21,8 @@ The packages used for backend of this project are:
     npm install && npm run dev
     create `snapfood` table in database
     php artisan migrate --seed
+    cp .env.example .env
+    php artisan key:generate
     php artisan queue:work
     php artisan serve
 
