@@ -23,6 +23,7 @@ The packages used for backend of this project are:
     php artisan migrate --seed
     cp .env.example .env
     php artisan key:generate
+    php artisan storage:link
     php artisan queue:work
     php artisan serve
 
