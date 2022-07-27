@@ -11,6 +11,18 @@ The packages used for backend of this project are:
  - Livewire
  - laravel-charts
  - laravel-map
+ 
+ #  Prerequisites
+  - PHP > 8.1
+  - Laravel 9
+  
+ # Instalation
+    composer update
+    npm install && npm run dev
+    create `snapfood` table in database
+    php artisan migrate --seed
+    php artisan queue:work
+    php artisan serve
 
 ## features
 
